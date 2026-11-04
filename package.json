@@ -1,0 +1,41 @@
+{
+  "name": "wandermin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "WANDERMIN \u2014 Every Minute Takes You Somewhere.",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "postcard": "tsx scripts/render-postcard.ts",
+    "boarding-pass": "tsx scripts/render-boarding-pass.ts",
+    "icons": "tsx scripts/render-icons.ts",
+    "bake-land": "tsx scripts/bake-land.ts",
+    "check": "npm run typecheck && npm run test",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.4",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/topojson-client": "^3.1.5",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^4.3.4",
+    "topojson-client": "^3.1.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7",
+    "world-atlas": "^2.0.2"
+  },
+  "dependencies": {
+    "next": "^15.5.29",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

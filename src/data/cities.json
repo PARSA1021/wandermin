@@ -1,0 +1,725 @@
+{
+  "version": 1,
+  "cities": [
+    {
+      "id": "seoul",
+      "name": {
+        "en": "Seoul",
+        "ko": "서울",
+        "ja": "ソウル"
+      },
+      "countryCode": "KR",
+      "region": "asia",
+      "lat": 37.5665,
+      "lng": 126.978,
+      "code": "SEL",
+      "departure": true,
+      "landmark": {
+        "id": "n-seoul-tower",
+        "name": {
+          "en": "N Seoul Tower",
+          "ko": "N서울타워",
+          "ja": "Nソウルタワー"
+        },
+        "lat": 37.5512,
+        "lng": 126.9882
+      }
+    },
+    {
+      "id": "tokyo",
+      "name": {
+        "en": "Tokyo",
+        "ko": "도쿄",
+        "ja": "東京"
+      },
+      "countryCode": "JP",
+      "region": "asia",
+      "lat": 35.6762,
+      "lng": 139.6503,
+      "code": "TYO",
+      "departure": true,
+      "landmark": {
+        "id": "tokyo-tower",
+        "name": {
+          "en": "Tokyo Tower",
+          "ko": "도쿄 타워",
+          "ja": "東京タワー"
+        },
+        "lat": 35.6586,
+        "lng": 139.7454
+      }
+    },
+    {
+      "id": "osaka",
+      "name": {
+        "en": "Osaka",
+        "ko": "오사카",
+        "ja": "大阪"
+      },
+      "countryCode": "JP",
+      "region": "asia",
+      "lat": 34.6937,
+      "lng": 135.5023,
+      "code": "OSA",
+      "departure": false,
+      "landmark": {
+        "id": "osaka-castle",
+        "name": {
+          "en": "Osaka Castle",
+          "ko": "오사카성",
+          "ja": "大阪城"
+        },
+        "lat": 34.6873,
+        "lng": 135.5262
+      }
+    },
+    {
+      "id": "kyoto",
+      "name": {
+        "en": "Kyoto",
+        "ko": "교토",
+        "ja": "京都"
+      },
+      "countryCode": "JP",
+      "region": "asia",
+      "lat": 35.0116,
+      "lng": 135.7681,
+      "code": "KYO",
+      "departure": false,
+      "landmark": {
+        "id": "kiyomizu-dera",
+        "name": {
+          "en": "Kiyomizu-dera",
+          "ko": "기요미즈데라",
+          "ja": "清水寺"
+        },
+        "lat": 34.9949,
+        "lng": 135.785
+      }
+    },
+    {
+      "id": "taipei",
+      "name": {
+        "en": "Taipei",
+        "ko": "타이베이",
+        "ja": "台北"
+      },
+      "countryCode": "TW",
+      "region": "asia",
+      "lat": 25.033,
+      "lng": 121.5654,
+      "code": "TPE",
+      "departure": false,
+      "landmark": {
+        "id": "taipei-101",
+        "name": {
+          "en": "Taipei 101",
+          "ko": "타이베이 101",
+          "ja": "台北101"
+        },
+        "lat": 25.034,
+        "lng": 121.5645
+      }
+    },
+    {
+      "id": "hong-kong",
+      "name": {
+        "en": "Hong Kong",
+        "ko": "홍콩",
+        "ja": "香港"
+      },
+      "countryCode": "HK",
+      "region": "asia",
+      "lat": 22.3193,
+      "lng": 114.1694,
+      "code": "HKG",
+      "departure": false,
+      "landmark": {
+        "id": "victoria-peak",
+        "name": {
+          "en": "Victoria Peak",
+          "ko": "빅토리아 피크",
+          "ja": "ヴィクトリア・ピーク"
+        },
+        "lat": 22.2759,
+        "lng": 114.1455
+      }
+    },
+    {
+      "id": "singapore",
+      "name": {
+        "en": "Singapore",
+        "ko": "싱가포르",
+        "ja": "シンガポール"
+      },
+      "countryCode": "SG",
+      "region": "asia",
+      "lat": 1.3521,
+      "lng": 103.8198,
+      "code": "SIN",
+      "departure": false,
+      "landmark": {
+        "id": "marina-bay-sands",
+        "name": {
+          "en": "Marina Bay Sands",
+          "ko": "마리나 베이 샌즈",
+          "ja": "マリーナベイ・サンズ"
+        },
+        "lat": 1.2834,
+        "lng": 103.8607
+      }
+    },
+    {
+      "id": "bangkok",
+      "name": {
+        "en": "Bangkok",
+        "ko": "방콕",
+        "ja": "バンコク"
+      },
+      "countryCode": "TH",
+      "region": "asia",
+      "lat": 13.7563,
+      "lng": 100.5018,
+      "code": "BKK",
+      "departure": false,
+      "landmark": {
+        "id": "wat-arun",
+        "name": {
+          "en": "Wat Arun",
+          "ko": "왓 아룬",
+          "ja": "ワット・アルン"
+        },
+        "lat": 13.7437,
+        "lng": 100.4888
+      }
+    },
+    {
+      "id": "hanoi",
+      "name": {
+        "en": "Hanoi",
+        "ko": "하노이",
+        "ja": "ハノイ"
+      },
+      "countryCode": "VN",
+      "region": "asia",
+      "lat": 21.0285,
+      "lng": 105.8542,
+      "code": "HAN",
+      "departure": false,
+      "landmark": {
+        "id": "hoan-kiem-lake",
+        "name": {
+          "en": "Hoan Kiem Lake",
+          "ko": "호안끼엠 호수",
+          "ja": "ホアンキエム湖"
+        },
+        "lat": 21.0288,
+        "lng": 105.8525
+      }
+    },
+    {
+      "id": "bali",
+      "name": {
+        "en": "Bali",
+        "ko": "발리",
+        "ja": "バリ島"
+      },
+      "countryCode": "ID",
+      "region": "asia",
+      "lat": -8.4095,
+      "lng": 115.1889,
+      "code": "DPS",
+      "departure": false,
+      "landmark": {
+        "id": "tanah-lot",
+        "name": {
+          "en": "Tanah Lot Temple",
+          "ko": "따나롯 사원",
+          "ja": "タナロット寺院"
+        },
+        "lat": -8.6212,
+        "lng": 115.0868
+      }
+    },
+    {
+      "id": "london",
+      "name": {
+        "en": "London",
+        "ko": "런던",
+        "ja": "ロンドン"
+      },
+      "countryCode": "GB",
+      "region": "europe",
+      "lat": 51.5074,
+      "lng": -0.1278,
+      "code": "LON",
+      "departure": true,
+      "landmark": {
+        "id": "big-ben",
+        "name": {
+          "en": "Big Ben",
+          "ko": "빅벤",
+          "ja": "ビッグ・ベン"
+        },
+        "lat": 51.5007,
+        "lng": -0.1246
+      }
+    },
+    {
+      "id": "paris",
+      "name": {
+        "en": "Paris",
+        "ko": "파리",
+        "ja": "パリ"
+      },
+      "countryCode": "FR",
+      "region": "europe",
+      "lat": 48.8566,
+      "lng": 2.3522,
+      "code": "PAR",
+      "departure": true,
+      "landmark": {
+        "id": "eiffel-tower",
+        "name": {
+          "en": "Eiffel Tower",
+          "ko": "에펠탑",
+          "ja": "エッフェル塔"
+        },
+        "lat": 48.8584,
+        "lng": 2.2945
+      }
+    },
+    {
+      "id": "rome",
+      "name": {
+        "en": "Rome",
+        "ko": "로마",
+        "ja": "ローマ"
+      },
+      "countryCode": "IT",
+      "region": "europe",
+      "lat": 41.9028,
+      "lng": 12.4964,
+      "code": "ROM",
+      "departure": false,
+      "landmark": {
+        "id": "colosseum",
+        "name": {
+          "en": "Colosseum",
+          "ko": "콜로세움",
+          "ja": "コロッセオ"
+        },
+        "lat": 41.8902,
+        "lng": 12.4922
+      }
+    },
+    {
+      "id": "venice",
+      "name": {
+        "en": "Venice",
+        "ko": "베네치아",
+        "ja": "ヴェネツィア"
+      },
+      "countryCode": "IT",
+      "region": "europe",
+      "lat": 45.4408,
+      "lng": 12.3155,
+      "code": "VCE",
+      "departure": false,
+      "landmark": {
+        "id": "rialto-bridge",
+        "name": {
+          "en": "Rialto Bridge",
+          "ko": "리알토 다리",
+          "ja": "リアルト橋"
+        },
+        "lat": 45.438,
+        "lng": 12.3359
+      }
+    },
+    {
+      "id": "barcelona",
+      "name": {
+        "en": "Barcelona",
+        "ko": "바르셀로나",
+        "ja": "バルセロナ"
+      },
+      "countryCode": "ES",
+      "region": "europe",
+      "lat": 41.3874,
+      "lng": 2.1686,
+      "code": "BCN",
+      "departure": false,
+      "landmark": {
+        "id": "sagrada-familia",
+        "name": {
+          "en": "Sagrada Família",
+          "ko": "사그라다 파밀리아",
+          "ja": "サグラダ・ファミリア"
+        },
+        "lat": 41.4036,
+        "lng": 2.1744
+      }
+    },
+    {
+      "id": "amsterdam",
+      "name": {
+        "en": "Amsterdam",
+        "ko": "암스테르담",
+        "ja": "アムステルダム"
+      },
+      "countryCode": "NL",
+      "region": "europe",
+      "lat": 52.3676,
+      "lng": 4.9041,
+      "code": "AMS",
+      "departure": false,
+      "landmark": {
+        "id": "canal-ring",
+        "name": {
+          "en": "Canal Ring",
+          "ko": "운하 지구",
+          "ja": "運河地区"
+        },
+        "lat": 52.3708,
+        "lng": 4.8868
+      }
+    },
+    {
+      "id": "prague",
+      "name": {
+        "en": "Prague",
+        "ko": "프라하",
+        "ja": "プラハ"
+      },
+      "countryCode": "CZ",
+      "region": "europe",
+      "lat": 50.0755,
+      "lng": 14.4378,
+      "code": "PRG",
+      "departure": false,
+      "landmark": {
+        "id": "charles-bridge",
+        "name": {
+          "en": "Charles Bridge",
+          "ko": "카를교",
+          "ja": "カレル橋"
+        },
+        "lat": 50.0865,
+        "lng": 14.4114
+      }
+    },
+    {
+      "id": "zurich",
+      "name": {
+        "en": "Zurich",
+        "ko": "취리히",
+        "ja": "チューリッヒ"
+      },
+      "countryCode": "CH",
+      "region": "europe",
+      "lat": 47.3769,
+      "lng": 8.5417,
+      "code": "ZRH",
+      "departure": false,
+      "landmark": {
+        "id": "grossmunster",
+        "name": {
+          "en": "Grossmünster",
+          "ko": "그로스뮌스터",
+          "ja": "グロスミュンスター"
+        },
+        "lat": 47.37,
+        "lng": 8.544
+      }
+    },
+    {
+      "id": "vienna",
+      "name": {
+        "en": "Vienna",
+        "ko": "빈",
+        "ja": "ウィーン"
+      },
+      "countryCode": "AT",
+      "region": "europe",
+      "lat": 48.2082,
+      "lng": 16.3738,
+      "code": "VIE",
+      "departure": false,
+      "landmark": {
+        "id": "schonbrunn-palace",
+        "name": {
+          "en": "Schönbrunn Palace",
+          "ko": "쇤브룬 궁전",
+          "ja": "シェーンブルン宮殿"
+        },
+        "lat": 48.1845,
+        "lng": 16.3122
+      }
+    },
+    {
+      "id": "istanbul",
+      "name": {
+        "en": "Istanbul",
+        "ko": "이스탄불",
+        "ja": "イスタンブール"
+      },
+      "countryCode": "TR",
+      "region": "europe",
+      "lat": 41.0082,
+      "lng": 28.9784,
+      "code": "IST",
+      "departure": false,
+      "landmark": {
+        "id": "hagia-sophia",
+        "name": {
+          "en": "Hagia Sophia",
+          "ko": "아야 소피아",
+          "ja": "アヤソフィア"
+        },
+        "lat": 41.0086,
+        "lng": 28.9802
+      }
+    },
+    {
+      "id": "new-york",
+      "name": {
+        "en": "New York",
+        "ko": "뉴욕",
+        "ja": "ニューヨーク"
+      },
+      "countryCode": "US",
+      "region": "americas",
+      "lat": 40.7128,
+      "lng": -74.006,
+      "code": "NYC",
+      "departure": true,
+      "landmark": {
+        "id": "statue-of-liberty",
+        "name": {
+          "en": "Statue of Liberty",
+          "ko": "자유의 여신상",
+          "ja": "自由の女神"
+        },
+        "lat": 40.6892,
+        "lng": -74.0445
+      }
+    },
+    {
+      "id": "los-angeles",
+      "name": {
+        "en": "Los Angeles",
+        "ko": "로스앤젤레스",
+        "ja": "ロサンゼルス"
+      },
+      "countryCode": "US",
+      "region": "americas",
+      "lat": 34.0522,
+      "lng": -118.2437,
+      "code": "LAX",
+      "departure": false,
+      "landmark": {
+        "id": "griffith-observatory",
+        "name": {
+          "en": "Griffith Observatory",
+          "ko": "그리피스 천문대",
+          "ja": "グリフィス天文台"
+        },
+        "lat": 34.1184,
+        "lng": -118.3004
+      }
+    },
+    {
+      "id": "san-francisco",
+      "name": {
+        "en": "San Francisco",
+        "ko": "샌프란시스코",
+        "ja": "サンフランシスコ"
+      },
+      "countryCode": "US",
+      "region": "americas",
+      "lat": 37.7749,
+      "lng": -122.4194,
+      "code": "SFO",
+      "departure": false,
+      "landmark": {
+        "id": "golden-gate-bridge",
+        "name": {
+          "en": "Golden Gate Bridge",
+          "ko": "금문교",
+          "ja": "ゴールデンゲートブリッジ"
+        },
+        "lat": 37.8199,
+        "lng": -122.4783
+      }
+    },
+    {
+      "id": "vancouver",
+      "name": {
+        "en": "Vancouver",
+        "ko": "밴쿠버",
+        "ja": "バンクーバー"
+      },
+      "countryCode": "CA",
+      "region": "americas",
+      "lat": 49.2827,
+      "lng": -123.1207,
+      "code": "YVR",
+      "departure": false,
+      "landmark": {
+        "id": "stanley-park",
+        "name": {
+          "en": "Stanley Park",
+          "ko": "스탠리 파크",
+          "ja": "スタンレーパーク"
+        },
+        "lat": 49.3043,
+        "lng": -123.1443
+      }
+    },
+    {
+      "id": "toronto",
+      "name": {
+        "en": "Toronto",
+        "ko": "토론토",
+        "ja": "トロント"
+      },
+      "countryCode": "CA",
+      "region": "americas",
+      "lat": 43.6532,
+      "lng": -79.3832,
+      "code": "YTO",
+      "departure": false,
+      "landmark": {
+        "id": "cn-tower",
+        "name": {
+          "en": "CN Tower",
+          "ko": "CN 타워",
+          "ja": "CNタワー"
+        },
+        "lat": 43.6426,
+        "lng": -79.3871
+      }
+    },
+    {
+      "id": "mexico-city",
+      "name": {
+        "en": "Mexico City",
+        "ko": "멕시코시티",
+        "ja": "メキシコシティ"
+      },
+      "countryCode": "MX",
+      "region": "americas",
+      "lat": 19.4326,
+      "lng": -99.1332,
+      "code": "MEX",
+      "departure": false,
+      "landmark": {
+        "id": "palacio-bellas-artes",
+        "name": {
+          "en": "Palacio de Bellas Artes",
+          "ko": "베야스 아르테스 궁전",
+          "ja": "ベジャス・アルテス宮殿"
+        },
+        "lat": 19.4352,
+        "lng": -99.1412
+      }
+    },
+    {
+      "id": "sydney",
+      "name": {
+        "en": "Sydney",
+        "ko": "시드니",
+        "ja": "シドニー"
+      },
+      "countryCode": "AU",
+      "region": "oceania",
+      "lat": -33.8688,
+      "lng": 151.2093,
+      "code": "SYD",
+      "departure": false,
+      "landmark": {
+        "id": "sydney-opera-house",
+        "name": {
+          "en": "Sydney Opera House",
+          "ko": "시드니 오페라 하우스",
+          "ja": "シドニー・オペラハウス"
+        },
+        "lat": -33.8568,
+        "lng": 151.2153
+      }
+    },
+    {
+      "id": "melbourne",
+      "name": {
+        "en": "Melbourne",
+        "ko": "멜버른",
+        "ja": "メルボルン"
+      },
+      "countryCode": "AU",
+      "region": "oceania",
+      "lat": -37.8136,
+      "lng": 144.9631,
+      "code": "MEL",
+      "departure": false,
+      "landmark": {
+        "id": "flinders-street-station",
+        "name": {
+          "en": "Flinders Street Station",
+          "ko": "플린더스 스트리트 역",
+          "ja": "フリンダース・ストリート駅"
+        },
+        "lat": -37.8183,
+        "lng": 144.9671
+      }
+    },
+    {
+      "id": "cairo",
+      "name": {
+        "en": "Cairo",
+        "ko": "카이로",
+        "ja": "カイロ"
+      },
+      "countryCode": "EG",
+      "region": "africa",
+      "lat": 30.0444,
+      "lng": 31.2357,
+      "code": "CAI",
+      "departure": false,
+      "landmark": {
+        "id": "giza-pyramids",
+        "name": {
+          "en": "Pyramids of Giza",
+          "ko": "기자 피라미드",
+          "ja": "ギザのピラミッド"
+        },
+        "lat": 29.9792,
+        "lng": 31.1342
+      }
+    },
+    {
+      "id": "cape-town",
+      "name": {
+        "en": "Cape Town",
+        "ko": "케이프타운",
+        "ja": "ケープタウン"
+      },
+      "countryCode": "ZA",
+      "region": "africa",
+      "lat": -33.9249,
+      "lng": 18.4241,
+      "code": "CPT",
+      "departure": false,
+      "landmark": {
+        "id": "table-mountain",
+        "name": {
+          "en": "Table Mountain",
+          "ko": "테이블 마운틴",
+          "ja": "テーブルマウンテン"
+        },
+        "lat": -33.9628,
+        "lng": 18.4098
+      }
+    }
+  ]
+}

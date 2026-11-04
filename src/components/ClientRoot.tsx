@@ -1,0 +1,25 @@
+"use client";
+import { useEffect, type ReactNode } from "react";
+import { AppProvider } from "@/store/AppProvider";
+import { I18nProvider } from "@/i18n/react";
+import { Shell } from "./Shell";
+import { ArrivalSheet } from "./ArrivalSheet";
+import { FlightCompanion } from "./FlightCompanion";
+import { OfflinePill } from "./InstallCard";
+
+export function ClientRoot({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production" || !("serviceWorker" in navigator)) return;
+    navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => { /* app works without it, just not offline */ });
+  }, []);
+  return (
+    <AppProvider>
+      <I18nProvider>
+        <OfflinePill />
+        <Shell>{children}</Shell>
+        <ArrivalSheet />
+        <FlightCompanion />
+      </I18nProvider>
+    </AppProvider>
+  );
+}

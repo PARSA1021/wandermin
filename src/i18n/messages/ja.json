@@ -1,0 +1,206 @@
+{
+  "app": {
+    "name": "WANDERMIN",
+    "slogan": "一分ごとに、新しい世界へ。"
+  },
+  "nav": {
+    "home": "ホーム",
+    "map": "世界地図",
+    "focus": "集中",
+    "journal": "旅の記録",
+    "profile": "プロフィール"
+  },
+  "home": {
+    "greeting": {
+      "morning": "おはようございます",
+      "afternoon": "こんにちは",
+      "evening": "こんばんは"
+    },
+    "currentLocation": "現在地：{place}付近",
+    "nextDestination": "次の目的地：{city}",
+    "todayFocus": "今日の集中：{minutes}分",
+    "inFlight": "{city}へ飛行中 · {percent}%",
+    "remainingFocus": "到着まで集中 {minutes}分",
+    "startCta": "集中を始める",
+    "recent": "最近の発見",
+    "noDiscoveries": "最初のポストカードまで集中あと{minutes}分。",
+    "arrivedAll": "{city}に着きました。次はどこへ？",
+    "today": "今日",
+    "quickStart": "{minutes}分ですぐ開始",
+    "customize": "時間・内容を変える",
+    "nextFlight": "次のフライトを開始"
+  },
+  "timer": {
+    "start": "集中を始める",
+    "pause": "一時停止",
+    "resume": "再開",
+    "complete": "完了",
+    "cancel": "キャンセル",
+    "remaining": "残り {time}",
+    "duration": "{count}分",
+    "custom": "カスタム",
+    "break": "休憩",
+    "completedWhileAway": "離れている間に完了しました",
+    "activity": {
+      "studying": "勉強",
+      "working": "仕事",
+      "reading": "読書",
+      "programming": "プログラミング",
+      "writing": "執筆",
+      "personal": "個人プロジェクト",
+      "custom": "カスタム"
+    },
+    "completedWhileAwayMinutes": "離れている間に{minutes}分のセッションが完了しました。"
+  },
+  "travel": {
+    "distance": "{km} km",
+    "remaining": "{city}まで {km} km",
+    "arrived": "{city}に到着しました！",
+    "chooseDeparture": "どこから旅を始めますか？",
+    "guided": "おすすめルート",
+    "chooseOwn": "目的地を自分で選ぶ"
+  },
+  "postcard": {
+    "arrivedOn": "{date} 到着",
+    "totalFocus": "累計集中 {minutes}分",
+    "save": "画像を保存",
+    "share": "共有",
+    "album": "ポストカードアルバム"
+  },
+  "settings": {
+    "language": "言語",
+    "departure": "出発地",
+    "reduceMotion": "動きを減らす",
+    "theme": "テーマ"
+  },
+  "onboarding": {
+    "title": "どこから旅を始めますか？",
+    "body": "集中した1分ごとに50km進みます。出発地を選んでください。",
+    "step1": "集中すると飛びます。1分で50km進みます。",
+    "step2": "実在の都市に着くと、その街のポストカードがもらえます。",
+    "step3": "旅の記録にすべてのフライトが残ります。休む日があっても大丈夫。",
+    "language": "言語",
+    "pick": "出発地を選んでください。"
+  },
+  "destination": {
+    "title": "次の目的地を選んでください",
+    "suggested": "おすすめ",
+    "anywhere": "または好きな場所へ",
+    "pick": "都市を選ぶ…",
+    "via": "{stops}経由",
+    "minutes": "{km} km · 約{minutes}分",
+    "go": "ここへ出発"
+  },
+  "focus": {
+    "duration": "集中時間",
+    "activityLabel": "何に集中しますか？",
+    "customMinutes": "分（5〜180）",
+    "customActivity": "アクティビティ名",
+    "paused": "一時停止中",
+    "focusing": "{activity}に集中中",
+    "finishConfirm": "今終わりますか？{minutes}分が記録されます。",
+    "cancelConfirm": "セッションをキャンセルしますか？旅の距離には含まれません。",
+    "keepAwake": "画面をオンのままにする",
+    "awayNote": "アプリを離れても大丈夫。時間は計算され続け、戻ると反映されます。機内の音をオンにすると、画面がオフでも多くの場合時間どおりに着陸が記録されます（端末によります）。",
+    "breakDone": "休憩終了。次のフライトの準備はいいですか？",
+    "takeBreak": "{minutes}分休憩する",
+    "onBreak": "休憩中",
+    "tooShort": "1分未満のセッションは記録されません。",
+    "finishTitle": "セッションを終えますか？",
+    "cancelTitle": "セッションを取り消しますか？",
+    "cancelSession": "セッションを取り消す",
+    "keepGoing": "集中を続ける",
+    "cancelled": "セッションを取り消しました",
+    "shortcuts": "スペース：一時停止・再開"
+  },
+  "arrival": {
+    "title": "{city}へようこそ！",
+    "capital": "首都",
+    "landmark": "ランドマーク",
+    "reached": "集中{minutes}分で到着",
+    "next": "続ける",
+    "newCountry": "新しい国のスタンプ！",
+    "chooseNext": "次の目的地を選ぶ"
+  },
+  "journal": {
+    "totalFocus": "累計集中",
+    "distance": "移動距離",
+    "cities": "都市",
+    "countries": "国",
+    "postcards": "ポストカード",
+    "passes": "搭乗券",
+    "sessions": "最近のセッション",
+    "empty": "まだ記録がありません。最初のフライトでここが埋まります。",
+    "week": "今週",
+    "hours": "{hours}時間{minutes}分",
+    "minutesShort": "{minutes}分"
+  },
+  "journey": {
+    "title": "あなたのルート",
+    "departed": "出発",
+    "arrived": "到着",
+    "flying": "飛行中",
+    "planned": "予定",
+    "change": "目的地を変更"
+  },
+  "profile": {
+    "language": "言語",
+    "auto": "端末の言語",
+    "departureLocked": "{city}から旅を始めました。飛行後は出発地を変更できません。",
+    "defaultMinutes": "デフォルトのセッション",
+    "data": "データ",
+    "dataBody": "すべての記録はこの端末にのみ保存されます。ブラウザのデータを消す前にバックアップしてください。",
+    "export": "バックアップを書き出す（JSON）",
+    "reset": "旅の記録をすべて削除",
+    "resetConfirm": "すべてのセッション、ポストカード、搭乗券を削除しますか？元に戻せません。"
+  },
+  "common": {
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "loading": "読み込み中…",
+    "on": "オン",
+    "off": "オフ",
+    "undo": "元に戻す"
+  },
+  "pwa": {
+    "install": "WANDERMINをインストール",
+    "installBody": "ホーム画面に追加すると全画面で開き、オフラインでも動作し、ロック画面にフライトを表示できます。",
+    "installButton": "インストール",
+    "iosSteps": "Safariで共有ボタンをタップし、「ホーム画面に追加」を選んでください。",
+    "installed": "インストール済み。アプリ版を使用中です。",
+    "later": "あとで",
+    "offline": "オフライン · 記録はこの端末に保存されます"
+  },
+  "companion": {
+    "cabin": "機内の音",
+    "cabinHint": "静かな機内の音が流れます。ロック画面にフライト・着陸時刻・進行バーが表示され、そこから一時停止できます。",
+    "notify": "ロック画面の通知",
+    "notifyHint": "集中中、着陸予定時刻を通知で表示します。",
+    "denied": "通知がブロックされています。ブラウザまたは端末の設定で許可してください。",
+    "unsupported": "このブラウザでは利用できません。",
+    "iosInstallFirst": "iPhone・iPadでは、ホーム画面にインストールすると通知を使えます。",
+    "title": "{city}行き 飛行中",
+    "lands": "{time} 着陸予定",
+    "pausedBody": "一時停止 · 残り{time}",
+    "breakTitle": "休憩中",
+    "endsAt": "{time} 終了",
+    "arrivedTitle": "{city}に到着！",
+    "arrivedBody": "新しいポストカードが届きました。",
+    "doneTitle": "セッション完了",
+    "doneBody": "集中{minutes}分を飛行しました。",
+    "lockTitle": "ロック解除せずに進行を確認"
+  },
+  "theme": {
+    "system": "端末に合わせる",
+    "light": "ライト",
+    "dark": "ダーク"
+  },
+  "map": {
+    "route": "マイルート",
+    "world": "世界全体",
+    "you": "現在地",
+    "credit": "海岸線：Natural Earth（パブリックドメイン）",
+    "label": "ルートを表示した世界地図"
+  }
+}

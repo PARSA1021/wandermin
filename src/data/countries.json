@@ -1,0 +1,323 @@
+{
+  "version": 1,
+  "countries": [
+    {
+      "code": "KR",
+      "name": {
+        "en": "South Korea",
+        "ko": "대한민국",
+        "ja": "韓国"
+      },
+      "capital": {
+        "en": "Seoul",
+        "ko": "서울",
+        "ja": "ソウル"
+      },
+      "postcardLabel": "KOREA"
+    },
+    {
+      "code": "JP",
+      "name": {
+        "en": "Japan",
+        "ko": "일본",
+        "ja": "日本"
+      },
+      "capital": {
+        "en": "Tokyo",
+        "ko": "도쿄",
+        "ja": "東京"
+      },
+      "postcardLabel": "JAPAN"
+    },
+    {
+      "code": "TW",
+      "name": {
+        "en": "Taiwan",
+        "ko": "대만",
+        "ja": "台湾"
+      },
+      "capital": {
+        "en": "Taipei",
+        "ko": "타이베이",
+        "ja": "台北"
+      },
+      "postcardLabel": "TAIWAN"
+    },
+    {
+      "code": "HK",
+      "name": {
+        "en": "Hong Kong SAR, China",
+        "ko": "중국 홍콩",
+        "ja": "中国香港"
+      },
+      "capital": null,
+      "postcardLabel": "HONG KONG SAR"
+    },
+    {
+      "code": "SG",
+      "name": {
+        "en": "Singapore",
+        "ko": "싱가포르",
+        "ja": "シンガポール"
+      },
+      "capital": {
+        "en": "Singapore",
+        "ko": "싱가포르",
+        "ja": "シンガポール"
+      },
+      "postcardLabel": "SINGAPORE"
+    },
+    {
+      "code": "TH",
+      "name": {
+        "en": "Thailand",
+        "ko": "태국",
+        "ja": "タイ"
+      },
+      "capital": {
+        "en": "Bangkok",
+        "ko": "방콕",
+        "ja": "バンコク"
+      },
+      "postcardLabel": "THAILAND"
+    },
+    {
+      "code": "VN",
+      "name": {
+        "en": "Vietnam",
+        "ko": "베트남",
+        "ja": "ベトナム"
+      },
+      "capital": {
+        "en": "Hanoi",
+        "ko": "하노이",
+        "ja": "ハノイ"
+      },
+      "postcardLabel": "VIETNAM"
+    },
+    {
+      "code": "ID",
+      "name": {
+        "en": "Indonesia",
+        "ko": "인도네시아",
+        "ja": "インドネシア"
+      },
+      "capital": {
+        "en": "Jakarta",
+        "ko": "자카르타",
+        "ja": "ジャカルタ"
+      },
+      "postcardLabel": "INDONESIA"
+    },
+    {
+      "code": "GB",
+      "name": {
+        "en": "United Kingdom",
+        "ko": "영국",
+        "ja": "イギリス"
+      },
+      "capital": {
+        "en": "London",
+        "ko": "런던",
+        "ja": "ロンドン"
+      },
+      "postcardLabel": "UNITED KINGDOM"
+    },
+    {
+      "code": "FR",
+      "name": {
+        "en": "France",
+        "ko": "프랑스",
+        "ja": "フランス"
+      },
+      "capital": {
+        "en": "Paris",
+        "ko": "파리",
+        "ja": "パリ"
+      },
+      "postcardLabel": "FRANCE"
+    },
+    {
+      "code": "IT",
+      "name": {
+        "en": "Italy",
+        "ko": "이탈리아",
+        "ja": "イタリア"
+      },
+      "capital": {
+        "en": "Rome",
+        "ko": "로마",
+        "ja": "ローマ"
+      },
+      "postcardLabel": "ITALY"
+    },
+    {
+      "code": "ES",
+      "name": {
+        "en": "Spain",
+        "ko": "스페인",
+        "ja": "スペイン"
+      },
+      "capital": {
+        "en": "Madrid",
+        "ko": "마드리드",
+        "ja": "マドリード"
+      },
+      "postcardLabel": "SPAIN"
+    },
+    {
+      "code": "NL",
+      "name": {
+        "en": "Netherlands",
+        "ko": "네덜란드",
+        "ja": "オランダ"
+      },
+      "capital": {
+        "en": "Amsterdam",
+        "ko": "암스테르담",
+        "ja": "アムステルダム"
+      },
+      "postcardLabel": "NETHERLANDS"
+    },
+    {
+      "code": "CZ",
+      "name": {
+        "en": "Czechia",
+        "ko": "체코",
+        "ja": "チェコ"
+      },
+      "capital": {
+        "en": "Prague",
+        "ko": "프라하",
+        "ja": "プラハ"
+      },
+      "postcardLabel": "CZECHIA"
+    },
+    {
+      "code": "CH",
+      "name": {
+        "en": "Switzerland",
+        "ko": "스위스",
+        "ja": "スイス"
+      },
+      "capital": {
+        "en": "Bern",
+        "ko": "베른",
+        "ja": "ベルン"
+      },
+      "postcardLabel": "SWITZERLAND"
+    },
+    {
+      "code": "AT",
+      "name": {
+        "en": "Austria",
+        "ko": "오스트리아",
+        "ja": "オーストリア"
+      },
+      "capital": {
+        "en": "Vienna",
+        "ko": "빈",
+        "ja": "ウィーン"
+      },
+      "postcardLabel": "AUSTRIA"
+    },
+    {
+      "code": "TR",
+      "name": {
+        "en": "Türkiye",
+        "ko": "튀르키예",
+        "ja": "トルコ"
+      },
+      "capital": {
+        "en": "Ankara",
+        "ko": "앙카라",
+        "ja": "アンカラ"
+      },
+      "postcardLabel": "TURKIYE"
+    },
+    {
+      "code": "US",
+      "name": {
+        "en": "United States",
+        "ko": "미국",
+        "ja": "アメリカ合衆国"
+      },
+      "capital": {
+        "en": "Washington, D.C.",
+        "ko": "워싱턴 D.C.",
+        "ja": "ワシントンD.C."
+      },
+      "postcardLabel": "USA"
+    },
+    {
+      "code": "CA",
+      "name": {
+        "en": "Canada",
+        "ko": "캐나다",
+        "ja": "カナダ"
+      },
+      "capital": {
+        "en": "Ottawa",
+        "ko": "오타와",
+        "ja": "オタワ"
+      },
+      "postcardLabel": "CANADA"
+    },
+    {
+      "code": "MX",
+      "name": {
+        "en": "Mexico",
+        "ko": "멕시코",
+        "ja": "メキシコ"
+      },
+      "capital": {
+        "en": "Mexico City",
+        "ko": "멕시코시티",
+        "ja": "メキシコシティ"
+      },
+      "postcardLabel": "MEXICO"
+    },
+    {
+      "code": "AU",
+      "name": {
+        "en": "Australia",
+        "ko": "호주",
+        "ja": "オーストラリア"
+      },
+      "capital": {
+        "en": "Canberra",
+        "ko": "캔버라",
+        "ja": "キャンベラ"
+      },
+      "postcardLabel": "AUSTRALIA"
+    },
+    {
+      "code": "EG",
+      "name": {
+        "en": "Egypt",
+        "ko": "이집트",
+        "ja": "エジプト"
+      },
+      "capital": {
+        "en": "Cairo",
+        "ko": "카이로",
+        "ja": "カイロ"
+      },
+      "postcardLabel": "EGYPT"
+    },
+    {
+      "code": "ZA",
+      "name": {
+        "en": "South Africa",
+        "ko": "남아프리카 공화국",
+        "ja": "南アフリカ"
+      },
+      "capital": {
+        "en": "Pretoria (executive)",
+        "ko": "프리토리아(행정)",
+        "ja": "プレトリア（行政）"
+      },
+      "postcardLabel": "SOUTH AFRICA"
+    }
+  ]
+}

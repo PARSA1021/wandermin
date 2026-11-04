@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f4ecd8;
+  --color-paper-deep: #e9dfc8;
+  --color-card: #fbf6ea;
+  --color-line: #d9cba8;
+  --color-ink: #283152;
+  --color-ink-soft: #6f6b74;
+  --color-accent: #b83a2b;
+  --color-accent-deep: #8f2c24;
+  --color-sky: #3a5a9a;
+  --color-ok: #3d7a4f;
+  --color-map-sea: #dfe7ea;
+  --color-map-land: #efe4c8;
+  --color-map-land-dot: #dccba0;
+  --color-map-coast: #c9b88e;
+  --color-map-grid: #cfdade;
+  --color-map-city: #9a9480;
+  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Hiragino Sans", "Noto Sans JP", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Dark theme: a night-flight palette. Pixel cards keep their own paper colours, like real cards. */
+@layer base {
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --color-paper: #171b2b;
+    --color-paper-deep: #22283c;
+    --color-card: #1f2436;
+    --color-line: #353c56;
+    --color-ink: #ece4d0;
+    --color-ink-soft: #a9a6b6;
+    --color-accent: #e2654f;
+    --color-accent-deep: #c24a36;
+    --color-sky: #8fb0e8;
+    --color-ok: #74c08a;
+    --color-map-sea: #1a2238;
+    --color-map-land: #2a3148;
+    --color-map-land-dot: #3a4260;
+    --color-map-coast: #4a5372;
+    --color-map-grid: #232b44;
+    --color-map-city: #6f7896;
+  }
+}
+
+html { background: var(--color-paper); color: var(--color-ink); -webkit-tap-highlight-color: transparent; }
+body { min-height: 100dvh; font-family: var(--font-sans); }
+.tabular { font-variant-numeric: tabular-nums; }
+.pixel > svg { width: 100%; height: auto; display: block; }
+:focus-visible { outline: 3px solid var(--color-sky); outline-offset: 2px; border-radius: 8px; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+.rise { animation: rise .45s cubic-bezier(.2,.8,.2,1) both; }
+.rise-late { animation: rise .45s .25s cubic-bezier(.2,.8,.2,1) both; }
+@media (prefers-reduced-motion: reduce) { .rise, .rise-late { animation: none; } }
+html[data-motion="reduce"] .rise, html[data-motion="reduce"] .rise-late { animation: none; }

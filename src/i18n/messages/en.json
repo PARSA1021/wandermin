@@ -1,0 +1,206 @@
+{
+  "app": {
+    "name": "WANDERMIN",
+    "slogan": "Every Minute Takes You Somewhere."
+  },
+  "nav": {
+    "home": "Home",
+    "map": "World Map",
+    "focus": "Focus",
+    "journal": "Travel Journal",
+    "profile": "Profile"
+  },
+  "home": {
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "currentLocation": "You are near {place}",
+    "nextDestination": "Next stop: {city}",
+    "todayFocus": "Today: {minutes, plural, one {# minute} other {# minutes}} of focus",
+    "inFlight": "Flying to {city} · {percent}%",
+    "remainingFocus": "{minutes} focus minutes to go",
+    "startCta": "Start focusing",
+    "recent": "Recent discoveries",
+    "noDiscoveries": "Your first postcard is {minutes} focus minutes away.",
+    "arrivedAll": "You reached {city}. Where next?",
+    "today": "Today",
+    "quickStart": "Start {minutes} min",
+    "customize": "Change time or activity",
+    "nextFlight": "Start next flight"
+  },
+  "timer": {
+    "start": "Start focus",
+    "pause": "Pause",
+    "resume": "Resume",
+    "complete": "Finish",
+    "cancel": "Cancel",
+    "remaining": "{time} left",
+    "duration": "{count, plural, one {# minute} other {# minutes}}",
+    "custom": "Custom",
+    "break": "Break",
+    "completedWhileAway": "Completed while you were away",
+    "activity": {
+      "studying": "Studying",
+      "working": "Working",
+      "reading": "Reading",
+      "programming": "Programming",
+      "writing": "Writing",
+      "personal": "Personal project",
+      "custom": "Custom activity"
+    },
+    "completedWhileAwayMinutes": "Your {minutes}-minute session finished while you were away."
+  },
+  "travel": {
+    "distance": "{km} km",
+    "remaining": "{km} km to {city}",
+    "arrived": "Welcome to {city}!",
+    "chooseDeparture": "Where does your journey begin?",
+    "guided": "Suggested route",
+    "chooseOwn": "Choose my destination"
+  },
+  "postcard": {
+    "arrivedOn": "Arrived {date}",
+    "totalFocus": "Total focus {minutes} min",
+    "save": "Save image",
+    "share": "Share",
+    "album": "Postcard album"
+  },
+  "settings": {
+    "language": "Language",
+    "departure": "Departure city",
+    "reduceMotion": "Reduce motion",
+    "theme": "Theme"
+  },
+  "onboarding": {
+    "title": "Where does your journey begin?",
+    "body": "Every focused minute flies you 50 km. Pick a home airport to begin.",
+    "step1": "Focus, and you fly: every minute is 50 km.",
+    "step2": "Land in a real city and collect its postcard.",
+    "step3": "Your journal keeps every flight. Missed days cost nothing.",
+    "language": "Language",
+    "pick": "Pick a home airport to begin."
+  },
+  "destination": {
+    "title": "Choose your next destination",
+    "suggested": "Suggested",
+    "anywhere": "Or fly anywhere",
+    "pick": "Pick a city…",
+    "via": "via {stops}",
+    "minutes": "{km} km · about {minutes} min",
+    "go": "Fly there"
+  },
+  "focus": {
+    "duration": "Duration",
+    "activityLabel": "What are you focusing on?",
+    "customMinutes": "Minutes (5–180)",
+    "customActivity": "Activity name",
+    "paused": "Paused",
+    "focusing": "Focusing on {activity}",
+    "finishConfirm": "Finish now? {minutes} minutes will count.",
+    "cancelConfirm": "Cancel this session? It won't count toward your trip.",
+    "keepAwake": "Keep screen on",
+    "awayNote": "Leaving the app is fine: time keeps counting and catches up when you return. With cabin sound on, the landing is usually recorded on time even with the screen off (this depends on the device).",
+    "breakDone": "Break over. Ready for the next flight?",
+    "takeBreak": "Take a {minutes}-minute break",
+    "onBreak": "On a break",
+    "tooShort": "Sessions under a minute aren't recorded.",
+    "finishTitle": "Finish this session?",
+    "cancelTitle": "Cancel this session?",
+    "cancelSession": "Cancel session",
+    "keepGoing": "Keep focusing",
+    "cancelled": "Session cancelled",
+    "shortcuts": "Space: pause or resume"
+  },
+  "arrival": {
+    "title": "Welcome to {city}!",
+    "capital": "Capital",
+    "landmark": "Landmark",
+    "reached": "Reached after {minutes} focus minutes",
+    "next": "Continue",
+    "newCountry": "New country stamp!",
+    "chooseNext": "Choose next destination"
+  },
+  "journal": {
+    "totalFocus": "Total focus",
+    "distance": "Distance",
+    "cities": "Cities",
+    "countries": "Countries",
+    "postcards": "Postcards",
+    "passes": "Boarding passes",
+    "sessions": "Recent sessions",
+    "empty": "Nothing here yet. Your first flight fills this page.",
+    "week": "This week",
+    "hours": "{hours} h {minutes} min",
+    "minutesShort": "{minutes} min"
+  },
+  "journey": {
+    "title": "Your route",
+    "departed": "Departed",
+    "arrived": "Arrived",
+    "flying": "In flight",
+    "planned": "Planned",
+    "change": "Change destination"
+  },
+  "profile": {
+    "language": "Language",
+    "auto": "Device language",
+    "departureLocked": "Your journey started in {city}. The departure can't change once you've flown.",
+    "defaultMinutes": "Default session",
+    "data": "Your data",
+    "dataBody": "Everything is stored only on this device. Export a backup before clearing browser data.",
+    "export": "Export backup (JSON)",
+    "reset": "Erase all travel data",
+    "resetConfirm": "Erase every session, postcard and pass? This can't be undone."
+  },
+  "common": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "close": "Close",
+    "loading": "Loading…",
+    "on": "On",
+    "off": "Off",
+    "undo": "Undo"
+  },
+  "pwa": {
+    "install": "Install WANDERMIN",
+    "installBody": "Add it to your home screen: it opens full-screen, works offline and can show your flight on the lock screen.",
+    "installButton": "Install",
+    "iosSteps": "In Safari, tap the Share button, then “Add to Home Screen”.",
+    "installed": "Installed. You're using the app version.",
+    "later": "Not now",
+    "offline": "Offline · your progress is saved on this device"
+  },
+  "companion": {
+    "cabin": "Cabin sound",
+    "cabinHint": "Plays a soft in-flight hum. Your lock screen then shows the flight, the landing time and a progress bar, and you can pause from there.",
+    "notify": "Lock-screen notice",
+    "notifyHint": "Shows your landing time as a notification while you focus.",
+    "denied": "Notifications are blocked. Allow them in your browser or system settings.",
+    "unsupported": "Not available in this browser.",
+    "iosInstallFirst": "On iPhone and iPad, notifications work after installing the app to your home screen.",
+    "title": "Flying to {city}",
+    "lands": "Lands {time}",
+    "pausedBody": "Paused · {time} left",
+    "breakTitle": "On a break",
+    "endsAt": "Ends {time}",
+    "arrivedTitle": "Arrived in {city}!",
+    "arrivedBody": "A new postcard is waiting for you.",
+    "doneTitle": "Session complete",
+    "doneBody": "{minutes} focus minutes flown.",
+    "lockTitle": "Know it's running without unlocking"
+  },
+  "theme": {
+    "system": "Match device",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "map": {
+    "route": "My route",
+    "world": "Whole world",
+    "you": "You are here",
+    "credit": "Coastlines: Natural Earth (public domain)",
+    "label": "World map showing your route"
+  }
+}

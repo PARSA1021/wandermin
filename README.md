@@ -1,0 +1,161 @@
+# WANDERMIN
+
+**Every Minute Takes You Somewhere.** · 매 순간, 새로운 세상으로. · 一分ごとに、新しい世界へ。
+
+Focus timer that turns completed focus minutes into real-world travel distance (default 1 min = 50 km).
+
+A Next.js (App Router) PWA-in-progress on top of a framework-independent core: travel data,
+distance/journey engine, focus timer, postcard and boarding-pass renderers, and i18n.
+Phase 1 (this build): responsive shell, timer with recovery, route planning, boarding passes,
+arrival postcards, travel journal, settings. Guest mode only; data stays on the device.
+
+## Commands
+
+```bash
+npm install
+npm run dev             # http://localhost:3000
+npm run build && npm start
+npm run check           # tsc --noEmit + vitest
+npm run postcard        # renders every city's postcard from real journey data into out/
+npm run boarding-pass   # renders the Seoul → Tokyo boarding pass in its three states
+```
+
+## Layout
+
+```
+src/
+  config/travel.ts              game balance (kmPerMinute, guided suggestions)
+  data/
+    cities.json                 30 cities: id, names (en/ko/ja), ISO country, lat/lng, postmark code, departure flag, landmark
+    countries.json              23 countries: names, capital, postcard label
+    routes.json                 curated flight legs (distances computed, never stored)
+    index.ts                    typed accessors
+  lib/geo.ts                    haversine, great-circle interpolation, antimeridian-safe lines
+  features/travel/
+    graph.ts                    flight graph, shortest path, guided suggestions
+    journey.ts                  derives position/arrivals from plan + session ledger (pure)
+  features/postcards/
+    pixel/canvas.ts             indexed pixel canvas → crisp SVG paths
+    pixel/font.ts               original 5×7 and 3×5 bitmap fonts
+    template.ts                 card layout, stamp, postmark, auto-fit captions
+    scenes/<city>.ts            one illustration per city (all 30)
+    scenes/common.ts            shared drawing helpers: sky, ridges, roofs, townhouses, people, boats, lanterns
+    scenes/index.ts             scene registry
+  features/tickets/
+    boarding-pass.ts            one pass per flight leg: boarding → in-flight → arrived (stamped, stub torn)
+  features/focus/timer.ts       timestamp-based timer state machine (no countdown variables)
+  store/state.ts                app state + pure reducer (start/pause/resume/finish/cancel/reconcile)
+  store/AppProvider.tsx         persistence (localStorage), cross-tab sync, reconcile on focus/visibility
+  app/                          pages: / (home), /map (route), /focus, /journal, /profile
+  components/                   Shell (bottom tabs / rail / sidebar), pickers, arrival sheet, pixel renderer
+  i18n/
+    react.tsx                   I18nProvider + useI18n (useSyncExternalStore: switches in place)
+    config.ts                   locales, fallbacks, localized data helper
+    messages/{en,ko,ja}.json    all UI strings
+    index.ts                    store: t(), setLocale(), subscribe(), Intl formatting
+tests/                          136 unit tests
+```
+
+## How to extend
+
+**Add a city** — append to `src/data/cities.json` (and its country to `countries.json` if new), add at
+least one leg in `routes.json`. Tests check coordinates, names in every locale, unique codes and
+that every city is reachable from every departure.
+
+**Add a postcard** — write `src/features/postcards/scenes/<city>.ts` exporting a `PostcardScene`
+(draw into a 224×108 pixel canvas + a stamp motif) and register it in `scenes/index.ts`.
+Title, country, dates, focus time, route and postmark come from data automatically.
+Cities without a registered scene have no postcard yet; the app must not invent one.
+
+**Add a language (e.g. zh-Hans)** — add `messages/zh-Hans.json` with the same keys, register it in
+`messages/index.ts`, move it from `PLANNED_LOCALES` to `SUPPORTED_LOCALES`. Optional `zh-Hans`
+names in data files; missing ones fall back through `FALLBACKS` (zh-Hant → zh-Hans → en).
+
+## Design decisions
+
+- Journey state is derived from an append-only session ledger; each session stores the km/min
+  rate it was earned at, so changing the rate never rewrites past arrivals. Session ids are deduped.
+- Plans may only use curated legs (no teleporting). Rerouting keeps visited cities and the leg in progress.
+- Postcards are printed in English, like real souvenir cards, so the bitmap font stays Latin-only;
+  the app UI around them (album, captions, share sheet) is fully localized.
+- Language changes go through a subscribable store; React will read it with
+  `useSyncExternalStore`, so the page updates in place without a reload.
+- Fonts on the postcard are original bitmap glyphs: no font files, no licences, identical on every device.
+
+## Boarding pass
+
+One pass per flight leg, used twice. It is issued when the leg starts and fills its route bar as
+sessions complete. On arrival it gets an ARRIVED stamp and the stub tears off along the perforation.
+The stub's window shows the destination's postcard scene at half scale (`windowFocus` on a scene
+picks the centre). Flight numbers and seats are stable per route, so the live, preview and stored pass always match.
+
+## Phase 1 behaviour notes
+
+- The timer never counts down a variable. On load, on `visibilitychange` and on `pageshow` it
+  reconciles from the stored timestamps; a session that ended while the app was closed is
+  recorded at its natural end time and the user is told so ("completed while you were away").
+- Sessions under one minute and breaks are not recorded as travel. Cancelled sessions are kept
+  in a separate list and never add distance. Completion is idempotent by session id, so two tabs
+  finishing the same session record it once.
+- Arrival is recorded when the session that crosses the line completes. If a short leg is fully
+  flown mid-session, the pass says LANDING until then.
+- Not in this build (next phases): server push, accounts/sync, achievements. Data persistence uses localStorage behind a single provider; moving to
+  IndexedDB is a contained change.
+
+## PWA and the lock screen
+
+- `src/app/manifest.ts` + pixel-art icons (`npm run icons`) + iOS home-screen meta. Install
+  guidance: the native prompt on Android/desktop Chromium, Share → Add to Home Screen on iOS.
+- `public/sw.js`: precaches the five pages, every hashed asset they reference and the audio, so the
+  first visit is already offline-ready. Pages are network-first, build assets cache-first, audio
+  supports byte ranges from cache. Bump `VERSION` to roll caches.
+- Lock screen (both opt-in, in Focus and Profile):
+  - **Cabin sound**: a generated, seamless 64 s cabin hum (`public/audio`). While it plays the
+    OS shows a Media Session card: "Flying to Tokyo", landing time, and a progress bar for the
+    session; its play/pause buttons resume/pause the session. Its `timeupdate` events also let the
+    page record the landing on time with the screen off, where the OS keeps media playing.
+  - **Lock-screen notice**: a silent notification with the landing time, updated on pause and
+    replaced by an arrival notice when the session lands while the page is alive.
+- Honest limits: a web app cannot run code when the OS suspends it, and cannot schedule a local
+  alert for later. Without cabin sound, the landing is recorded the moment the app is opened again.
+  On iOS, notifications need the app installed to the home screen (iOS 16.4+).
+- Browser checks (headless Chrome, simulated phone/tablet/desktop with a fake clock) are in
+  the session report; real-device testing on iOS/Android is still to do.
+
+## Usability pass (Nov 2026)
+
+- **Fewer taps**: one-tap "Start 25 min" on Home (last duration and activity), a start button that
+  stays above the tab bar on phones, lock-screen options folded into one line that shows what's on.
+- **No native dialogs**: finish, cancel and erase use an in-app sheet; the safe choice is focused
+  first and Escape/tap-outside choose it. Cancelling shows "Undo" for 8 s, and the cancelled
+  seconds count as a pause, so no focus time is invented.
+- **Feedback**: a break that runs out chimes, buzzes (Android) and offers "Start next flight";
+  landing buzzes too. The browser tab shows `24:00 → Tokyo`. Space pauses/resumes on desktop.
+- **Dark mode**: Match device / Light / Dark in Profile, applied before first paint (no flash).
+- **Onboarding**: language buttons on the first screen and a three-step "how it works".
+- **World map** (`/map`): Natural Earth 1:110m land baked into one SVG path (`npm run bake-land`,
+  ~41 KB, no map library at runtime); flown legs solid, the rest dashed, the plane at its live
+  position, "My route" / "Whole world" zoom, collision-aware labels.
+- After landing at the last stop, the arrival sheet leads straight to choosing the next city.
+
+## Deploy to Vercel
+
+The app is a standard Next.js project: Vercel detects it with no settings to change
+(framework Next.js, build `next build`, Node ≥ 20). Security and caching headers live in
+`next.config.mjs`, so they apply on any host. Nothing needs environment variables.
+
+**Option A — GitHub + Vercel (recommended, redeploys on every push)**
+1. Create an empty GitHub repository (no README), then from this folder:
+   `git remote add origin https://github.com/<you>/wandermin.git && git push -u origin main`
+2. vercel.com → Add New… → Project → Import that repository → Deploy.
+
+**Option B — Vercel CLI from your computer**
+`npx vercel` (first time: log in and accept the defaults), then `npx vercel --prod`.
+
+After deploying, open the HTTPS URL on your phone:
+- iPhone: Safari → Share → Add to Home Screen, open it from the home screen, then allow
+  notifications from Focus → "Know it's running without unlocking".
+- Android: Chrome shows an install prompt (or ⋮ → Install app).
+
+Things to check on real devices: the lock-screen media card with cabin sound on, landing on time
+with the screen off, the lock-screen notice, offline reopen, and haptics on Android.

@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "note": "Curated flight legs. Distances are computed from city coordinates, never stored.",
+  "legs": [
+    {
+      "from": "seoul",
+      "to": "tokyo"
+    },
+    {
+      "from": "seoul",
+      "to": "osaka"
+    },
+    {
+      "from": "seoul",
+      "to": "taipei"
+    },
+    {
+      "from": "seoul",
+      "to": "hong-kong"
+    },
+    {
+      "from": "tokyo",
+      "to": "osaka"
+    },
+    {
+      "from": "tokyo",
+      "to": "kyoto"
+    },
+    {
+      "from": "osaka",
+      "to": "kyoto"
+    },
+    {
+      "from": "osaka",
+      "to": "taipei"
+    },
+    {
+      "from": "taipei",
+      "to": "hong-kong"
+    },
+    {
+      "from": "hong-kong",
+      "to": "hanoi"
+    },
+    {
+      "from": "hong-kong",
+      "to": "bangkok"
+    },
+    {
+      "from": "hong-kong",
+      "to": "singapore"
+    },
+    {
+      "from": "hanoi",
+      "to": "bangkok"
+    },
+    {
+      "from": "bangkok",
+      "to": "singapore"
+    },
+    {
+      "from": "singapore",
+      "to": "bali"
+    },
+    {
+      "from": "bali",
+      "to": "sydney"
+    },
+    {
+      "from": "bali",
+      "to": "melbourne"
+    },
+    {
+      "from": "sydney",
+      "to": "melbourne"
+    },
+    {
+      "from": "singapore",
+      "to": "sydney"
+    },
+    {
+      "from": "bangkok",
+      "to": "istanbul"
+    },
+    {
+      "from": "hong-kong",
+      "to": "london"
+    },
+    {
+      "from": "london",
+      "to": "paris"
+    },
+    {
+      "from": "london",
+      "to": "amsterdam"
+    },
+    {
+      "from": "paris",
+      "to": "amsterdam"
+    },
+    {
+      "from": "paris",
+      "to": "barcelona"
+    },
+    {
+      "from": "paris",
+      "to": "zurich"
+    },
+    {
+      "from": "barcelona",
+      "to": "rome"
+    },
+    {
+      "from": "zurich",
+      "to": "venice"
+    },
+    {
+      "from": "venice",
+      "to": "rome"
+    },
+    {
+      "from": "zurich",
+      "to": "vienna"
+    },
+    {
+      "from": "vienna",
+      "to": "prague"
+    },
+    {
+      "from": "prague",
+      "to": "amsterdam"
+    },
+    {
+      "from": "vienna",
+      "to": "venice"
+    },
+    {
+      "from": "vienna",
+      "to": "istanbul"
+    },
+    {
+      "from": "rome",
+      "to": "istanbul"
+    },
+    {
+      "from": "istanbul",
+      "to": "cairo"
+    },
+    {
+      "from": "rome",
+      "to": "cairo"
+    },
+    {
+      "from": "cairo",
+      "to": "cape-town"
+    },
+    {
+      "from": "cape-town",
+      "to": "sydney"
+    },
+    {
+      "from": "london",
+      "to": "new-york"
+    },
+    {
+      "from": "paris",
+      "to": "new-york"
+    },
+    {
+      "from": "london",
+      "to": "toronto"
+    },
+    {
+      "from": "new-york",
+      "to": "toronto"
+    },
+    {
+      "from": "toronto",
+      "to": "vancouver"
+    },
+    {
+      "from": "vancouver",
+      "to": "san-francisco"
+    },
+    {
+      "from": "san-francisco",
+      "to": "los-angeles"
+    },
+    {
+      "from": "los-angeles",
+      "to": "mexico-city"
+    },
+    {
+      "from": "new-york",
+      "to": "mexico-city"
+    },
+    {
+      "from": "new-york",
+      "to": "los-angeles"
+    },
+    {
+      "from": "tokyo",
+      "to": "vancouver"
+    },
+    {
+      "from": "tokyo",
+      "to": "san-francisco"
+    },
+    {
+      "from": "seoul",
+      "to": "los-angeles"
+    },
+    {
+      "from": "sydney",
+      "to": "los-angeles"
+    }
+  ]
+}
