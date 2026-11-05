@@ -4,14 +4,15 @@ import { getCity, getCountry } from "@/data";
 import { legDistanceKm } from "@/features/travel/graph";
 import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
-import { DeparturePicker, DestinationPicker } from "@/components/Pickers";
+import { DestinationPicker } from "@/components/Pickers";
+import { Onboarding } from "@/components/Onboarding";
 import { WorldMap } from "@/components/WorldMap";
 
 export default function RoutePage() {
   const { state, journey } = useApp();
   const { t, name, fmt, date } = useI18n();
   const [changing, setChanging] = useState(false);
-  if (!state.plan || !journey) return <DeparturePicker />;
+  if (!state.plan || !journey) return <Onboarding />;
   const cities = [state.plan.departureId, ...state.plan.stops];
   const arrivedAt = (i: number) => journey.arrivals.find((a) => a.legIndex === i - 1)?.arrivedAt;
 

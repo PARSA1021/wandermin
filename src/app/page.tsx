@@ -6,7 +6,8 @@ import { getCity, getCountry } from "@/data";
 import { TRAVEL_CONFIG } from "@/config/travel";
 import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
-import { DeparturePicker, DestinationPicker } from "@/components/Pickers";
+import { DestinationPicker } from "@/components/Pickers";
+import { Onboarding } from "@/components/Onboarding";
 import { Notice } from "@/components/Notice";
 import { InstallCard } from "@/components/InstallCard";
 import { ArtImage } from "@/components/ArtImage";
@@ -22,7 +23,7 @@ export default function HomePage() {
   const router = useRouter();
   const { t, name, fmt } = useI18n();
   const now = useNow(state.active ? 5_000 : 60_000);
-  if (!state.plan || !journey) return <DeparturePicker />;
+  if (!state.plan || !journey) return <Onboarding />;
 
   const hour = new Date(now).getHours();
   const greeting = hour < 12 ? t("home.greeting.morning") : hour < 18 ? t("home.greeting.afternoon") : t("home.greeting.evening");

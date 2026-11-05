@@ -6,7 +6,8 @@ import { BREAK_MINUTES, CUSTOM_RANGE, PRESET_MINUTES, elapsedMs, formatClock, is
 import { livePass } from "@/features/tickets/passes";
 import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
-import { DeparturePicker, DestinationPicker } from "@/components/Pickers";
+import { DestinationPicker } from "@/components/Pickers";
+import { Onboarding } from "@/components/Onboarding";
 import { Notice } from "@/components/Notice";
 import { ArtImage } from "@/components/ArtImage";
 import { useNow, useWakeLock } from "@/components/hooks";
@@ -90,7 +91,7 @@ export default function FocusPage() {
     }
   }, [active, now, dispatch]);
 
-  if (!state.plan) return <DeparturePicker />;
+  if (!state.plan) return <Onboarding />;
   const needsDestination = !journey?.currentLeg && !active;
 
   if (active) {

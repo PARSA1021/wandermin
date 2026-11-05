@@ -162,6 +162,15 @@ picks the centre). Flight numbers and seats are stable per route, so the live, p
 - Lighthouse (mobile, local): performance 63 → 81–85, LCP 4.4 s → 1.5–1.8 s, CLS 0;
   accessibility, best practices and SEO 100.
 
+## First run (Nov 2026)
+
+Modelled on how focus and travel apps onboard (value first, one decision per screen, defaults
+pre-selected, first session one tap away): a welcome screen with a sample postcard and three
+lines on how it works → departure (pre-selected from the device time zone) → first destination
+(shortest flight pre-selected, shown as minutes of focus) → the boarding pass with
+"Board and focus", which starts the first session immediately. Progress dots, back, language
+switch, no tab bar until the plan exists. Profile → "How WANDERMIN works" replays the intro.
+
 ## Deploy to Vercel
 
 The app is a standard Next.js project: Vercel detects it with no settings to change

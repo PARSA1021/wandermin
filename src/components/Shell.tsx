@@ -59,7 +59,8 @@ export function Shell({ children }: { children: ReactNode }) {
   const { state } = useApp();
   const { t } = useI18n();
   // distraction-free focus screen on phones while a session runs
-  const immersive = pathname === "/focus" && !!state.active;
+  // and during first-run onboarding, which is its own full-screen flow
+  const immersive = (pathname === "/focus" && !!state.active) || !state.plan;
 
   useEffect(() => {
     document.documentElement.dataset.motion = state.settings.reduceMotion ? "reduce" : "full";

@@ -3,7 +3,7 @@ import { getCity } from "@/data";
 import { legPasses } from "@/features/tickets/passes";
 import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
-import { DeparturePicker } from "@/components/Pickers";
+import { Onboarding } from "@/components/Onboarding";
 import { useState } from "react";
 import { ArtImage } from "@/components/ArtImage";
 import { PostcardViewer, postcardJob } from "@/components/PostcardViewer";
@@ -17,7 +17,7 @@ export default function JournalPage() {
   const { state, journey, timeZone } = useApp();
   const { t, name, fmt, date } = useI18n();
   const [viewing, setViewing] = useState<Arrival | null>(null);
-  if (!state.plan || !journey) return <DeparturePicker />;
+  if (!state.plan || !journey) return <Onboarding />;
 
   const totalMin = Math.round(state.ledger.reduce((m, s) => m + s.focusedMs, 0) / 60000);
   const firstByCity = new Map<string, (typeof journey.arrivals)[number]>();
