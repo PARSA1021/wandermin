@@ -221,6 +221,30 @@ What the app is, made obvious: link previews (title, description and a 1200×630
 `npm run og`), a "How it works" button on Home, one-line explanations on Focus before and during a
 flight, and subtitles on the map and journal.
 
+## Collection board and takeoff/landing moments (Nov 2026)
+
+- **Postcard collection** (`components/CollectionBoard.tsx`): all 50 cities on the journal, with
+  region tabs (Asia 1/17 …) and a progress bar. Visited cities show their postcard; the rest are faded
+  sepia ghosts with how much focus they are from where you are. Tapping one explains the route
+  (time, distance, stops) and "Fly here" plans it and opens Focus.
+- **Takeoff** (`components/Takeoff.tsx`): a 2-second overlay when a flight starts — the pixel plane rolls
+  down the runway and climbs out. Fresh starts only (not after reloads); a tap skips it.
+- **Landing**: the boarding pass gets a stamp thump with an ink ring and pixel confetti, then the
+  postcard slides in. All motion is off with Reduced motion.
+
+## Passport, flight to-dos and the lock-screen flight card (Nov 2026)
+
+- **Passport** (`components/Passport.tsx`): ink stamps in SVG (shape, colour and tilt from the country
+  code; a turbulence filter gives the inked edge). The first flight stamps the home country as
+  DEPARTURE; each new country reached adds an ARRIVAL stamp, also shown on the arrival sheet.
+- **To-do for each flight**: an optional note when starting (kept on the session), shown while flying;
+  after landing, "Did you get it done?" → done, or carry it over to the next flight (pre-filled).
+  The journal's session list shows ✓ / ↻ with the note.
+- **Lock-screen flight card** (`components/lockArt.ts`): with cabin sound on, the Media Session artwork is
+  a 1024×1024 picture of the destination scene, route codes, progress with the plane and the landing time,
+  redrawn every minute (and on audio ticks while the screen is off). iOS 16+ can enlarge it on the lock
+  screen; Android uses it as the player background. A full custom lock-screen UI needs a native app.
+
 ## Deploy to Vercel
 
 The app is a standard Next.js project: Vercel detects it with no settings to change

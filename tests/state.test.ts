@@ -207,3 +207,39 @@ describe("sessions land with the plane", () => {
     expect(j.currentLeg?.travelledKm).toBe(0);
   });
 });
+
+describe("flight to-do notes", () => {
+  it("keeps the note with the session, asks once, and carries it over when not finished", () => {
+    let s = reduce(trip(), { type: "start", id: "n1", minutes: 15, activity: "studying", note: "  영어 단어 2장  ", now: T });
+    expect(s.active!.note).toBe("영어 단어 2장");
+    s = reduce(s, { type: "finish", now: T + 15 * min });
+    expect(s.ledger[0]!.note).toBe("영어 단어 2장");
+    expect(s.noteReview).toBe("n1");
+    s = reduce(s, { type: "note-result", sessionId: "n1", done: false });
+    expect(s.noteReview).toBeNull();
+    expect(s.ledger[0]!.noteDone).toBe(false);
+    expect(s.draftNote).toBe("영어 단어 2장"); // offered again on the next flight
+    s = reduce(s, { type: "start", id: "n2", minutes: 5, activity: "studying", note: s.draftNote, now: T + 20 * min });
+    expect(s.draftNote).toBe("");
+    s = reduce(s, { type: "finish", now: T + 25 * min });
+    s = reduce(s, { type: "note-result", sessionId: "n2", done: true });
+    expect(s.ledger.find((x) => x.id === "n2")!.noteDone).toBe(true);
+    expect(s.draftNote).toBe("");
+  });
+
+  it("never asks about a note on a session too short to record, or on breaks", () => {
+    let s = reduce(trip(), { type: "start", id: "n3", minutes: 15, activity: "studying", note: "읽기", now: T });
+    s = reduce(s, { type: "finish", now: T + 30_000 });
+    expect(s.noteReview).toBeNull();
+    s = reduce(s, { type: "start", id: "b1", minutes: 5, activity: "studying", kind: "break", note: "x", now: T + min });
+    expect(s.active!.note).toBeUndefined();
+  });
+
+  it("old saves without the new fields still load", () => {
+    const old = { ...initialState() } as Partial<AppState>;
+    delete old.draftNote; delete old.noteReview;
+    const s = parseState(JSON.stringify(old));
+    expect(s.draftNote).toBe("");
+    expect(s.noteReview).toBeNull();
+  });
+});

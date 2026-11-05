@@ -13,6 +13,9 @@ export interface CompletedSession {
   activity?: string;
   /** When the session started (pauses included); used for boarding times. */
   startedAt?: number;
+  /** The flight's to-do, and whether the user said they got it done. */
+  note?: string;
+  noteDone?: boolean;
 }
 
 /** Where the traveller started and the ordered cities they intend to fly to. */

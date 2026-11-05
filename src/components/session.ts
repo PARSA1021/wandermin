@@ -9,10 +9,10 @@ export const newId = () => (typeof crypto !== "undefined" && crypto.randomUUID ?
  * Start a session from a tap. Must be called synchronously inside the click handler:
  * iOS only lets audio start inside a user gesture.
  */
-export function startSession(dispatch: (a: Action) => void, settings: Settings, opts: { minutes: number; activity: ActivityId; customActivity?: string; kind?: SessionKind; remember?: boolean }) {
+export function startSession(dispatch: (a: Action) => void, settings: Settings, opts: { minutes: number; activity: ActivityId; customActivity?: string; kind?: SessionKind; remember?: boolean; note?: string }) {
   if (settings.cabinSound) cabin.start();
   if (opts.remember) dispatch({ type: "settings", patch: { activity: opts.activity, defaultMinutes: opts.minutes } });
-  dispatch({ type: "start", id: newId(), minutes: opts.minutes, activity: opts.activity, customActivity: opts.customActivity, kind: opts.kind, now: Date.now() });
+  dispatch({ type: "start", id: newId(), minutes: opts.minutes, activity: opts.activity, customActivity: opts.customActivity, kind: opts.kind, note: opts.note, now: Date.now() });
 }
 
 /** Light haptic tap where supported (Android); silently ignored elsewhere. */

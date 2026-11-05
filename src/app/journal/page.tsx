@@ -1,13 +1,14 @@
 "use client";
-import { CITIES, getCity } from "@/data";
+import { getCity } from "@/data";
 import { legPasses } from "@/features/tickets/passes";
 import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
 import { Onboarding } from "@/components/Onboarding";
 import { useState } from "react";
 import { ArtImage } from "@/components/ArtImage";
-import { PostcardViewer, postcardJob } from "@/components/PostcardViewer";
-import { getSceneAvailable } from "@/features/art/available";
+import { PostcardViewer } from "@/components/PostcardViewer";
+import { CollectionBoard } from "@/components/CollectionBoard";
+import { Passport } from "@/components/Passport";
 import type { Arrival } from "@/features/travel/journey";
 import type { MessageKey } from "@/i18n";
 
@@ -66,22 +67,9 @@ export default function JournalPage() {
         </div>
       </section>
 
-      <section>
-        <h2 className="mb-3 text-lg font-bold">{t("journal.postcards")} <span className="font-normal text-ink-soft tabular">{firstByCity.size}/{CITIES.length}</span></h2>
-        {firstByCity.size === 0 ? <p className="rounded-2xl border border-dashed border-line p-5 text-ink-soft">{t("journal.empty")}</p> : (
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[...firstByCity.values()].reverse().map((a) => {
-              return getSceneAvailable(a.cityId) && (
-                <li key={a.cityId}>
-                  <button onClick={() => setViewing(a)} className="tap block w-full text-left" aria-haspopup="dialog">
-                    <ArtImage className="rounded-lg shadow transition-transform hover:-translate-y-0.5" job={postcardJob(a, timeZone)} alt={name(getCity(a.cityId).name)} />
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
+      <Passport />
+
+      <CollectionBoard onOpen={setViewing} />
 
       <section>
         <h2 className="mb-3 text-lg font-bold">{t("journal.passes")}</h2>
@@ -98,7 +86,10 @@ export default function JournalPage() {
           {[...state.ledger].reverse().slice(0, 12).map((s) => (
             <li key={s.id} className="flex items-center justify-between px-4 py-3 text-sm">
               <span>{date(s.completedAt, undefined, { dateStyle: "medium", timeStyle: "short" })}</span>
-              <span className="text-ink-soft">{s.activity ? (["studying", "working", "reading", "programming", "writing", "personal", "custom"].includes(s.activity) ? t(`timer.activity.${s.activity}` as MessageKey) : s.activity) : ""}</span>
+              <span className="min-w-0 flex-1 truncate px-3 text-ink-soft">
+                {s.activity ? (["studying", "working", "reading", "programming", "writing", "personal", "custom"].includes(s.activity) ? t(`timer.activity.${s.activity}` as MessageKey) : s.activity) : ""}
+                {s.note && <span className={`ml-2 ${s.noteDone ? "text-ok" : ""}`}>{s.noteDone ? "✓" : s.noteDone === false ? "↻" : "·"} {s.note}</span>}
+              </span>
               <span className="font-semibold tabular">{t("journal.minutesShort", { minutes: Math.round(s.focusedMs / 60000) })}</span>
             </li>
           ))}

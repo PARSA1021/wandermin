@@ -90,3 +90,52 @@ html[data-motion="reduce"] :is(.rise, .rise-late, .sheet-panel, .sheet-backdrop,
 /* very large monitors: scale the whole rem-based UI up instead of leaving a thin column in a sea of space */
 @media (min-width: 1920px) and (min-height: 1000px) { html { font-size: 112.5%; } }
 @media (min-width: 2400px) and (min-height: 1300px) { html { font-size: 125%; } }
+
+/* collection board: places not visited yet show as faded, sepia ghosts of their postcard */
+.ghost-card { background: var(--color-paper-deep); position: relative; }
+/* hide the card's text strip: an unvisited city has no arrival date or route yet */
+.ghost-card::before { content: ""; position: absolute; inset: auto 0 0 0; height: 30%; z-index: 1; background: var(--color-paper-deep); }
+.ghost-card img { filter: grayscale(1) sepia(.35) contrast(.7) brightness(1.08) blur(.6px); opacity: .42; }
+.ghost-card::after { content: ""; position: absolute; inset: 0; border: 2px dashed color-mix(in srgb, var(--color-ink-soft) 35%, transparent); border-radius: inherit; pointer-events: none; }
+.no-scrollbar { scrollbar-width: none; } .no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* takeoff: the plane rolls, rotates up and climbs out while the sky scrolls by */
+.takeoff { animation: takeoff-out .35s 1.95s ease-in both; }
+.takeoff-sky { background: linear-gradient(to bottom, #7fb0e0, #cfe2ee 70%, var(--color-paper)); }
+html[data-theme="dark"] .takeoff-sky { background: linear-gradient(to bottom, #1c2f5e, #3a4f7e 70%, var(--color-paper)); }
+.takeoff-runway { background: repeating-linear-gradient(90deg, #5a5f6e 0 28px, #f3ece0 28px 44px); animation: runway 1s linear both; }
+.takeoff-plane { animation: plane-roll 1.9s cubic-bezier(.45,.05,.4,1) both; }
+.takeoff-cloud { left: 105%; animation: cloud-by 1.6s .25s linear both; }
+.takeoff-title { animation: rise .4s .15s cubic-bezier(.2,.8,.2,1) both; }
+.takeoff-sub { animation: rise .4s .3s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes plane-roll {
+  0% { transform: translate(0, 0) rotate(0); }
+  40% { transform: translate(55vw, 0) rotate(0); }
+  55% { transform: translate(70vw, -3vh) rotate(-12deg); }
+  100% { transform: translate(135vw, -62vh) rotate(-22deg); }
+}
+@keyframes runway { from { transform: translateX(0); } to { transform: translateX(-40%); opacity: .3; } }
+@keyframes cloud-by { from { transform: translateX(0); } to { transform: translateX(-160vw); } }
+@keyframes takeoff-out { to { opacity: 0; visibility: hidden; } }
+
+/* landing: the pass gets stamped (a thump and an ink ring), then the postcard slides in */
+.stamp-hit { animation: stamp-hit .55s .15s cubic-bezier(.3,1.6,.5,1) both; position: relative; }
+.stamp-hit::after { content: ""; position: absolute; left: 38%; top: 36%; width: 14%; aspect-ratio: 1; border-radius: 999px;
+  border: 3px solid #c8322a; transform: translate(-50%, -50%) scale(.4); opacity: 0; animation: ink-ring .7s .32s ease-out both; pointer-events: none; }
+@keyframes stamp-hit { 0% { transform: scale(1.05) rotate(-.6deg); } 45% { transform: scale(.97) rotate(.4deg); } 70% { transform: scale(1.01); } 100% { transform: none; } }
+@keyframes ink-ring { 0% { opacity: .9; transform: translate(-50%, -50%) scale(.4); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(2.6); } }
+.deal-in { animation: deal-in .7s .55s cubic-bezier(.2,.9,.25,1.15) both; }
+@keyframes deal-in { 0% { opacity: 0; transform: translateY(46px) rotate(-7deg) scale(.92); } 70% { opacity: 1; transform: translateY(-4px) rotate(1deg); } 100% { opacity: 1; transform: none; } }
+.confetti { position: absolute; width: 7px; height: 7px; pointer-events: none; animation: confetti 1.1s .45s cubic-bezier(.2,.7,.3,1) both; }
+@keyframes confetti { 0% { opacity: 1; transform: translate(0, 0) rotate(0); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); } }
+
+@media (prefers-reduced-motion: reduce) { .takeoff, .takeoff-plane, .takeoff-cloud, .stamp-hit, .stamp-hit::after, .deal-in, .confetti { animation: none !important; } .confetti, .stamp-hit::after { display: none; } }
+html[data-motion="reduce"] :is(.stamp-hit, .stamp-hit::after, .deal-in, .confetti) { animation: none !important; }
+html[data-motion="reduce"] .confetti { display: none; }
+
+/* passport page: faint guilloche lines, stamps land with a small press */
+.passport-page { background: repeating-linear-gradient(0deg, transparent 0 22px, color-mix(in srgb, var(--color-line) 55%, transparent) 22px 23px), var(--color-card); }
+.stamp-in { animation: stamp-in .45s cubic-bezier(.3,1.5,.5,1) both; }
+@keyframes stamp-in { 0% { opacity: 0; transform: scale(1.5); } 60% { opacity: 1; transform: scale(.94); } 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .stamp-in { animation: none; } }
+html[data-motion="reduce"] .stamp-in { animation: none; }

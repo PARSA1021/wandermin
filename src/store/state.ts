@@ -45,6 +45,10 @@ export interface AppState {
   notice: Notice | null;
   /** The session cancelled most recently, kept briefly so the user can undo. */
   undo: { session: ActiveSession; cancelledAt: number } | null;
+  /** A to-do carried over to the next flight ("not finished yet"). */
+  draftNote: string;
+  /** Session whose to-do the user hasn't answered yet ("did you get it done?"). */
+  noteReview: string | null;
 }
 
 export const initialState = (): AppState => ({
@@ -57,6 +61,8 @@ export const initialState = (): AppState => ({
   pendingArrivals: [],
   notice: null,
   undo: null,
+  draftNote: "",
+  noteReview: null,
 });
 
 /** How long "Undo" stays available after cancelling a session. */
@@ -65,7 +71,8 @@ export const UNDO_MS = 8_000;
 export type Action =
   | { type: "choose-departure"; departureId: string }
   | { type: "set-destination"; cityId: string; now?: number }
-  | { type: "start"; id: string; minutes: number; activity: ActivityId; kind?: SessionKind; customActivity?: string; now: number }
+  | { type: "start"; id: string; minutes: number; activity: ActivityId; kind?: SessionKind; customActivity?: string; note?: string; now: number }
+  | { type: "note-result"; sessionId: string; done: boolean }
   | { type: "pause"; now: number }
   | { type: "resume"; now: number }
   | { type: "finish"; now: number }
@@ -116,6 +123,7 @@ function finishActive(state: AppState, now: number, auto: boolean): AppState {
     active: null,
     ledger,
     pendingArrivals: [...state.pendingArrivals, ...fresh],
+    noteReview: record.note && ledger.length > state.ledger.length ? record.id : state.noteReview,
     notice: auto && whileAway ? { kind: "completed-while-away", minutes: Math.round(record.focusedMs / 60000) } : state.notice,
   };
 }
@@ -139,7 +147,10 @@ export function reduce(state: AppState, action: Action): AppState {
           id: action.id, kind: action.kind, activity: action.activity, customActivity: action.customActivity,
           minutes: action.minutes, kmPerMinute: TRAVEL_CONFIG.kmPerMinute, now: action.now,
           maxMs: (action.kind ?? "focus") === "focus" ? flightLeftMs(state) : undefined,
+          note: (action.kind ?? "focus") === "focus" ? action.note : undefined,
         }),
+        draftNote: (action.kind ?? "focus") === "focus" ? "" : state.draftNote,
+        noteReview: (action.kind ?? "focus") === "focus" ? null : state.noteReview,
         notice: null,
         undo: null,
       };
@@ -186,11 +197,21 @@ export function reduce(state: AppState, action: Action): AppState {
       return { ...state, notice: null };
     case "settings":
       return { ...state, settings: { ...state.settings, ...action.patch } };
+    case "note-result": {
+      const s = state.ledger.find((x) => x.id === action.sessionId);
+      return {
+        ...state,
+        ledger: state.ledger.map((x) => (x.id === action.sessionId ? { ...x, noteDone: action.done } : x)),
+        noteReview: null,
+        // not done yet: offer the same to-do on the next flight
+        draftNote: !action.done && s?.note ? s.note : state.draftNote,
+      };
+    }
     case "reset":
       return { ...initialState(), settings: state.settings };
     case "import":
       // a restored log never resumes a session from another device; this device keeps its own look
-      return { ...action.state, active: null, undo: null, notice: null, settings: { ...action.state.settings, theme: state.settings.theme, locale: state.settings.locale } };
+      return { ...action.state, active: null, undo: null, notice: null, noteReview: null, settings: { ...action.state.settings, theme: state.settings.theme, locale: state.settings.locale } };
     default:
       return state;
   }

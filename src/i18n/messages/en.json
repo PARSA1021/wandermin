@@ -190,7 +190,7 @@
   },
   "companion": {
     "cabin": "Cabin sound",
-    "cabinHint": "Plays a soft in-flight hum. Your lock screen then shows the flight, the landing time and a progress bar, and you can pause from there.",
+    "cabinHint": "Plays a soft cabin hum. Your lock screen shows a large flight card — destination, progress and landing time — and you can pause from there.",
     "notify": "Lock-screen notice",
     "notifyHint": "Shows your landing time as a notification while you focus.",
     "denied": "Notifications are blocked. Allow them in your browser or system settings.",
@@ -260,5 +260,44 @@
   },
   "help": {
     "open": "How it works"
+  },
+  "collection": {
+    "title": "Postcard collection",
+    "all": "All",
+    "locked": "Not visited yet",
+    "away": "about {minutes} min of focus",
+    "here": "You're here",
+    "hereBody": "You're here now. Fly somewhere and come back to collect this city's postcard.",
+    "routeTime": "About {minutes} min of focus from where you are · {km} km",
+    "go": "Fly here",
+    "flyingCta": "Keep flying",
+    "flying": "You're already on your way here.",
+    "busy": "You can change your destination once this session ends."
+  },
+  "region": {
+    "asia": "Asia",
+    "europe": "Europe",
+    "americas": "Americas",
+    "africa": "Africa",
+    "oceania": "Oceania"
+  },
+  "takeoff": {
+    "title": "Takeoff!",
+    "body": "{time} to {city}"
+  },
+  "note": {
+    "label": "To-do for this flight (optional)",
+    "placeholder": "e.g. 2 pages of vocabulary",
+    "carried": "Carried over from your last flight",
+    "onboard": "On this flight: {note}",
+    "reviewTitle": "Did you get it done?",
+    "done": "Done",
+    "carry": "Continue next flight"
+  },
+  "passport": {
+    "title": "Passport",
+    "empty": "Your first flight puts the departure stamp in your passport.",
+    "left": "{n} countries left to stamp",
+    "newStamp": "New stamp in your passport"
   }
 }

@@ -9,6 +9,7 @@ import { useI18n } from "@/i18n/react";
 import { DestinationPicker } from "@/components/Pickers";
 import { Onboarding } from "@/components/Onboarding";
 import { Notice } from "@/components/Notice";
+import { NoteReview } from "@/components/NoteReview";
 import { HowItWorksButton } from "@/components/HowItWorks";
 import { InstallCard } from "@/components/InstallCard";
 import { ArtImage } from "@/components/ArtImage";
@@ -54,6 +55,7 @@ export default function HomePage() {
         </h1>
       </header>
       <Notice />
+      <NoteReview />
       <InstallCard dismissible />
 
       {leg ? (

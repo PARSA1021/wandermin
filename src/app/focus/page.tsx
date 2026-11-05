@@ -11,6 +11,8 @@ import { DestinationPicker } from "@/components/Pickers";
 import { Onboarding } from "@/components/Onboarding";
 import { Notice } from "@/components/Notice";
 import { ArtImage } from "@/components/ArtImage";
+import { TakeoffOverlay } from "@/components/Takeoff";
+import { NoteReview } from "@/components/NoteReview";
 import { useNow, useWakeLock } from "@/components/hooks";
 import { LockScreenOptions } from "@/components/LockScreenOptions";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
@@ -58,6 +60,8 @@ export default function FocusPage() {
   const [custom, setCustom] = useState("");
   const [activity, setActivity] = useState<ActivityId>(state.settings.activity);
   const [customActivity, setCustomActivity] = useState("");
+  const [note, setNote] = useState(state.draftNote);
+  useEffect(() => { if (state.draftNote) setNote(state.draftNote); }, [state.draftNote]);
   // a session (re)starting swaps the setup form for the timer: show it from the top
   const activeId = active?.id;
   useEffect(() => { if (activeId) window.scrollTo({ top: 0 }); }, [activeId]);
@@ -107,9 +111,13 @@ export default function FocusPage() {
     const paused = isPaused(active);
     return (
       <section className="mx-auto flex max-w-2xl flex-col items-center gap-6 pt-6 text-center sm:pt-10 wideland:max-w-5xl wideland:flex-row wideland:items-start wideland:justify-center wideland:gap-x-8 short:gap-x-5 short:pt-2">
+        {active.kind === "focus" && pass && (
+          <TakeoffOverlay sessionId={active.id} startedAt={active.startedAt} city={name(getCity(state.plan.stops.at(-1) ?? pass.toId).name)} time={formatClock(active.plannedMs)} />
+        )}
         <div className="flex flex-col items-center gap-3 wideland:sticky wideland:top-4">
         <p className="text-sm font-semibold text-ink-soft">{paused ? t("focus.paused") : label}</p>
         {pass && !paused && <p className="-mt-1 text-xs text-ink-soft">{t("focus.inFlightHint", { city: name(getCity(pass.toId).name), rate: TRAVEL_CONFIG.kmPerMinute })}</p>}
+        {active.note && <p className="max-w-xs rounded-full bg-paper-deep/70 px-4 py-1.5 text-sm font-semibold">{t("note.onboard", { note: active.note })}</p>}
         <div className="relative grid aspect-square w-[min(78vw,20rem)] place-items-center wideland:w-[min(38vw,24rem)] short:w-[min(34vw,calc(100dvh-5rem))]">
           <TimerRing progress={elapsedMs(active, now) / active.plannedMs} paused={paused} kind={active.kind} />
           <p className={`tabular relative font-bold tracking-tight ${remaining >= 3_600_000 ? "text-5xl sm:text-6xl" : "text-6xl sm:text-7xl"} ${paused ? "opacity-60" : ""}`} role="timer" aria-live="off" aria-label={t("timer.remaining", { time: formatClock(remaining) })}>
@@ -157,6 +165,7 @@ export default function FocusPage() {
   return (
     <section className="mx-auto flex max-w-2xl flex-col gap-6">
       <Notice />
+      <NoteReview />
       {justFinished && !state.pendingArrivals.length && (
         <div className="rise flex flex-col gap-3 rounded-2xl border border-line bg-card p-4 sm:flex-row sm:items-center">
           <p className="flex-1 font-semibold">✓ {t("timer.complete")}</p>
@@ -191,6 +200,12 @@ export default function FocusPage() {
                 className="mt-2 min-h-11 w-full rounded-xl border border-line bg-card px-4" />
             )}
           </fieldset>
+          <label className="flex flex-col gap-2">
+            <span className="text-sm font-bold">{t("note.label")}</span>
+            <input value={note} maxLength={80} onChange={(e) => setNote(e.target.value)} placeholder={t("note.placeholder")} enterKeyHint="done"
+              className="min-h-12 w-full rounded-xl border border-line bg-card px-4" />
+            {state.draftNote && note === state.draftNote && <span className="text-xs text-ink-soft">↻ {t("note.carried")}</span>}
+          </label>
           <LockScreenOptions collapsible />
           {!landing && journey?.currentLeg && (
             <p className="rounded-xl bg-paper-deep/60 px-4 py-3 text-sm text-ink-soft" role="note">
@@ -204,7 +219,8 @@ export default function FocusPage() {
             <button disabled={!valid} onClick={() => {
               setJustFinished(false);
               buzz(20);
-              startSession(dispatch, state.settings, { minutes: chosen, activity, customActivity: activity === "custom" ? customActivity.trim() : undefined, remember: !custom });
+              startSession(dispatch, state.settings, { minutes: chosen, activity, customActivity: activity === "custom" ? customActivity.trim() : undefined, remember: !custom, note });
+              setNote("");
             }} className="min-h-16 w-full rounded-2xl bg-accent text-lg font-bold text-paper shadow-lg disabled:opacity-40">
               {t("timer.start")} · {!valid ? "—" : landing ? t("timer.landsIn", { city: landing.city, time: formatClock(landing.ms) }) : t("timer.duration", { count: chosen })}
             </button>

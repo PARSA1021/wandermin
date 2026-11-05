@@ -8,6 +8,7 @@
  * Nothing here counts time: every value comes from the stored timestamps.
  */
 import { useEffect, useRef } from "react";
+import { drawLockArt } from "./lockArt";
 import { getCity } from "@/data";
 import { elapsedMs, expectedEndAt, formatClock, isDue, remainingMs } from "@/features/focus/timer";
 import { useApp } from "@/store/AppProvider";
@@ -38,7 +39,10 @@ async function clearNotice() {
 }
 
 export function FlightCompanion() {
-  const { state, journey, dispatch } = useApp();
+  const { state, journey, dispatch, timeZone } = useApp();
+  const journeyRef = useRef(journey);
+  journeyRef.current = journey;
+  const artRef = useRef<{ refresh: () => void; last: number } | null>(null);
   const { t, name, date } = useI18n();
   const stateRef = useRef(state);
   stateRef.current = state;
@@ -81,13 +85,34 @@ export function FlightCompanion() {
       try { ms.setPositionState({ duration: a.plannedMs / 1000, position: Math.min(a.plannedMs, elapsedMs(a, Date.now())) / 1000, playbackRate: 1 }); } catch { /* unsupported */ }
     };
     setPosition();
+    // swap the icon for a large live flight card (scene, route, progress, landing time)
+    const icons = [{ src: "/icons/icon-512.png", sizes: "512x512", type: "image/png" }];
+    let alive = true;
+    const refresh = async () => {
+      const a = stateRef.current.active, j = journeyRef.current;
+      if (!a || a.kind !== "focus" || !j?.currentLeg) return;
+      const now = Date.now(), leg = j.currentLeg;
+      const flown = Math.min(leg.legKm, leg.travelledKm + (elapsedMs(a, now) / 60000) * a.kmPerMinute);
+      const isPaused = a.pausedAt !== null;
+      const art = await drawLockArt({
+        fromId: leg.fromId, toId: leg.toId, progress: flown / leg.legKm, timeZone, paused: isPaused, landsAt: expectedEndAt(a, now),
+        bigLine: isPaused ? t("focus.paused") : t("companion.lands", { time: clock(expectedEndAt(a, now)) }),
+        smallLine: `${name(getCity(leg.fromId).name)} → ${name(getCity(leg.toId).name)}`,
+      });
+      if (!alive || !art || !stateRef.current.active) return;
+      ms.metadata = new MediaMetadata({ title, artist: body(Date.now()), album: "WANDERMIN", artwork: [{ src: art, sizes: "1024x1024", type: "image/png" }, ...icons] });
+      if (artRef.current) artRef.current.last = Date.now();
+    };
+    artRef.current = { refresh: () => { void refresh(); }, last: Date.now() };
+    void refresh();
+    const every = window.setInterval(() => void refresh(), 60_000);
     const set = (action: MediaSessionAction, handler: MediaSessionActionHandler | null) => { try { ms.setActionHandler(action, handler); } catch { /* unsupported action */ } };
     set("play", () => { dispatch({ type: "resume", now: Date.now() }); cabin.start(); });
     set("pause", () => { dispatch({ type: "pause", now: Date.now() }); cabin.pause(); });
     for (const a of ["seekto", "seekbackward", "seekforward", "previoustrack", "nexttrack"] as MediaSessionAction[]) set(a, null);
     const el = cabin.element();
     el?.addEventListener("play", setPosition);
-    return () => { el?.removeEventListener("play", setPosition); };
+    return () => { alive = false; window.clearInterval(every); artRef.current = null; el?.removeEventListener("play", setPosition); };
   }, [active?.id, paused, state.settings.cabinSound, title, state.settings.locale]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // with the screen off, the playing audio keeps firing timeupdate: use it to land on time
@@ -101,6 +126,7 @@ export function FlightCompanion() {
       last = now;
       const a = stateRef.current.active;
       if (a && a.pausedAt === null && isDue(a, now)) dispatch({ type: "reconcile", now });
+      else if (artRef.current && now - artRef.current.last > 60_000) { artRef.current.last = now; artRef.current.refresh(); }
     };
     el.addEventListener("timeupdate", tick);
     return () => el.removeEventListener("timeupdate", tick);

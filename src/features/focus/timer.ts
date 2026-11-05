@@ -19,6 +19,8 @@ export interface ActiveSession {
   pausedTotalMs: number;
   /** Rate locked in when the session started; recorded with the completed session. */
   kmPerMinute: number;
+  /** What the user wants to get done on this flight (optional, their own words). */
+  note?: string;
 }
 
 export const PRESET_MINUTES = [15, 25, 30, 45, 50, 60, 90] as const;
@@ -31,6 +33,7 @@ export function startSession(opts: {
   id: string; kind?: SessionKind; activity: ActivityId; customActivity?: string; minutes: number; kmPerMinute: number; now: number;
   /** Upper bound for the planned time — the flight time left to the final stop, so the timer lands with the plane. */
   maxMs?: number;
+  note?: string;
 }): ActiveSession {
   const minutes = Math.round(opts.minutes);
   if (!Number.isFinite(minutes) || minutes < 1 || minutes > CUSTOM_RANGE.max) throw new Error("Invalid duration");
@@ -38,6 +41,7 @@ export function startSession(opts: {
   return {
     id: opts.id, kind: opts.kind ?? "focus", activity: opts.activity, customActivity: opts.customActivity,
     plannedMs: Math.min(minutes * 60_000, cap), startedAt: opts.now, pausedAt: null, pausedTotalMs: 0, kmPerMinute: opts.kmPerMinute,
+    ...(opts.note?.trim() ? { note: opts.note.trim().slice(0, 80) } : {}),
   };
 }
 
@@ -79,7 +83,7 @@ export function complete(s: ActiveSession, now: number): { record: CompletedSess
   const whileAway = naturalEnd !== null && now - naturalEnd > 5_000;
   const completedAt = naturalEnd !== null && focused >= s.plannedMs ? Math.min(now, naturalEnd) : now;
   if (s.kind === "break" || focused < MIN_RECORD_MS) return { record: null, whileAway, focusedMs: focused };
-  return { record: { id: s.id, completedAt, focusedMs: focused, kmPerMinute: s.kmPerMinute, activity: s.customActivity || s.activity, startedAt: s.startedAt }, whileAway, focusedMs: focused };
+  return { record: { id: s.id, completedAt, focusedMs: focused, kmPerMinute: s.kmPerMinute, activity: s.customActivity || s.activity, startedAt: s.startedAt, ...(s.note ? { note: s.note } : {}) }, whileAway, focusedMs: focused };
 }
 
 /** "25:00", or "1:05:00" for an hour or more. Rounds up so 0:00 only shows at the very end. */
