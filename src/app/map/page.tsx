@@ -18,7 +18,10 @@ export default function RoutePage() {
 
   return (
     <div className="flex flex-col gap-5">
-      <h1 className="text-2xl font-bold sm:text-3xl">{t("journey.title")}</h1>
+      <header>
+        <h1 className="text-2xl font-bold sm:text-3xl">{t("journey.title")}</h1>
+        <p className="mt-1 text-sm text-ink-soft">{t("journey.subtitle")}</p>
+      </header>
       <WorldMap />
       <ol className="relative flex flex-col gap-0 rounded-3xl border border-line bg-card p-5 sm:p-6">
         {cities.map((id, i) => {

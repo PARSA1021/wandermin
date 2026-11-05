@@ -115,7 +115,9 @@
     "keepGoing": "계속 집중하기",
     "cancelled": "세션을 취소했어요",
     "shortcuts": "스페이스: 일시정지·다시 시작",
-    "landsHint": "{city}까지 집중 {time}이면 도착해요. 착륙하면 세션이 끝나요."
+    "landsHint": "{city}까지 집중 {time}이면 도착해요. 착륙하면 세션이 끝나요.",
+    "flightHint": "{city}까지 {km}km · 집중 1분에 {rate}km씩 날아가요",
+    "inFlightHint": "집중하는 1분마다 {city}에 {rate}km씩 가까워져요"
   },
   "arrival": {
     "title": "{city}에 오신 걸 환영해요!",
@@ -137,7 +139,8 @@
     "empty": "아직 기록이 없어요. 첫 비행을 마치면 여기에 채워져요.",
     "week": "이번 주",
     "hours": "{hours}시간 {minutes}분",
-    "minutesShort": "{minutes}분"
+    "minutesShort": "{minutes}분",
+    "subtitle": "도착한 도시마다 엽서와 탑승권이 여기에 모여요."
   },
   "journey": {
     "title": "나의 여정",
@@ -145,7 +148,8 @@
     "arrived": "도착",
     "flying": "비행 중",
     "planned": "예정",
-    "change": "목적지 바꾸기"
+    "change": "목적지 바꾸기",
+    "subtitle": "집중으로 날아간 경로예요. 다음 목적지는 언제든 바꿀 수 있어요."
   },
   "profile": {
     "language": "언어",
@@ -248,5 +252,13 @@
     "moreFlights": "직항 더 보기 ({n})",
     "landsInOne": "이 비행은 {time}이면 도착해요. 착륙하면 세션이 끝나요.",
     "boardTime": "탑승하고 집중 시작 · {time}"
+  },
+  "notFound": {
+    "title": "이 페이지는 지도 밖으로 날아갔어요",
+    "body": "주소가 잘못됐을 수 있어요. 여행 기록은 그대로 안전해요.",
+    "home": "홈으로 돌아가기"
+  },
+  "help": {
+    "open": "사용법"
   }
 }

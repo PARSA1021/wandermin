@@ -17,5 +17,9 @@ export function startSession(dispatch: (a: Action) => void, settings: Settings, 
 
 /** Light haptic tap where supported (Android); silently ignored elsewhere. */
 export function buzz(pattern: number | number[] = 20) {
-  try { navigator.vibrate?.(pattern); } catch { /* unsupported */ }
+  try {
+    const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation;
+    if (ua && !ua.hasBeenActive) return; // before the first tap the browser would refuse (and log a warning)
+    navigator.vibrate?.(pattern);
+  } catch { /* unsupported */ }
 }

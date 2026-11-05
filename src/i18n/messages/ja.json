@@ -115,7 +115,9 @@
     "keepGoing": "集中を続ける",
     "cancelled": "セッションを取り消しました",
     "shortcuts": "スペース：一時停止・再開",
-    "landsHint": "{city}まであと集中{time}。着陸するとセッションが終わります。"
+    "landsHint": "{city}まであと集中{time}。着陸するとセッションが終わります。",
+    "flightHint": "{city}まで{km}km・集中1分ごとに{rate}km進みます",
+    "inFlightHint": "集中1分ごとに{city}へ{rate}km近づきます"
   },
   "arrival": {
     "title": "{city}へようこそ！",
@@ -137,7 +139,8 @@
     "empty": "まだ記録がありません。最初のフライトでここが埋まります。",
     "week": "今週",
     "hours": "{hours}時間{minutes}分",
-    "minutesShort": "{minutes}分"
+    "minutesShort": "{minutes}分",
+    "subtitle": "到着した都市ごとにポストカードと搭乗券がここに集まります。"
   },
   "journey": {
     "title": "あなたのルート",
@@ -145,7 +148,8 @@
     "arrived": "到着",
     "flying": "飛行中",
     "planned": "予定",
-    "change": "目的地を変更"
+    "change": "目的地を変更",
+    "subtitle": "集中で飛んだルートです。次の目的地はいつでも変えられます。"
   },
   "profile": {
     "language": "言語",
@@ -248,5 +252,13 @@
     "moreFlights": "ほかの直行便 ({n})",
     "landsInOne": "このフライトは{time}で到着。着陸するとセッションが終わります。",
     "boardTime": "搭乗して集中・{time}"
+  },
+  "notFound": {
+    "title": "このページは地図の外へ飛んでいきました",
+    "body": "アドレスが間違っているかもしれません。旅の記録はそのまま安全です。",
+    "home": "ホームに戻る"
+  },
+  "help": {
+    "open": "使い方"
   }
 }

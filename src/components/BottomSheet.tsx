@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { createPortal } from "react-dom";
+import { currentLayer, popLayers, pushLayer } from "./backStack";
 
 /**
  * Native-feeling sheet: slides up from the bottom on phones (a centred card on larger screens),
@@ -28,6 +29,23 @@ export function BottomSheet({ open, onClose, labelledBy, describedBy, role = "di
     window.addEventListener("keydown", onKey);
     return () => { window.removeEventListener("keydown", onKey); root.style.overflow = prevOverflow; previous?.focus?.(); setDy(0); };
   }, [open, dismissible]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // the system back button closes the sheet (Android, browser back, iOS edge swipe in the browser)
+  useEffect(() => {
+    if (!open) return;
+    const id = `sheet-${Math.random().toString(36).slice(2)}`;
+    let mine = true;
+    pushLayer(id);
+    const onPop = () => {
+      if (mine && currentLayer() !== id) { mine = false; closeRef.current(); }
+    };
+    window.addEventListener("popstate", onPop);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      // closed from the UI: take our history entry off the stack again
+      if (mine && currentLayer() === id) popLayers(1);
+    };
+  }, [open]);
 
   if (!open) return null;
 

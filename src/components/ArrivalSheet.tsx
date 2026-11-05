@@ -8,6 +8,7 @@ import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
 import { ArtImage } from "./ArtImage";
 import { BottomSheet } from "./BottomSheet";
+import { afterLayersClosed } from "./backStack";
 import { ShareButton, postcardJob } from "./PostcardViewer";
 
 /** The arrival celebration: stamped boarding pass, the new postcard and the country card. */
@@ -51,7 +52,7 @@ export function ArrivalSheet() {
         </dl>
 
         <div className="mt-5 flex flex-col gap-2 sm:flex-row-reverse wideland:col-start-1 short:mt-3 tiny:flex-col">
-          <button ref={closeRef} onClick={() => { ack(); if (routeDone) router.push("/"); }} className="tap min-h-12 flex-1 whitespace-nowrap rounded-xl bg-ink px-4 font-semibold text-paper">
+          <button ref={closeRef} onClick={() => { ack(); if (routeDone) setTimeout(() => afterLayersClosed(() => router.push("/")), 0); }} className="tap min-h-12 flex-1 whitespace-nowrap rounded-xl bg-ink px-4 font-semibold text-paper">
             {routeDone ? t("arrival.chooseNext") : t("arrival.next")}
           </button>
           {hasCard && <ShareButton job={job} className="flex-1" />}

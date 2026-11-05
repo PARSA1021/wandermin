@@ -11,6 +11,8 @@
     "boarding-pass": "tsx scripts/render-boarding-pass.ts",
     "icons": "tsx scripts/render-icons.ts",
     "splash": "tsx scripts/render-splash.ts",
+    "samples": "tsx scripts/render-samples.ts",
+    "og": "tsx scripts/render-og.ts",
     "bake-land": "tsx scripts/bake-land.ts",
     "check": "npm run typecheck && npm run test",
     "dev": "next dev",

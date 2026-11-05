@@ -51,7 +51,7 @@ function TimerRing({ progress, paused, kind }: { progress: number; paused: boole
 
 export default function FocusPage() {
   const { state, journey, dispatch, timeZone } = useApp();
-  const { t, name } = useI18n();
+  const { t, name, fmt } = useI18n();
   const active = state.active;
   const now = useNow(250, !!active && !isPaused(active));
   const [minutes, setMinutes] = useState(state.settings.defaultMinutes);
@@ -109,6 +109,7 @@ export default function FocusPage() {
       <section className="mx-auto flex max-w-2xl flex-col items-center gap-6 pt-6 text-center sm:pt-10 wideland:max-w-5xl wideland:flex-row wideland:items-start wideland:justify-center wideland:gap-x-8 short:gap-x-5 short:pt-2">
         <div className="flex flex-col items-center gap-3 wideland:sticky wideland:top-4">
         <p className="text-sm font-semibold text-ink-soft">{paused ? t("focus.paused") : label}</p>
+        {pass && !paused && <p className="-mt-1 text-xs text-ink-soft">{t("focus.inFlightHint", { city: name(getCity(pass.toId).name), rate: TRAVEL_CONFIG.kmPerMinute })}</p>}
         <div className="relative grid aspect-square w-[min(78vw,20rem)] place-items-center wideland:w-[min(38vw,24rem)] short:w-[min(34vw,calc(100dvh-5rem))]">
           <TimerRing progress={elapsedMs(active, now) / active.plannedMs} paused={paused} kind={active.kind} />
           <p className={`tabular relative font-bold tracking-tight ${remaining >= 3_600_000 ? "text-5xl sm:text-6xl" : "text-6xl sm:text-7xl"} ${paused ? "opacity-60" : ""}`} role="timer" aria-live="off" aria-label={t("timer.remaining", { time: formatClock(remaining) })}>
@@ -191,6 +192,11 @@ export default function FocusPage() {
             )}
           </fieldset>
           <LockScreenOptions collapsible />
+          {!landing && journey?.currentLeg && (
+            <p className="rounded-xl bg-paper-deep/60 px-4 py-3 text-sm text-ink-soft" role="note">
+              {t("focus.flightHint", { city: name(getCity(journey.currentLeg.toId).name), km: fmt(Math.round(journey.currentLeg.remainingKm)), rate: TRAVEL_CONFIG.kmPerMinute })}
+            </p>
+          )}
           {landing && <p className="rounded-xl bg-accent/10 px-4 py-3 text-sm font-semibold text-accent" role="note">{t("focus.landsHint", { city: landing.city, time: formatClock(landing.ms) })}</p>}
           <p className="text-center text-xs text-ink-soft">{t("focus.tooShort")}</p>
           {/* the start button stays in reach of the thumb, above the tab bar */}

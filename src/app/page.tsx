@@ -9,6 +9,7 @@ import { useI18n } from "@/i18n/react";
 import { DestinationPicker } from "@/components/Pickers";
 import { Onboarding } from "@/components/Onboarding";
 import { Notice } from "@/components/Notice";
+import { HowItWorksButton } from "@/components/HowItWorks";
 import { InstallCard } from "@/components/InstallCard";
 import { ArtImage } from "@/components/ArtImage";
 import { postcardJob } from "@/components/PostcardViewer";
@@ -42,7 +43,10 @@ export default function HomePage() {
   return (
     <div className="flex flex-col gap-5">
       <header>
-        <p className="text-sm text-ink-soft">{greeting}</p>
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-sm text-ink-soft">{greeting}</p>
+          <HowItWorksButton />
+        </div>
         <h1 className="mt-1 text-2xl font-bold sm:text-3xl">
           {leg && liveKm > 0
             ? t("home.inFlight", { city: name(getCity(leg.toId).name), percent: Math.floor(liveProgress * 100) })

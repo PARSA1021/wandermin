@@ -8,8 +8,7 @@ import { useI18n } from "@/i18n/react";
 import { InstallCard } from "@/components/InstallCard";
 import { LockScreenOptions } from "@/components/LockScreenOptions";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
-import { BottomSheet } from "@/components/BottomSheet";
-import { IntroContent } from "@/components/Onboarding";
+import { HowItWorksSheet } from "@/components/HowItWorks";
 import { parseBackup, type AppState } from "@/store/state";
 
 function Row({ title, children }: { title: string; children: React.ReactNode }) {
@@ -82,13 +81,7 @@ export default function ProfilePage() {
       <button onClick={() => setShowIntro(true)} className="tap flex min-h-14 items-center justify-between rounded-2xl border border-line bg-card px-5 text-left font-semibold">
         {t("welcome.howItWorks")}<span aria-hidden="true" className="text-ink-soft">›</span>
       </button>
-      <BottomSheet open={showIntro} onClose={() => setShowIntro(false)} labelledBy="intro-title" wide>
-        <div className="px-5 pb-6 pt-2 sm:p-6">
-          <h2 id="intro-title" className="mb-4 text-xl font-bold">{t("welcome.howItWorks")}</h2>
-          <IntroContent />
-          <button onClick={() => setShowIntro(false)} className="tap mt-6 min-h-12 w-full rounded-xl bg-ink font-semibold text-paper">{t("common.close")}</button>
-        </div>
-      </BottomSheet>
+      <HowItWorksSheet open={showIntro} onClose={() => setShowIntro(false)} />
       <InstallCard />
       <LockScreenOptions />
       <section className="rounded-3xl border border-line bg-card p-5">

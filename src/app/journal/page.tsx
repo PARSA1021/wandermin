@@ -43,7 +43,10 @@ export default function JournalPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold sm:text-3xl">{t("nav.journal")}</h1>
+      <header>
+        <h1 className="text-2xl font-bold sm:text-3xl">{t("nav.journal")}</h1>
+        <p className="mt-1 text-sm text-ink-soft">{t("journal.subtitle")}</p>
+      </header>
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {tiles.map(([label, value]) => (
           <div key={label} className="rounded-2xl border border-line bg-card p-4"><p className="text-xs text-ink-soft">{label}</p><p className="mt-1 text-xl font-bold tabular">{value}</p></div>

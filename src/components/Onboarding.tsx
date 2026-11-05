@@ -1,16 +1,16 @@
 "use client";
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { DEPARTURE_CITIES, getCity, getCountry } from "@/data";
 import { TRAVEL_CONFIG } from "@/config/travel";
 import { suggestNext } from "@/features/travel/graph";
-import type { PostcardJob } from "@/features/art/jobs";
 import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
 import { LOCALE_LABELS, SUPPORTED_LOCALES } from "@/i18n";
 import { ArtImage } from "./ArtImage";
 import { formatClock } from "@/features/focus/timer";
 import { buzz, startSession } from "./session";
+import { cabin } from "./cabin";
 
 /** A best guess at the nearest departure city from the device time zone (the user can change it). */
 export function guessDeparture(timeZone: string): string {
@@ -21,7 +21,6 @@ export function guessDeparture(timeZone: string): string {
   return "seoul";
 }
 
-const SAMPLE: PostcardJob = { kind: "postcard", cityId: "tokyo", fromId: "seoul", arrivedAt: Date.UTC(2026, 10, 4, 13, 23), focusMinutesAtArrival: 23, timeZone: "Asia/Tokyo" };
 
 function Step({ icon, title, body }: { icon: ReactNode; title: string; body: string }) {
   return (
@@ -39,7 +38,9 @@ export function IntroContent() {
   const { t } = useI18n();
   return (
     <div className="wideland:grid wideland:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] wideland:items-center wideland:gap-6 tiny:block">
-      <ArtImage eager job={SAMPLE} alt={t("welcome.sampleAlt")} className="rise rounded-lg shadow-lg short:mx-auto short:w-[min(100%,calc((100dvh-13rem)*1.46))] tiny:hidden" />
+      {/* a ready-made image, so the first thing a new visitor sees is the postcard, not a loading box */}
+      <img src="/samples/welcome-tokyo.png" alt={t("welcome.sampleAlt")} width={720} height={492} fetchPriority="high"
+        className="rise pixelated block aspect-[240/164] w-full rounded-lg shadow-lg short:mx-auto short:w-[min(100%,calc((100dvh-13rem)*1.46))] tiny:hidden" />
       <ul className="mt-6 grid gap-4 wideland:mt-0 short:gap-1.5 tiny:mt-3 tiny:gap-1">
         <Step icon={<><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2.5 2.5M9.5 2.5h5" /></>} title={t("welcome.how1Title")} body={t("welcome.how1", { km: TRAVEL_CONFIG.kmPerMinute })} />
         <Step icon={<path d="M2 16l20-7-3 9-6-3-3 4-1-5z" />} title={t("welcome.how2Title")} body={t("welcome.how2")} />
@@ -58,7 +59,21 @@ export function Onboarding() {
   const { state, dispatch, timeZone } = useApp();
   const { t, name, fmt, locale } = useI18n();
   const router = useRouter();
-  const [step, setStep] = useState(0);
+  // each step is a history entry, so the system back button goes back a step instead of leaving the app
+  const [step, setStep] = useState(() => (typeof history !== "undefined" ? (history.state as { wmStep?: number } | null)?.wmStep ?? 0 : 0));
+  const stepRef = useRef(step);
+  stepRef.current = step;
+  const finishRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    const onPop = () => {
+      const s = (history.state as { wmStep?: number } | null)?.wmStep ?? 0;
+      if (finishRef.current && s === 0) { const f = finishRef.current; finishRef.current = null; f(); return; }
+      setStep(s);
+      window.scrollTo({ top: 0 });
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
   const [from, setFrom] = useState(() => guessDeparture(timeZone));
   // every direct flight from the departure, nearest first; the three nearest are shown until "more" is tapped
   const allDirect = useMemo(() => suggestNext(from, new Set([from]), 99), [from]);
@@ -73,7 +88,19 @@ export function Onboarding() {
   // a first flight shorter than the session: the session will end as the plane lands
   const flightMs = leg ? Math.ceil((leg.km / TRAVEL_CONFIG.kmPerMinute) * 60) * 1000 : 0;
   const landsFirst = leg !== undefined && flightMs < minutes * 60_000;
-  const go = (n: number) => { buzz(8); setStep(n); window.scrollTo({ top: 0 }); };
+  const go = (n: number) => {
+    buzz(8);
+    if (n < step) { history.back(); return; } // same as the system back button
+    history.pushState({ ...(history.state ?? {}), wmStep: n }, "");
+    setStep(n);
+    window.scrollTo({ top: 0 });
+  };
+  /** Leave onboarding: drop the step entries from history first, so back later doesn't revisit them. */
+  const leave = (fn: () => void) => {
+    const n = stepRef.current;
+    if (n > 0 && (history.state as { wmStep?: number } | null)?.wmStep === n) { finishRef.current = fn; history.go(-n); }
+    else fn();
+  };
   const commitPlan = () => { dispatch({ type: "choose-departure", departureId: from }); dispatch({ type: "set-destination", cityId: to }); };
 
   const steps = 4;
@@ -183,10 +210,14 @@ export function Onboarding() {
             </div>
             </div>
             <Footer>
-              <button onClick={() => { commitPlan(); startSession(dispatch, state.settings, { minutes, activity: state.settings.activity }); buzz(20); router.push("/focus"); }} className={primary}>
+              <button onClick={() => {
+                buzz(20);
+                if (state.settings.cabinSound) cabin.start(); // audio must start inside the tap (iOS)
+                leave(() => { commitPlan(); startSession(dispatch, state.settings, { minutes, activity: state.settings.activity }); router.push("/focus"); });
+              }} className={primary}>
                 {landsFirst ? t("welcome.boardTime", { time: formatClock(flightMs) }) : t("welcome.board", { minutes })}
               </button>
-              <button onClick={() => { commitPlan(); window.scrollTo({ top: 0 }); }} className="tap mt-2 min-h-12 w-full rounded-2xl font-semibold text-ink-soft short:mt-0 short:min-h-10">{t("welcome.later")}</button>
+              <button onClick={() => leave(() => { commitPlan(); window.scrollTo({ top: 0 }); })} className="tap mt-2 min-h-12 w-full rounded-2xl font-semibold text-ink-soft short:mt-0 short:min-h-10">{t("welcome.later")}</button>
             </Footer>
           </>
         )}

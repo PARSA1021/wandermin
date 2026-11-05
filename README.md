@@ -204,6 +204,23 @@ Tested at 17 viewports (320×568 up to 2560×1440, phones and tablets in both or
 - Primary buttons stay pinned on short screens; labels never wrap; safe-area insets on notched phones.
 - Very large monitors scale the rem-based UI (112.5% at ≥1920px, 125% at ≥2400px).
 
+## Real-user simulation (Nov 2026)
+
+Five personas plus a random "monkey" run (350 taps with time jumps, back presses and reloads) on
+phone, landscape phone, tablet and desktop in ko/en/ja: a student closing the app mid-flight, a
+keyboard-only desktop user on a multi-session long haul, a tablet user switching language mid-flight,
+accidental actions (back button, 404, two tabs, offline, too-short sessions, reset, dark mode), and
+settings edge cases (notifications denied, sound on, double taps, a 3-hour session). Fixed from it:
+- The system back button now goes back an onboarding step and closes sheets, instead of leaving the
+  app (`components/backStack.ts`); finishing onboarding removes its steps from history.
+- Friendly, localized 404 page with a way home.
+- Offline tab switches use cached page data (no failed requests); vibration waits for the first tap.
+- The welcome postcard is a ready-made image (`npm run samples`), so it shows instantly.
+
+What the app is, made obvious: link previews (title, description and a 1200×630 image,
+`npm run og`), a "How it works" button on Home, one-line explanations on Focus before and during a
+flight, and subtitles on the map and journal.
+
 ## Deploy to Vercel
 
 The app is a standard Next.js project: Vercel detects it with no settings to change

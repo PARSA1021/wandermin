@@ -115,7 +115,9 @@
     "keepGoing": "Keep focusing",
     "cancelled": "Session cancelled",
     "shortcuts": "Space: pause or resume",
-    "landsHint": "{city} is {time} of focus away. The session ends as you land."
+    "landsHint": "{city} is {time} of focus away. The session ends as you land.",
+    "flightHint": "{km} km to {city} · every focused minute flies {rate} km",
+    "inFlightHint": "Every focused minute brings {city} {rate} km closer"
   },
   "arrival": {
     "title": "Welcome to {city}!",
@@ -137,7 +139,8 @@
     "empty": "Nothing here yet. Your first flight fills this page.",
     "week": "This week",
     "hours": "{hours} h {minutes} min",
-    "minutesShort": "{minutes} min"
+    "minutesShort": "{minutes} min",
+    "subtitle": "Every city you reach leaves a postcard and a boarding pass here."
   },
   "journey": {
     "title": "Your route",
@@ -145,7 +148,8 @@
     "arrived": "Arrived",
     "flying": "In flight",
     "planned": "Planned",
-    "change": "Change destination"
+    "change": "Change destination",
+    "subtitle": "The route your focus has flown. Change the next stop any time."
   },
   "profile": {
     "language": "Language",
@@ -248,5 +252,13 @@
     "moreFlights": "More direct flights ({n})",
     "landsInOne": "This flight lands in {time} — the session ends as you land.",
     "boardTime": "Board and focus · {time}"
+  },
+  "notFound": {
+    "title": "This page flew off the map",
+    "body": "The address may be wrong. Your travel log is safe.",
+    "home": "Back to home"
+  },
+  "help": {
+    "open": "How it works"
   }
 }
