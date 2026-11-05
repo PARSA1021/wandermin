@@ -4,19 +4,23 @@ import { SUPPORTED_LOCALES } from "@/i18n/config";
 import { GRAPH, shortestPath } from "@/features/travel/graph";
 
 describe("city data", () => {
-  it("has the 30 agreed cities", () => {
+  it("has the 50 agreed cities", () => {
     const expected = ["seoul","tokyo","osaka","kyoto","taipei","hong-kong","singapore","bangkok","hanoi","bali",
       "london","paris","rome","venice","barcelona","amsterdam","prague","zurich","vienna","istanbul",
       "new-york","los-angeles","san-francisco","vancouver","toronto","mexico-city",
-      "sydney","melbourne","cairo","cape-town"];
+      "sydney","melbourne","cairo","cape-town",
+      // expansion, Nov 2026
+      "busan","jeju","shanghai","da-nang","kuala-lumpur","agra","dubai",
+      "lisbon","athens","reykjavik","berlin","marrakech","nairobi","zanzibar",
+      "honolulu","havana","cusco","rio-de-janeiro","buenos-aires","auckland"];
     expect(CITIES.map((c) => c.id).sort()).toEqual([...expected].sort());
   });
   it("has the 5 agreed departures", () => {
     expect(DEPARTURE_CITIES.map((c) => c.id).sort()).toEqual(["london","new-york","paris","seoul","tokyo"]);
   });
   it("has unique ids and postmark codes", () => {
-    expect(new Set(CITIES.map((c) => c.id)).size).toBe(30);
-    expect(new Set(CITIES.map((c) => c.code)).size).toBe(30);
+    expect(new Set(CITIES.map((c) => c.id)).size).toBe(50);
+    expect(new Set(CITIES.map((c) => c.code)).size).toBe(50);
     for (const c of CITIES) expect(c.code).toMatch(/^[A-Z]{3}$/);
   });
   it.each(CITIES.map((c) => [c.id, c] as const))("%s has valid coordinates, country and names", (_, c) => {

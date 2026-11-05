@@ -233,7 +233,7 @@
     "toBody": "Flight time = focus time. A short first flight gets you your first postcard sooner.",
     "flight": "{minutes} min of focus · {km} km",
     "shortest": "Shortest",
-    "laterAnywhere": "After this, you can fly to any of the 30 cities.",
+    "laterAnywhere": "After this, you can fly to any of the 50 cities.",
     "boardTitle": "Your boarding pass is ready",
     "boardBody": "{minutes} minutes of focus takes you to {city}.",
     "oneSession": "One {minutes}-minute session gets you there.",
@@ -241,6 +241,7 @@
     "awayOk": "You can leave the app or lock the screen — time keeps counting.",
     "board": "Board and focus · {minutes} min",
     "later": "Not now — go to Home",
-    "howItWorks": "How WANDERMIN works"
+    "howItWorks": "How WANDERMIN works",
+    "moreFlights": "More direct flights ({n})"
   }
 }

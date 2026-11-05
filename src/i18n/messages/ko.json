@@ -233,7 +233,7 @@
     "toBody": "비행 시간 = 집중 시간이에요. 첫 비행은 짧을수록 첫 엽서를 빨리 받아요.",
     "flight": "집중 {minutes}분 · {km}km",
     "shortest": "가장 짧아요",
-    "laterAnywhere": "다음부터는 30개 도시 어디로든 갈 수 있어요.",
+    "laterAnywhere": "다음부터는 50개 도시 어디로든 갈 수 있어요.",
     "boardTitle": "탑승권이 준비됐어요",
     "boardBody": "{minutes}분 집중하면 {city}에 도착해요.",
     "oneSession": "{minutes}분 세션 한 번이면 도착해요.",
@@ -241,6 +241,7 @@
     "awayOk": "앱을 나가거나 화면을 꺼도 시간은 계속 흘러요.",
     "board": "탑승하고 집중 시작 · {minutes}분",
     "later": "나중에 할게요",
-    "howItWorks": "WANDERMIN 사용법"
+    "howItWorks": "WANDERMIN 사용법",
+    "moreFlights": "직항 더 보기 ({n})"
   }
 }

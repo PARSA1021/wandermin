@@ -18,8 +18,16 @@ describe("world map", () => {
     expect(LAND_PATH.length).toBeLessThan(80_000);
     expect(LAND_PATH).toMatch(/^[MLZ0-9. -]+$/);
     const xs = [...LAND_PATH.matchAll(/[ML](-?[\d.]+) (-?[\d.]+)/g)].map((m) => Number(m[1]));
-    expect(Math.min(...xs)).toBeGreaterThanOrEqual(0);
-    expect(Math.max(...xs)).toBeLessThanOrEqual(MAP_W);
+    // rings crossing the antimeridian are drawn twice, so some points lie beyond the frame (clipped by the SVG)
+    expect(Math.min(...xs)).toBeGreaterThan(-MAP_W);
+    expect(Math.max(...xs)).toBeLessThan(2 * MAP_W);
+  });
+
+  it("never draws a coastline edge across the whole map (antimeridian wrap)", () => {
+    for (const sub of LAND_PATH.split("M").slice(1)) {
+      const xs = [...("M" + sub).matchAll(/[ML](-?[\d.]+) (-?[\d.]+)/g)].map((m) => Number(m[1]));
+      for (let i = 1; i < xs.length; i++) expect(Math.abs(xs[i]! - xs[i - 1]!)).toBeLessThan(MAP_W / 2);
+    }
   });
 
   it("fits a route box at the map's aspect ratio, inside the map", () => {

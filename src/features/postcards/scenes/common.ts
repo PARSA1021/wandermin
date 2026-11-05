@@ -319,3 +319,31 @@ export function stoneLantern(c: PixelCanvas, x: number, base: number, stone = "#
   c.hline(x - 2, x + 2, base - 8, dark);
   c.set(x, base - 9, stone);
 }
+
+/** Deterministic 0..1 hash per 2×2 clump — mottled canopy, rock and crowd textures without stripes. */
+export function leaf(x: number, y: number): number {
+  const bx = (x + (Math.floor(y / 2) % 2)) >> 1, by = y >> 1;
+  let h = (bx * 374761393 + by * 668265263) | 0;
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+
+/** Coconut / date palm: curved trunk with ring marks and drooping fronds. `lean` −1…1. */
+export function palm(c: PixelCanvas, x: number, base: number, h: number, lean: number, fronds: Color[], trunk: Color, ring: Color, span = 10) {
+  for (let y = base; y > base - h; y--) {
+    const t = (base - y) / h;
+    c.set(x + Math.round(lean * t * t * 6), y, y % 3 ? trunk : ring);
+  }
+  const tx = x + Math.round(lean * 6), ty = base - h;
+  for (let k = 0; k < 9; k++) {
+    const a = Math.PI * 0.95 + (k / 8) * Math.PI * 1.1;
+    for (let d = 1; d < span; d++) c.set(tx + Math.round(Math.cos(a) * d), ty + Math.round(Math.sin(a) * d * 0.55 + d * d * 0.07), fronds[k % fronds.length]!);
+  }
+  c.set(tx, ty + 1, ring); c.set(tx + 1, ty + 1, ring);
+}
+
+/** Lit window grid for a building face (night scenes): `on` is the share of lit windows. */
+export function windows(c: PixelCanvas, seed: number, x: number, y: number, w: number, h: number, lit: Color, dark: Color, on = 0.6, stepX = 2, stepY = 2) {
+  const r = rng(seed);
+  for (let yy = y; yy < y + h; yy += stepY) for (let xx = x; xx < x + w; xx += stepX) c.set(xx, yy, r() < on ? lit : dark);
+}

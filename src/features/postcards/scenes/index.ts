@@ -29,6 +29,26 @@ import { melbourneScene } from "./melbourne";
 import { cairoScene } from "./cairo";
 import { capeTownScene } from "./cape-town";
 import { istanbulScene } from "./istanbul";
+import { rioDeJaneiroScene } from "./rio-de-janeiro";
+import { busanScene } from "./busan";
+import { jejuScene } from "./jeju";
+import { shanghaiScene } from "./shanghai";
+import { daNangScene } from "./da-nang";
+import { kualaLumpurScene } from "./kuala-lumpur";
+import { agraScene } from "./agra";
+import { dubaiScene } from "./dubai";
+import { lisbonScene } from "./lisbon";
+import { athensScene } from "./athens";
+import { reykjavikScene } from "./reykjavik";
+import { berlinScene } from "./berlin";
+import { marrakechScene } from "./marrakech";
+import { nairobiScene } from "./nairobi";
+import { zanzibarScene } from "./zanzibar";
+import { honoluluScene } from "./honolulu";
+import { havanaScene } from "./havana";
+import { cuscoScene } from "./cusco";
+import { buenosAiresScene } from "./buenos-aires";
+import { aucklandScene } from "./auckland";
 
 /**
  * Illustrated scenes by city id. A city without a scene has no postcard yet — the arrival
@@ -65,6 +85,26 @@ const SCENES: Record<string, PostcardScene> = {
   [cairoScene.cityId]: cairoScene,
   [capeTownScene.cityId]: capeTownScene,
   [istanbulScene.cityId]: istanbulScene,
+  [rioDeJaneiroScene.cityId]: rioDeJaneiroScene,
+  [busanScene.cityId]: busanScene,
+  [jejuScene.cityId]: jejuScene,
+  [shanghaiScene.cityId]: shanghaiScene,
+  [daNangScene.cityId]: daNangScene,
+  [kualaLumpurScene.cityId]: kualaLumpurScene,
+  [agraScene.cityId]: agraScene,
+  [dubaiScene.cityId]: dubaiScene,
+  [lisbonScene.cityId]: lisbonScene,
+  [athensScene.cityId]: athensScene,
+  [reykjavikScene.cityId]: reykjavikScene,
+  [berlinScene.cityId]: berlinScene,
+  [marrakechScene.cityId]: marrakechScene,
+  [nairobiScene.cityId]: nairobiScene,
+  [zanzibarScene.cityId]: zanzibarScene,
+  [honoluluScene.cityId]: honoluluScene,
+  [havanaScene.cityId]: havanaScene,
+  [cuscoScene.cityId]: cuscoScene,
+  [buenosAiresScene.cityId]: buenosAiresScene,
+  [aucklandScene.cityId]: aucklandScene,
 };
 
 export const getScene = (cityId: string): PostcardScene | undefined => SCENES[cityId];

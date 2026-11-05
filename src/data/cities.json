@@ -720,6 +720,466 @@
         "lat": -33.9628,
         "lng": 18.4098
       }
+    },
+    {
+      "id": "busan",
+      "name": {
+        "en": "Busan",
+        "ko": "부산",
+        "ja": "釜山"
+      },
+      "countryCode": "KR",
+      "region": "asia",
+      "lat": 35.1796,
+      "lng": 129.0756,
+      "code": "PUS",
+      "landmark": {
+        "id": "gwangan-bridge",
+        "name": {
+          "en": "Gwangan Bridge",
+          "ko": "광안대교",
+          "ja": "広安大橋"
+        },
+        "lat": 35.1477,
+        "lng": 129.13
+      }
+    },
+    {
+      "id": "jeju",
+      "name": {
+        "en": "Jeju",
+        "ko": "제주",
+        "ja": "済州"
+      },
+      "countryCode": "KR",
+      "region": "asia",
+      "lat": 33.4996,
+      "lng": 126.5312,
+      "code": "CJU",
+      "landmark": {
+        "id": "seongsan-ilchulbong",
+        "name": {
+          "en": "Seongsan Ilchulbong",
+          "ko": "성산일출봉",
+          "ja": "城山日出峰"
+        },
+        "lat": 33.4581,
+        "lng": 126.9425
+      }
+    },
+    {
+      "id": "shanghai",
+      "name": {
+        "en": "Shanghai",
+        "ko": "상하이",
+        "ja": "上海"
+      },
+      "countryCode": "CN",
+      "region": "asia",
+      "lat": 31.2304,
+      "lng": 121.4737,
+      "code": "SHA",
+      "landmark": {
+        "id": "oriental-pearl-tower",
+        "name": {
+          "en": "Oriental Pearl Tower",
+          "ko": "동방명주",
+          "ja": "東方明珠塔"
+        },
+        "lat": 31.2397,
+        "lng": 121.4998
+      }
+    },
+    {
+      "id": "da-nang",
+      "name": {
+        "en": "Da Nang",
+        "ko": "다낭",
+        "ja": "ダナン"
+      },
+      "countryCode": "VN",
+      "region": "asia",
+      "lat": 16.0544,
+      "lng": 108.2022,
+      "code": "DAD",
+      "landmark": {
+        "id": "dragon-bridge",
+        "name": {
+          "en": "Dragon Bridge",
+          "ko": "용다리",
+          "ja": "ロン橋"
+        },
+        "lat": 16.0612,
+        "lng": 108.2272
+      }
+    },
+    {
+      "id": "kuala-lumpur",
+      "name": {
+        "en": "Kuala Lumpur",
+        "ko": "쿠알라룸푸르",
+        "ja": "クアラルンプール"
+      },
+      "countryCode": "MY",
+      "region": "asia",
+      "lat": 3.139,
+      "lng": 101.6869,
+      "code": "KUL",
+      "landmark": {
+        "id": "petronas-towers",
+        "name": {
+          "en": "Petronas Twin Towers",
+          "ko": "페트로나스 트윈 타워",
+          "ja": "ペトロナスツインタワー"
+        },
+        "lat": 3.1579,
+        "lng": 101.7116
+      }
+    },
+    {
+      "id": "agra",
+      "name": {
+        "en": "Agra",
+        "ko": "아그라",
+        "ja": "アーグラ"
+      },
+      "countryCode": "IN",
+      "region": "asia",
+      "lat": 27.1767,
+      "lng": 78.0081,
+      "code": "AGR",
+      "landmark": {
+        "id": "taj-mahal",
+        "name": {
+          "en": "Taj Mahal",
+          "ko": "타지마할",
+          "ja": "タージ・マハル"
+        },
+        "lat": 27.1751,
+        "lng": 78.0421
+      }
+    },
+    {
+      "id": "dubai",
+      "name": {
+        "en": "Dubai",
+        "ko": "두바이",
+        "ja": "ドバイ"
+      },
+      "countryCode": "AE",
+      "region": "asia",
+      "lat": 25.2048,
+      "lng": 55.2708,
+      "code": "DXB",
+      "landmark": {
+        "id": "burj-khalifa",
+        "name": {
+          "en": "Burj Khalifa",
+          "ko": "부르즈 할리파",
+          "ja": "ブルジュ・ハリファ"
+        },
+        "lat": 25.1972,
+        "lng": 55.2744
+      }
+    },
+    {
+      "id": "lisbon",
+      "name": {
+        "en": "Lisbon",
+        "ko": "리스본",
+        "ja": "リスボン"
+      },
+      "countryCode": "PT",
+      "region": "europe",
+      "lat": 38.7223,
+      "lng": -9.1393,
+      "code": "LIS",
+      "landmark": {
+        "id": "belem-tower",
+        "name": {
+          "en": "Belém Tower",
+          "ko": "벨렝탑",
+          "ja": "ベレンの塔"
+        },
+        "lat": 38.6916,
+        "lng": -9.216
+      }
+    },
+    {
+      "id": "athens",
+      "name": {
+        "en": "Athens",
+        "ko": "아테네",
+        "ja": "アテネ"
+      },
+      "countryCode": "GR",
+      "region": "europe",
+      "lat": 37.9838,
+      "lng": 23.7275,
+      "code": "ATH",
+      "landmark": {
+        "id": "parthenon",
+        "name": {
+          "en": "Parthenon",
+          "ko": "파르테논 신전",
+          "ja": "パルテノン神殿"
+        },
+        "lat": 37.9715,
+        "lng": 23.7267
+      }
+    },
+    {
+      "id": "reykjavik",
+      "name": {
+        "en": "Reykjavík",
+        "ko": "레이캬비크",
+        "ja": "レイキャビク"
+      },
+      "countryCode": "IS",
+      "region": "europe",
+      "lat": 64.1466,
+      "lng": -21.9426,
+      "code": "REK",
+      "landmark": {
+        "id": "hallgrimskirkja",
+        "name": {
+          "en": "Hallgrímskirkja",
+          "ko": "할그림스키르캬",
+          "ja": "ハットルグリムス教会"
+        },
+        "lat": 64.1417,
+        "lng": -21.9266
+      }
+    },
+    {
+      "id": "berlin",
+      "name": {
+        "en": "Berlin",
+        "ko": "베를린",
+        "ja": "ベルリン"
+      },
+      "countryCode": "DE",
+      "region": "europe",
+      "lat": 52.52,
+      "lng": 13.405,
+      "code": "BER",
+      "landmark": {
+        "id": "brandenburg-gate",
+        "name": {
+          "en": "Brandenburg Gate",
+          "ko": "브란덴부르크 문",
+          "ja": "ブランデンブルク門"
+        },
+        "lat": 52.5163,
+        "lng": 13.3777
+      }
+    },
+    {
+      "id": "marrakech",
+      "name": {
+        "en": "Marrakech",
+        "ko": "마라케시",
+        "ja": "マラケシュ"
+      },
+      "countryCode": "MA",
+      "region": "africa",
+      "lat": 31.6295,
+      "lng": -7.9811,
+      "code": "RAK",
+      "landmark": {
+        "id": "koutoubia",
+        "name": {
+          "en": "Koutoubia Mosque",
+          "ko": "쿠투비아 모스크",
+          "ja": "クトゥビア・モスク"
+        },
+        "lat": 31.6237,
+        "lng": -7.9936
+      }
+    },
+    {
+      "id": "nairobi",
+      "name": {
+        "en": "Nairobi",
+        "ko": "나이로비",
+        "ja": "ナイロビ"
+      },
+      "countryCode": "KE",
+      "region": "africa",
+      "lat": -1.2921,
+      "lng": 36.8219,
+      "code": "NBO",
+      "landmark": {
+        "id": "nairobi-national-park",
+        "name": {
+          "en": "Nairobi National Park",
+          "ko": "나이로비 국립공원",
+          "ja": "ナイロビ国立公園"
+        },
+        "lat": -1.3733,
+        "lng": 36.8589
+      }
+    },
+    {
+      "id": "zanzibar",
+      "name": {
+        "en": "Zanzibar",
+        "ko": "잔지바르",
+        "ja": "ザンジバル"
+      },
+      "countryCode": "TZ",
+      "region": "africa",
+      "lat": -6.1659,
+      "lng": 39.2026,
+      "code": "ZNZ",
+      "landmark": {
+        "id": "stone-town",
+        "name": {
+          "en": "Stone Town",
+          "ko": "스톤타운",
+          "ja": "ストーン・タウン"
+        },
+        "lat": -6.1622,
+        "lng": 39.1887
+      }
+    },
+    {
+      "id": "honolulu",
+      "name": {
+        "en": "Honolulu",
+        "ko": "호놀룰루",
+        "ja": "ホノルル"
+      },
+      "countryCode": "US",
+      "region": "americas",
+      "lat": 21.3069,
+      "lng": -157.8583,
+      "code": "HNL",
+      "landmark": {
+        "id": "diamond-head",
+        "name": {
+          "en": "Diamond Head",
+          "ko": "다이아몬드 헤드",
+          "ja": "ダイヤモンドヘッド"
+        },
+        "lat": 21.262,
+        "lng": -157.806
+      }
+    },
+    {
+      "id": "havana",
+      "name": {
+        "en": "Havana",
+        "ko": "아바나",
+        "ja": "ハバナ"
+      },
+      "countryCode": "CU",
+      "region": "americas",
+      "lat": 23.1136,
+      "lng": -82.3666,
+      "code": "HAV",
+      "landmark": {
+        "id": "el-capitolio",
+        "name": {
+          "en": "El Capitolio",
+          "ko": "카피톨리오",
+          "ja": "カピトリオ"
+        },
+        "lat": 23.1352,
+        "lng": -82.3596
+      }
+    },
+    {
+      "id": "cusco",
+      "name": {
+        "en": "Cusco",
+        "ko": "쿠스코",
+        "ja": "クスコ"
+      },
+      "countryCode": "PE",
+      "region": "americas",
+      "lat": -13.532,
+      "lng": -71.9675,
+      "code": "CUZ",
+      "landmark": {
+        "id": "cusco-cathedral",
+        "name": {
+          "en": "Cusco Cathedral",
+          "ko": "쿠스코 대성당",
+          "ja": "クスコ大聖堂"
+        },
+        "lat": -13.5165,
+        "lng": -71.9785
+      }
+    },
+    {
+      "id": "rio-de-janeiro",
+      "name": {
+        "en": "Rio de Janeiro",
+        "ko": "리우데자네이루",
+        "ja": "リオデジャネイロ"
+      },
+      "countryCode": "BR",
+      "region": "americas",
+      "lat": -22.9068,
+      "lng": -43.1729,
+      "code": "RIO",
+      "landmark": {
+        "id": "christ-the-redeemer",
+        "name": {
+          "en": "Christ the Redeemer",
+          "ko": "구원의 예수상",
+          "ja": "コルコバードのキリスト像"
+        },
+        "lat": -22.9519,
+        "lng": -43.2105
+      }
+    },
+    {
+      "id": "buenos-aires",
+      "name": {
+        "en": "Buenos Aires",
+        "ko": "부에노스아이레스",
+        "ja": "ブエノスアイレス"
+      },
+      "countryCode": "AR",
+      "region": "americas",
+      "lat": -34.6037,
+      "lng": -58.3816,
+      "code": "BUE",
+      "landmark": {
+        "id": "obelisco",
+        "name": {
+          "en": "Obelisco",
+          "ko": "오벨리스크",
+          "ja": "オベリスコ"
+        },
+        "lat": -34.6037,
+        "lng": -58.3816
+      }
+    },
+    {
+      "id": "auckland",
+      "name": {
+        "en": "Auckland",
+        "ko": "오클랜드",
+        "ja": "オークランド"
+      },
+      "countryCode": "NZ",
+      "region": "oceania",
+      "lat": -36.8485,
+      "lng": 174.7633,
+      "code": "AKL",
+      "landmark": {
+        "id": "sky-tower",
+        "name": {
+          "en": "Sky Tower",
+          "ko": "스카이 타워",
+          "ja": "スカイタワー"
+        },
+        "lat": -36.8484,
+        "lng": 174.7622
+      }
     }
   ]
 }

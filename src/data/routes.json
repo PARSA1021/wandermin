@@ -213,6 +213,218 @@
     {
       "from": "sydney",
       "to": "los-angeles"
+    },
+    {
+      "from": "seoul",
+      "to": "busan"
+    },
+    {
+      "from": "busan",
+      "to": "jeju"
+    },
+    {
+      "from": "seoul",
+      "to": "jeju"
+    },
+    {
+      "from": "busan",
+      "to": "osaka"
+    },
+    {
+      "from": "seoul",
+      "to": "shanghai"
+    },
+    {
+      "from": "shanghai",
+      "to": "taipei"
+    },
+    {
+      "from": "shanghai",
+      "to": "hong-kong"
+    },
+    {
+      "from": "shanghai",
+      "to": "tokyo"
+    },
+    {
+      "from": "hanoi",
+      "to": "da-nang"
+    },
+    {
+      "from": "da-nang",
+      "to": "bangkok"
+    },
+    {
+      "from": "da-nang",
+      "to": "hong-kong"
+    },
+    {
+      "from": "singapore",
+      "to": "kuala-lumpur"
+    },
+    {
+      "from": "kuala-lumpur",
+      "to": "bangkok"
+    },
+    {
+      "from": "kuala-lumpur",
+      "to": "bali"
+    },
+    {
+      "from": "bangkok",
+      "to": "agra"
+    },
+    {
+      "from": "agra",
+      "to": "dubai"
+    },
+    {
+      "from": "dubai",
+      "to": "istanbul"
+    },
+    {
+      "from": "dubai",
+      "to": "cairo"
+    },
+    {
+      "from": "dubai",
+      "to": "nairobi"
+    },
+    {
+      "from": "kuala-lumpur",
+      "to": "dubai"
+    },
+    {
+      "from": "lisbon",
+      "to": "barcelona"
+    },
+    {
+      "from": "lisbon",
+      "to": "paris"
+    },
+    {
+      "from": "lisbon",
+      "to": "london"
+    },
+    {
+      "from": "lisbon",
+      "to": "marrakech"
+    },
+    {
+      "from": "marrakech",
+      "to": "barcelona"
+    },
+    {
+      "from": "athens",
+      "to": "istanbul"
+    },
+    {
+      "from": "athens",
+      "to": "rome"
+    },
+    {
+      "from": "athens",
+      "to": "cairo"
+    },
+    {
+      "from": "reykjavik",
+      "to": "london"
+    },
+    {
+      "from": "reykjavik",
+      "to": "amsterdam"
+    },
+    {
+      "from": "reykjavik",
+      "to": "new-york"
+    },
+    {
+      "from": "reykjavik",
+      "to": "toronto"
+    },
+    {
+      "from": "berlin",
+      "to": "prague"
+    },
+    {
+      "from": "berlin",
+      "to": "amsterdam"
+    },
+    {
+      "from": "berlin",
+      "to": "vienna"
+    },
+    {
+      "from": "berlin",
+      "to": "paris"
+    },
+    {
+      "from": "cairo",
+      "to": "nairobi"
+    },
+    {
+      "from": "nairobi",
+      "to": "zanzibar"
+    },
+    {
+      "from": "zanzibar",
+      "to": "cape-town"
+    },
+    {
+      "from": "los-angeles",
+      "to": "honolulu"
+    },
+    {
+      "from": "san-francisco",
+      "to": "honolulu"
+    },
+    {
+      "from": "honolulu",
+      "to": "tokyo"
+    },
+    {
+      "from": "honolulu",
+      "to": "auckland"
+    },
+    {
+      "from": "sydney",
+      "to": "auckland"
+    },
+    {
+      "from": "melbourne",
+      "to": "auckland"
+    },
+    {
+      "from": "mexico-city",
+      "to": "havana"
+    },
+    {
+      "from": "havana",
+      "to": "new-york"
+    },
+    {
+      "from": "mexico-city",
+      "to": "cusco"
+    },
+    {
+      "from": "cusco",
+      "to": "rio-de-janeiro"
+    },
+    {
+      "from": "cusco",
+      "to": "buenos-aires"
+    },
+    {
+      "from": "rio-de-janeiro",
+      "to": "buenos-aires"
+    },
+    {
+      "from": "rio-de-janeiro",
+      "to": "lisbon"
+    },
+    {
+      "from": "rio-de-janeiro",
+      "to": "cape-town"
     }
   ]
 }

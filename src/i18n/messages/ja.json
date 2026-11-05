@@ -233,7 +233,7 @@
     "toBody": "飛行時間＝集中時間。最初は短いフライトほど早くポストカードがもらえます。",
     "flight": "集中{minutes}分・{km}km",
     "shortest": "いちばん短い",
-    "laterAnywhere": "次からは30都市のどこへでも行けます。",
+    "laterAnywhere": "次からは50都市のどこへでも行けます。",
     "boardTitle": "搭乗券の準備ができました",
     "boardBody": "{minutes}分集中すると{city}に到着します。",
     "oneSession": "{minutes}分のセッション1回で到着します。",
@@ -241,6 +241,7 @@
     "awayOk": "アプリを離れても画面を消しても、時間は進み続けます。",
     "board": "搭乗して集中・{minutes}分",
     "later": "あとで",
-    "howItWorks": "WANDERMINの使い方"
+    "howItWorks": "WANDERMINの使い方",
+    "moreFlights": "ほかの直行便 ({n})"
   }
 }

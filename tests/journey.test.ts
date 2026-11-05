@@ -72,7 +72,7 @@ describe("journey", () => {
 
   it("suggests nearest unvisited neighbours in guided mode", () => {
     const sug = suggestNext("seoul", new Set(["seoul"]), 3);
-    expect(sug.map((x) => x.cityId)).toEqual(["osaka", "tokyo", "taipei"]);
+    expect(sug.map((x) => x.cityId)).toEqual(["busan", "jeju", "osaka"]);
     expect(sug[0]!.km).toBeLessThan(sug[1]!.km);
   });
 });

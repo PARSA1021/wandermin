@@ -28,7 +28,7 @@ npm run splash          # iOS launch screens (public/splash, sizes in src/config
 src/
   config/travel.ts              game balance (kmPerMinute, guided suggestions)
   data/
-    cities.json                 30 cities: id, names (en/ko/ja), ISO country, lat/lng, postmark code, departure flag, landmark
+    cities.json                 50 cities: id, names (en/ko/ja), ISO country, lat/lng, postmark code, departure flag, landmark
     countries.json              23 countries: names, capital, postcard label
     routes.json                 curated flight legs (distances computed, never stored)
     index.ts                    typed accessors
@@ -40,7 +40,7 @@ src/
     pixel/canvas.ts             indexed pixel canvas → crisp SVG paths
     pixel/font.ts               original 5×7 and 3×5 bitmap fonts
     template.ts                 card layout, stamp, postmark, auto-fit captions
-    scenes/<city>.ts            one illustration per city (all 30)
+    scenes/<city>.ts            one illustration per city (all 50)
     scenes/common.ts            shared drawing helpers: sky, ridges, roofs, townhouses, people, boats, lanterns
     scenes/index.ts             scene registry
   features/tickets/
@@ -170,6 +170,17 @@ lines on how it works → departure (pre-selected from the device time zone) →
 (shortest flight pre-selected, shown as minutes of focus) → the boarding pass with
 "Board and focus", which starts the first session immediately. Progress dots, back, language
 switch, no tab bar until the plan exists. Profile → "How WANDERMIN works" replays the intro.
+
+## World expansion (Nov 2026): 30 → 50 cities
+
+Twenty cities fill the empty parts of the map, each with a full postcard at the same detail level:
+Busan, Jeju, Shanghai, Da Nang, Kuala Lumpur, Agra, Dubai · Lisbon, Athens, Reykjavík, Berlin ·
+Marrakech, Nairobi, Zanzibar · Honolulu, Havana, Cusco, Rio de Janeiro, Buenos Aires · Auckland
+(16 new countries). 53 new flight legs keep hops in Asia and Europe short (Seoul → Busan is 7 min)
+and connect South America, East Africa, Iceland, Hawaii and New Zealand through hubs.
+Onboarding shows the three nearest first flights plus "More direct flights" for the rest.
+Shared scene helpers added: `leaf` (mottled canopy texture), `palm`, `windows`.
+The baked coastline now unwraps rings that cross the antimeridian (no more lines across the map).
 
 ## Deploy to Vercel
 

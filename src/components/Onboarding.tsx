@@ -59,10 +59,13 @@ export function Onboarding() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [from, setFrom] = useState(() => guessDeparture(timeZone));
-  const suggestions = useMemo(() => suggestNext(from, new Set([from]), 3), [from]);
+  // every direct flight from the departure, nearest first; the three nearest are shown until "more" is tapped
+  const allDirect = useMemo(() => suggestNext(from, new Set([from]), 99), [from]);
+  const [showAll, setShowAll] = useState(false);
   const [toPick, setToPick] = useState<string | null>(null);
-  const to = toPick && suggestions.some((s) => s.cityId === toPick) ? toPick : suggestions[0]?.cityId ?? "";
-  const leg = suggestions.find((s) => s.cityId === to);
+  const suggestions = showAll || (toPick && allDirect.findIndex((s) => s.cityId === toPick) >= 3) ? allDirect : allDirect.slice(0, 3);
+  const to = toPick && allDirect.some((s) => s.cityId === toPick) ? toPick : allDirect[0]?.cityId ?? "";
+  const leg = allDirect.find((s) => s.cityId === to);
   const flightMin = leg ? Math.ceil(leg.km / TRAVEL_CONFIG.kmPerMinute) : 0;
   const minutes = state.settings.defaultMinutes;
   const sessions = Math.max(1, Math.ceil(flightMin / minutes));
@@ -116,7 +119,7 @@ export function Onboarding() {
                 const on = c.id === from;
                 return (
                   <li key={c.id}>
-                    <button role="radio" aria-checked={on} onClick={() => { buzz(8); setFrom(c.id); setToPick(null); }}
+                    <button role="radio" aria-checked={on} onClick={() => { buzz(8); setFrom(c.id); setToPick(null); setShowAll(false); }}
                       className={`tap flex min-h-16 w-full items-center gap-3 rounded-2xl border-2 bg-card px-4 text-left ${on ? "border-accent" : "border-line"}`}>
                       <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 ${on ? "border-accent bg-accent" : "border-line"}`}>{on && <span className="h-2 w-2 rounded-full bg-paper" />}</span>
                       <span className="flex-1 font-semibold">{name(c.name)}<span className="block text-xs font-normal text-ink-soft">{name(getCountry(c.countryCode).name)}</span></span>
@@ -153,6 +156,11 @@ export function Onboarding() {
                 );
               })}
             </ul>
+            {!showAll && allDirect.length > 3 && (
+              <button onClick={() => setShowAll(true)} className="tap mt-2 min-h-12 w-full rounded-2xl border border-dashed border-line font-semibold text-ink-soft">
+                {t("welcome.moreFlights", { n: allDirect.length - 3 })}
+              </button>
+            )}
             <p className="mt-4 text-sm text-ink-soft">{t("welcome.laterAnywhere")}</p>
             <Footer><button onClick={() => go(3)} className={primary}>{t("welcome.next")}</button></Footer>
           </>

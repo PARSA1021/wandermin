@@ -318,6 +318,230 @@
         "ja": "プレトリア（行政）"
       },
       "postcardLabel": "SOUTH AFRICA"
+    },
+    {
+      "code": "CN",
+      "name": {
+        "en": "China",
+        "ko": "중국",
+        "ja": "中国"
+      },
+      "capital": {
+        "en": "Beijing",
+        "ko": "베이징",
+        "ja": "北京"
+      },
+      "postcardLabel": "CHINA"
+    },
+    {
+      "code": "MY",
+      "name": {
+        "en": "Malaysia",
+        "ko": "말레이시아",
+        "ja": "マレーシア"
+      },
+      "capital": {
+        "en": "Kuala Lumpur",
+        "ko": "쿠알라룸푸르",
+        "ja": "クアラルンプール"
+      },
+      "postcardLabel": "MALAYSIA"
+    },
+    {
+      "code": "IN",
+      "name": {
+        "en": "India",
+        "ko": "인도",
+        "ja": "インド"
+      },
+      "capital": {
+        "en": "New Delhi",
+        "ko": "뉴델리",
+        "ja": "ニューデリー"
+      },
+      "postcardLabel": "INDIA"
+    },
+    {
+      "code": "AE",
+      "name": {
+        "en": "United Arab Emirates",
+        "ko": "아랍에미리트",
+        "ja": "アラブ首長国連邦"
+      },
+      "capital": {
+        "en": "Abu Dhabi",
+        "ko": "아부다비",
+        "ja": "アブダビ"
+      },
+      "postcardLabel": "U.A.E."
+    },
+    {
+      "code": "PT",
+      "name": {
+        "en": "Portugal",
+        "ko": "포르투갈",
+        "ja": "ポルトガル"
+      },
+      "capital": {
+        "en": "Lisbon",
+        "ko": "리스본",
+        "ja": "リスボン"
+      },
+      "postcardLabel": "PORTUGAL"
+    },
+    {
+      "code": "GR",
+      "name": {
+        "en": "Greece",
+        "ko": "그리스",
+        "ja": "ギリシャ"
+      },
+      "capital": {
+        "en": "Athens",
+        "ko": "아테네",
+        "ja": "アテネ"
+      },
+      "postcardLabel": "GREECE"
+    },
+    {
+      "code": "IS",
+      "name": {
+        "en": "Iceland",
+        "ko": "아이슬란드",
+        "ja": "アイスランド"
+      },
+      "capital": {
+        "en": "Reykjavík",
+        "ko": "레이캬비크",
+        "ja": "レイキャビク"
+      },
+      "postcardLabel": "ICELAND"
+    },
+    {
+      "code": "DE",
+      "name": {
+        "en": "Germany",
+        "ko": "독일",
+        "ja": "ドイツ"
+      },
+      "capital": {
+        "en": "Berlin",
+        "ko": "베를린",
+        "ja": "ベルリン"
+      },
+      "postcardLabel": "GERMANY"
+    },
+    {
+      "code": "MA",
+      "name": {
+        "en": "Morocco",
+        "ko": "모로코",
+        "ja": "モロッコ"
+      },
+      "capital": {
+        "en": "Rabat",
+        "ko": "라바트",
+        "ja": "ラバト"
+      },
+      "postcardLabel": "MOROCCO"
+    },
+    {
+      "code": "KE",
+      "name": {
+        "en": "Kenya",
+        "ko": "케냐",
+        "ja": "ケニア"
+      },
+      "capital": {
+        "en": "Nairobi",
+        "ko": "나이로비",
+        "ja": "ナイロビ"
+      },
+      "postcardLabel": "KENYA"
+    },
+    {
+      "code": "TZ",
+      "name": {
+        "en": "Tanzania",
+        "ko": "탄자니아",
+        "ja": "タンザニア"
+      },
+      "capital": {
+        "en": "Dodoma",
+        "ko": "도도마",
+        "ja": "ドドマ"
+      },
+      "postcardLabel": "TANZANIA"
+    },
+    {
+      "code": "CU",
+      "name": {
+        "en": "Cuba",
+        "ko": "쿠바",
+        "ja": "キューバ"
+      },
+      "capital": {
+        "en": "Havana",
+        "ko": "아바나",
+        "ja": "ハバナ"
+      },
+      "postcardLabel": "CUBA"
+    },
+    {
+      "code": "PE",
+      "name": {
+        "en": "Peru",
+        "ko": "페루",
+        "ja": "ペルー"
+      },
+      "capital": {
+        "en": "Lima",
+        "ko": "리마",
+        "ja": "リマ"
+      },
+      "postcardLabel": "PERU"
+    },
+    {
+      "code": "BR",
+      "name": {
+        "en": "Brazil",
+        "ko": "브라질",
+        "ja": "ブラジル"
+      },
+      "capital": {
+        "en": "Brasília",
+        "ko": "브라질리아",
+        "ja": "ブラジリア"
+      },
+      "postcardLabel": "BRAZIL"
+    },
+    {
+      "code": "AR",
+      "name": {
+        "en": "Argentina",
+        "ko": "아르헨티나",
+        "ja": "アルゼンチン"
+      },
+      "capital": {
+        "en": "Buenos Aires",
+        "ko": "부에노스아이레스",
+        "ja": "ブエノスアイレス"
+      },
+      "postcardLabel": "ARGENTINA"
+    },
+    {
+      "code": "NZ",
+      "name": {
+        "en": "New Zealand",
+        "ko": "뉴질랜드",
+        "ja": "ニュージーランド"
+      },
+      "capital": {
+        "en": "Wellington",
+        "ko": "웰링턴",
+        "ja": "ウェリントン"
+      },
+      "postcardLabel": "NEW ZEALAND"
     }
   ]
 }
