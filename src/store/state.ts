@@ -75,7 +75,8 @@ export type Action =
   | { type: "ack-arrival"; cityId: string }
   | { type: "dismiss-notice" }
   | { type: "settings"; patch: Partial<Settings> }
-  | { type: "reset" };
+  | { type: "reset" }
+  | { type: "import"; state: AppState };
 
 function finishActive(state: AppState, now: number, auto: boolean): AppState {
   if (!state.active) return state;
@@ -162,8 +163,24 @@ export function reduce(state: AppState, action: Action): AppState {
       return { ...state, settings: { ...state.settings, ...action.patch } };
     case "reset":
       return { ...initialState(), settings: state.settings };
+    case "import":
+      // a restored log never resumes a session from another device; this device keeps its own look
+      return { ...action.state, active: null, undo: null, notice: null, settings: { ...action.state.settings, theme: state.settings.theme, locale: state.settings.locale } };
     default:
       return state;
+  }
+}
+
+/** Read a backup file the user picked. Returns null unless it is a well-formed WANDERMIN backup. */
+export function parseBackup(raw: string): AppState | null {
+  try {
+    const data = JSON.parse(raw) as Partial<AppState>;
+    const okLedger = Array.isArray(data.ledger) && data.ledger.every((s) => s && typeof s.id === "string" && Number.isFinite(s.completedAt) && Number.isFinite(s.focusedMs) && Number.isFinite(s.kmPerMinute));
+    const okPlan = data.plan === null || (!!data.plan && typeof data.plan.departureId === "string" && Array.isArray(data.plan.stops));
+    if (data.version !== STATE_VERSION || !okLedger || !okPlan) return null;
+    return parseState(raw);
+  } catch {
+    return null;
   }
 }
 

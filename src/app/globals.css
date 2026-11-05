@@ -6,7 +6,7 @@
   --color-card: #fbf6ea;
   --color-line: #d9cba8;
   --color-ink: #283152;
-  --color-ink-soft: #6f6b74;
+  --color-ink-soft: #5f5b66;
   --color-accent: #b83a2b;
   --color-accent-deep: #8f2c24;
   --color-sky: #3a5a9a;
@@ -46,11 +46,36 @@
 html { background: var(--color-paper); color: var(--color-ink); -webkit-tap-highlight-color: transparent; }
 body { min-height: 100dvh; font-family: var(--font-sans); }
 .tabular { font-variant-numeric: tabular-nums; }
-.pixel > svg { width: 100%; height: auto; display: block; }
+/* ---------- app feel ---------- */
+html { -webkit-text-size-adjust: 100%; touch-action: manipulation; }
+/* installed app: no rubber-band / pull-to-refresh on the page itself */
+@media (display-mode: standalone) { html, body { overscroll-behavior-y: none; } }
+/* UI chrome behaves like native controls: no text selection or long-press callout */
+button, nav, [role="tab"], [role="switch"], summary, .tap { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+/* iPhone zooms into inputs below 16px; keep them at 16px on phones */
+@media (max-width: 639px) { input, select, textarea { font-size: 16px !important; } }
+/* pressed state, like a native button */
+.tap, button { transition: transform .12s ease, opacity .12s ease; }
+.tap:active, button:active:not(:disabled) { transform: scale(.97); }
+
+.pixelated { image-rendering: pixelated; image-rendering: crisp-edges; }
+/* opacity-only pulse: runs on the compositor, so loading placeholders cost no main-thread time */
+@keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+.art-skeleton { background: var(--color-paper-deep); animation: pulse-soft 1.6s ease-in-out infinite; border-radius: 8px; will-change: opacity; }
+.skeleton { background: var(--color-paper-deep); border-radius: 12px; animation: pulse-soft 1.6s ease-in-out infinite; will-change: opacity; }
+
+/* sheets slide up; pages fade in when switching tabs */
+@keyframes sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes page-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.sheet-panel { animation: sheet-in .32s cubic-bezier(.2,.8,.2,1) both; }
+@media (min-width: 640px) { .sheet-panel { animation: rise .3s cubic-bezier(.2,.8,.2,1) both; } }
+.sheet-backdrop { animation: fade-in .25s ease both; }
+.page-in { animation: page-in .28s cubic-bezier(.2,.8,.2,1) both; }
 :focus-visible { outline: 3px solid var(--color-sky); outline-offset: 2px; border-radius: 8px; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
 .rise { animation: rise .45s cubic-bezier(.2,.8,.2,1) both; }
 .rise-late { animation: rise .45s .25s cubic-bezier(.2,.8,.2,1) both; }
-@media (prefers-reduced-motion: reduce) { .rise, .rise-late { animation: none; } }
-html[data-motion="reduce"] .rise, html[data-motion="reduce"] .rise-late { animation: none; }
+@media (prefers-reduced-motion: reduce) { .rise, .rise-late, .sheet-panel, .sheet-backdrop, .page-in, .art-skeleton, .skeleton { animation: none; } }
+html[data-motion="reduce"] :is(.rise, .rise-late, .sheet-panel, .sheet-backdrop, .page-in, .art-skeleton, .skeleton) { animation: none; }

@@ -9,8 +9,9 @@ import { useI18n } from "@/i18n/react";
 import { DeparturePicker, DestinationPicker } from "@/components/Pickers";
 import { Notice } from "@/components/Notice";
 import { InstallCard } from "@/components/InstallCard";
-import { Pixel } from "@/components/Pixel";
-import { postcardSvg } from "@/components/art";
+import { ArtImage } from "@/components/ArtImage";
+import { postcardJob } from "@/components/PostcardViewer";
+import { getSceneAvailable } from "@/features/art/available";
 import { useNow } from "@/components/hooks";
 import { elapsedMs } from "@/features/focus/timer";
 
@@ -103,8 +104,11 @@ export default function HomePage() {
         ) : (
           <ul className="grid gap-3 sm:grid-cols-3">
             {recent.map((a) => {
-              const svg = postcardSvg(a, timeZone);
-              return svg && <li key={`${a.cityId}-${a.arrivedAt}`}><Pixel className="overflow-hidden rounded-lg shadow" svg={svg} label={name(getCity(a.cityId).name)} /></li>;
+              return getSceneAvailable(a.cityId) && (
+                <li key={`${a.cityId}-${a.arrivedAt}`}>
+                  <Link href="/journal" className="tap block"><ArtImage className="rounded-lg shadow" job={postcardJob(a, timeZone)} alt={name(getCity(a.cityId).name)} /></Link>
+                </li>
+              );
             })}
           </ul>
         )}

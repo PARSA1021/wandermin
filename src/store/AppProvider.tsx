@@ -64,7 +64,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const journey = useMemo(() => (state?.plan ? computeJourney(state.plan, state.ledger) : null), [state?.plan, state?.ledger]);
   const timeZone = useMemo(() => Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC", []);
 
-  if (!state) return <div className="grid min-h-dvh place-items-center text-ink-soft" aria-busy="true">WANDERMIN</div>;
+  if (!state) return <AppSkeleton />;
   return <AppContext.Provider value={{ state, journey, dispatch, timeZone }}>{children}</AppContext.Provider>;
 }
 
@@ -72,4 +72,23 @@ export function useApp(): Ctx {
   const ctx = useContext(AppContext);
   if (!ctx) throw new Error("useApp outside AppProvider");
   return ctx;
+}
+
+/** Shown for the instant before saved data loads: the app's frame, so it never looks like a blank web page. */
+function AppSkeleton() {
+  return (
+    <div className="min-h-dvh sm:flex" aria-busy="true" aria-label="WANDERMIN">
+      <aside className="hidden h-dvh shrink-0 border-r border-line bg-card/60 sm:block sm:w-20 lg:w-60">
+        <p className="px-6 pt-6 text-center text-sm font-black tracking-[0.18em] lg:text-left lg:text-lg">WANDERMIN</p>
+        <div className="mt-6 flex flex-col gap-2 px-3">{[0, 1, 2, 3, 4].map((i) => <div key={i} className="skeleton h-12" />)}</div>
+      </aside>
+      <div className="mx-auto w-full max-w-5xl px-4 pt-6 sm:px-6 sm:pt-8 lg:px-10">
+        <p className="text-xs font-black tracking-[0.25em] text-accent sm:hidden">WANDERMIN</p>
+        <div className="skeleton mt-3 h-8 w-2/3" />
+        <div className="skeleton mt-5 h-40" />
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">{[0, 1, 2, 3].map((i) => <div key={i} className="skeleton h-20" />)}</div>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 h-16 border-t border-line bg-card/95 sm:hidden" />
+    </div>
+  );
 }

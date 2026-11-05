@@ -18,6 +18,8 @@ npm run build && npm start
 npm run check           # tsc --noEmit + vitest
 npm run postcard        # renders every city's postcard from real journey data into out/
 npm run boarding-pass   # renders the Seoul → Tokyo boarding pass in its three states
+npm run icons           # app icons from the pixel engine
+npm run splash          # iOS launch screens (public/splash, sizes in src/config/splash.ts)
 ```
 
 ## Layout
@@ -137,6 +139,28 @@ picks the centre). Flight numbers and seats are stable per route, so the live, p
   ~41 KB, no map library at runtime); flown legs solid, the rest dashed, the plane at its live
   position, "My route" / "Whole world" zoom, collision-aware labels.
 - After landing at the last stop, the arrival sheet leads straight to choosing the next city.
+
+## App-like upgrade (Nov 2026)
+
+- **Art off the main thread**: postcards and passes render in a Web Worker
+  (`src/features/art/art.worker.ts`) to PNG, cached in memory and in Cache Storage (`wm-art-v1`),
+  and load lazily as images (`ArtImage`). Job types and cache keys live in `features/art/jobs.ts`
+  so UI code never imports the scenes. Home first-load JS: 183 kB → 134 kB.
+- **Native feel**: swipe-down bottom sheets (portalled to `<body>`) for every dialog, page
+  transitions, a progress ring with the plane on the Focus timer, pressed states, light haptics on
+  tab change, a skeleton shell while local data loads, safe-area padding, no overscroll bounce in
+  the installed app, 16 px inputs so iOS never zooms.
+- **Share**: postcards share as a PNG through the system share sheet (saved as a file where sharing
+  files isn't supported). Tap any postcard in the journal to open it full size.
+- **Installed app**: iOS launch screens for current iPhones and iPads, manifest shortcuts
+  (Focus / Journal / Map), store screenshots, `launch_handler: focus-existing`, an icon badge with
+  the number of unopened postcards, and a "new version ready · Reload" toast when the service worker
+  updates (never reloads on its own mid-session).
+- **Keeping data safe**: restore from a backup file in Profile (validated, asks before replacing;
+  a running session is never imported). The home-screen install card now waits until the first
+  finished session, and in Safari on iPhone explains that installing keeps the travel log safe.
+- Lighthouse (mobile, local): performance 63 → 81–85, LCP 4.4 s → 1.5–1.8 s, CLS 0;
+  accessibility, best practices and SEO 100.
 
 ## Deploy to Vercel
 

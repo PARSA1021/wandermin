@@ -64,8 +64,9 @@
     "arrivedOn": "{date} 도착",
     "totalFocus": "누적 집중 {minutes}분",
     "save": "이미지 저장",
-    "share": "공유",
-    "album": "엽서 앨범"
+    "share": "공유하기",
+    "album": "엽서 앨범",
+    "shareText": "WANDERMIN에서 {city} 엽서를 받았어요 ✈️"
   },
   "settings": {
     "language": "언어",
@@ -152,7 +153,12 @@
     "dataBody": "모든 기록은 이 기기에만 저장돼요. 브라우저 데이터를 지우기 전에 백업을 내보내 주세요.",
     "export": "백업 내보내기 (JSON)",
     "reset": "여행 기록 전체 삭제",
-    "resetConfirm": "모든 세션, 엽서, 탑승권을 지울까요? 되돌릴 수 없어요."
+    "resetConfirm": "모든 세션, 엽서, 탑승권을 지울까요? 되돌릴 수 없어요.",
+    "import": "백업 불러오기",
+    "importConfirm": "이 기기의 여행 기록을 백업 내용으로 바꿀까요?",
+    "importDone": "백업을 불러왔어요.",
+    "importInvalid": "WANDERMIN 백업 파일이 아니에요.",
+    "importAction": "불러오기"
   },
   "common": {
     "confirm": "확인",
@@ -170,7 +176,10 @@
     "iosSteps": "Safari에서 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택하세요.",
     "installed": "설치됨. 앱 버전으로 사용 중이에요.",
     "later": "나중에",
-    "offline": "오프라인 · 기록은 이 기기에 저장돼요"
+    "offline": "오프라인 · 기록은 이 기기에 저장돼요",
+    "updateReady": "새 버전이 준비됐어요.",
+    "reload": "새로고침",
+    "iosKeep": "Safari에서는 홈 화면에 설치해야 여행 기록이 안전하게 보관돼요. 공유 → 홈 화면에 추가를 눌러 주세요."
   },
   "companion": {
     "cabin": "기내 소음",

@@ -144,6 +144,19 @@ export class PixelCanvas {
       }
   }
 
+  /** RGBA pixels (transparent where unset), ready for ImageData / putImageData. */
+  toRGBA(): Uint8ClampedArray {
+    const rgb = this.palette.map((c) => [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]);
+    const out = new Uint8ClampedArray(this.width * this.height * 4);
+    for (let i = 0; i < this.data.length; i++) {
+      const ci = this.data[i]!;
+      if (ci < 0) continue;
+      const [r, g, b] = rgb[ci]!;
+      out[i * 4] = r!; out[i * 4 + 1] = g!; out[i * 4 + 2] = b!; out[i * 4 + 3] = 255;
+    }
+    return out;
+  }
+
   colors(): Color[] {
     return [...this.palette];
   }

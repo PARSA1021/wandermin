@@ -78,3 +78,10 @@ describe("postcard render", () => {
     expect(other).not.toBe(svg);
   });
 });
+
+describe("main-thread scene list", () => {
+  it("matches the scene registry exactly", async () => {
+    const { ILLUSTRATED } = await import("@/features/art/available");
+    expect([...ILLUSTRATED].sort()).toEqual(illustratedCityIds().sort());
+  });
+});

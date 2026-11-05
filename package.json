@@ -10,6 +10,7 @@
     "postcard": "tsx scripts/render-postcard.ts",
     "boarding-pass": "tsx scripts/render-boarding-pass.ts",
     "icons": "tsx scripts/render-icons.ts",
+    "splash": "tsx scripts/render-splash.ts",
     "bake-land": "tsx scripts/bake-land.ts",
     "check": "npm run typecheck && npm run test",
     "dev": "next dev",

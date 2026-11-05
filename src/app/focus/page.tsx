@@ -8,8 +8,7 @@ import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
 import { DeparturePicker, DestinationPicker } from "@/components/Pickers";
 import { Notice } from "@/components/Notice";
-import { Pixel } from "@/components/Pixel";
-import { passSvg } from "@/components/art";
+import { ArtImage } from "@/components/ArtImage";
 import { useNow, useWakeLock } from "@/components/hooks";
 import { LockScreenOptions } from "@/components/LockScreenOptions";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
@@ -25,6 +24,26 @@ function Chip({ on, children, onClick }: { on: boolean; children: React.ReactNod
       className={`min-h-11 rounded-full border px-4 text-sm font-semibold tabular ${on ? "border-ink bg-ink text-paper" : "border-line bg-card text-ink hover:border-ink"}`}>
       {children}
     </button>
+  );
+}
+
+/** Circular progress around the clock; a small plane rides the ring. */
+function TimerRing({ progress, paused, kind }: { progress: number; paused: boolean; kind: "focus" | "break" }) {
+  const r = 46, c = 2 * Math.PI * r, p = Math.min(1, Math.max(0, progress));
+  const a = (p * 360 - 90) * (Math.PI / 180);
+  const color = kind === "break" ? "var(--color-ok)" : "var(--color-accent)";
+  return (
+    <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" aria-hidden="true">
+      <circle cx="50" cy="50" r={r} fill="none" stroke="var(--color-paper-deep)" strokeWidth="3.5" />
+      <circle cx="50" cy="50" r={r} fill="none" stroke={color} strokeWidth="3.5" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - p)}
+        transform="rotate(-90 50 50)" style={{ transition: "stroke-dashoffset .9s linear", opacity: paused ? 0.45 : 1 }} />
+      {kind === "focus" && (
+        <g transform={`translate(${50 + r * Math.cos(a)} ${50 + r * Math.sin(a)}) rotate(${p * 360})`}>
+          <circle r="4.2" fill="var(--color-card)" stroke={color} strokeWidth="1" />
+          <path d="M2.6 0 L-0.9 -0.5 L-1.8 -2.2 L-2.4 -2.2 L-1.8 -0.45 L-2.6 -0.35 L-3.1 -1.1 L-3.5 -1.1 L-3.15 0 L-3.5 1.1 L-3.1 1.1 L-2.6 0.35 L-1.8 0.45 L-2.4 2.2 L-1.8 2.2 L-0.9 0.5 Z" fill="var(--color-ink)" />
+        </g>
+      )}
+    </svg>
   );
 }
 
@@ -84,10 +103,13 @@ export default function FocusPage() {
     return (
       <section className="mx-auto flex max-w-2xl flex-col items-center gap-6 pt-6 text-center sm:pt-10">
         <p className="text-sm font-semibold text-ink-soft">{paused ? t("focus.paused") : label}</p>
-        <p className="tabular text-7xl font-bold tracking-tight sm:text-8xl" role="timer" aria-live="off" aria-label={t("timer.remaining", { time: formatClock(remaining) })}>
-          {formatClock(remaining)}
-        </p>
-        {pass && <Pixel className="w-full max-w-xl" svg={passSvg(pass)} label={`${name(getCity(pass.fromId).name)} → ${name(getCity(pass.toId).name)}`} />}
+        <div className="relative grid aspect-square w-[min(78vw,20rem)] place-items-center">
+          <TimerRing progress={elapsedMs(active, now) / active.plannedMs} paused={paused} kind={active.kind} />
+          <p className={`tabular relative font-bold tracking-tight ${remaining >= 3_600_000 ? "text-5xl sm:text-6xl" : "text-6xl sm:text-7xl"} ${paused ? "opacity-60" : ""}`} role="timer" aria-live="off" aria-label={t("timer.remaining", { time: formatClock(remaining) })}>
+            {formatClock(remaining)}
+          </p>
+        </div>
+        {pass && <ArtImage eager className="w-full max-w-xl" job={{ kind: "pass", input: pass }} alt={`${name(getCity(pass.fromId).name)} → ${name(getCity(pass.toId).name)}`} />}
         <div className="grid w-full max-w-md grid-cols-3 gap-2">
           <button onClick={togglePause} className="min-h-14 rounded-2xl bg-ink font-semibold text-paper">{paused ? t("timer.resume") : t("timer.pause")}</button>
           <button onClick={() => { if (active.kind === "break") dispatch({ type: "finish", now: Date.now() }); else setConfirm("finish"); }}
@@ -132,7 +154,7 @@ export default function FocusPage() {
       )}
       {needsDestination ? <DestinationPicker /> : (
         <>
-          {preview && <Pixel svg={passSvg(preview)} label={`${name(getCity(preview.fromId).name)} → ${name(getCity(preview.toId).name)}`} />}
+          {preview && <ArtImage eager job={{ kind: "pass", input: preview }} alt={`${name(getCity(preview.fromId).name)} → ${name(getCity(preview.toId).name)}`} />}
           <fieldset>
             <legend className="mb-2 text-sm font-bold">{t("focus.duration")}</legend>
             <div className="flex flex-wrap gap-2">

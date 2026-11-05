@@ -36,6 +36,8 @@ export function InstallCard({ dismissible = false }: { dismissible?: boolean }) 
 
   if (standalone) return dismissible ? null : <p className="text-sm text-ok">✓ {t("pwa.installed")}</p>;
   if (dismissible && state.settings.installDismissed) return null;
+  // on the home screen, wait until the first finished session so the nudge is about keeping something real
+  if (dismissible && state.ledger.length === 0) return null;
   const ios = isIOS();
   if (!ios && !canPrompt && dismissible) return null; // nothing actionable to offer on this browser
 
@@ -44,7 +46,7 @@ export function InstallCard({ dismissible = false }: { dismissible?: boolean }) 
       <img src="/icons/icon-192.png" alt="" width={48} height={48} className="h-12 w-12 rounded-xl" />
       <div className="flex-1">
         <p className="font-semibold">{t("pwa.install")}</p>
-        <p className="text-sm text-ink-soft">{ios ? t("pwa.iosSteps") : t("pwa.installBody")}</p>
+        <p className="text-sm text-ink-soft">{ios ? (dismissible ? t("pwa.iosKeep") : t("pwa.iosSteps")) : t("pwa.installBody")}</p>
       </div>
       <div className="flex gap-2">
         {canPrompt && !ios && (

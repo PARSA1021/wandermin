@@ -65,7 +65,8 @@
     "totalFocus": "Total focus {minutes} min",
     "save": "Save image",
     "share": "Share",
-    "album": "Postcard album"
+    "album": "Postcard album",
+    "shareText": "I collected a postcard from {city} on WANDERMIN ✈️"
   },
   "settings": {
     "language": "Language",
@@ -152,7 +153,12 @@
     "dataBody": "Everything is stored only on this device. Export a backup before clearing browser data.",
     "export": "Export backup (JSON)",
     "reset": "Erase all travel data",
-    "resetConfirm": "Erase every session, postcard and pass? This can't be undone."
+    "resetConfirm": "Erase every session, postcard and pass? This can't be undone.",
+    "import": "Restore from backup",
+    "importConfirm": "Replace this device's travel log with the backup?",
+    "importDone": "Backup restored.",
+    "importInvalid": "That file isn't a WANDERMIN backup.",
+    "importAction": "Restore"
   },
   "common": {
     "confirm": "Confirm",
@@ -170,7 +176,10 @@
     "iosSteps": "In Safari, tap the Share button, then “Add to Home Screen”.",
     "installed": "Installed. You're using the app version.",
     "later": "Not now",
-    "offline": "Offline · your progress is saved on this device"
+    "offline": "Offline · your progress is saved on this device",
+    "updateReady": "A new version is ready.",
+    "reload": "Reload",
+    "iosKeep": "In Safari, install to your home screen so your travel log is kept safely: Share → Add to Home Screen."
   },
   "companion": {
     "cabin": "Cabin sound",

@@ -1,6 +1,6 @@
 /* WANDERMIN service worker — offline app shell, cached art/audio, notification clicks.
  * The timer never runs here: progress is always computed from stored timestamps by the page. */
-const VERSION = "wm-v2";
+const VERSION = "wm-v3";
 const SHELL = ["/", "/focus", "/map", "/journal", "/profile", "/manifest.webmanifest",
   "/icons/icon-192.png", "/icons/icon-512.png", "/audio/chime.m4a", "/audio/chime.mp3"];
 const MEDIA = ["/audio/cabin.m4a", "/audio/cabin.mp3"];
@@ -25,7 +25,7 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
-    for (const key of await caches.keys()) if (key !== VERSION) await caches.delete(key);
+    for (const key of await caches.keys()) if (key !== VERSION && !key.startsWith("wm-art-")) await caches.delete(key);
     await self.clients.claim();
   })());
 });

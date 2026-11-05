@@ -8,6 +8,7 @@ import { formatClock, remainingMs } from "@/features/focus/timer";
 import type { MessageKey } from "@/i18n";
 import { useNow } from "./hooks";
 import { UndoToast } from "./UndoToast";
+import { buzz } from "./session";
 import { getCity } from "@/data";
 
 const NAV: { href: string; key: MessageKey; icon: ReactNode }[] = [
@@ -106,7 +107,7 @@ export function Shell({ children }: { children: ReactNode }) {
         {!immersive && pathname !== "/focus" && state.active && (
           <div className="sticky top-0 z-20 flex justify-end px-4 pt-3 lg:hidden"><SessionChip /></div>
         )}
-        <main className={`mx-auto w-full max-w-5xl px-4 pt-4 sm:px-6 sm:pt-8 lg:px-10 ${immersive ? "pb-8" : "pb-28 sm:pb-10"}`}>{children}</main>
+        <main key={pathname} className={`page-in mx-auto w-full max-w-5xl px-4 pt-[max(1rem,env(safe-area-inset-top))] sm:px-6 sm:pt-8 lg:px-10 ${immersive ? "pb-8" : "pb-28 sm:pb-10"}`}>{children}</main>
       </div>
 
       {/* phone bottom tabs */}
@@ -115,10 +116,10 @@ export function Shell({ children }: { children: ReactNode }) {
           <ul className="grid grid-cols-5">
             {NAV.map((n) => (
               <li key={n.href}>
-                <Link href={n.href} aria-current={isActive(n.href) ? "page" : undefined}
-                  className={`flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium ${isActive(n.href) ? "text-accent" : "text-ink-soft"}`}>
-                  <Icon>{n.icon}</Icon>
-                  <span className="max-w-full truncate px-1">{t(n.key)}</span>
+                <Link href={n.href} aria-current={isActive(n.href) ? "page" : undefined} onClick={() => { if (!isActive(n.href)) buzz(8); }}
+                  className={`tap flex min-h-16 flex-col items-center justify-center gap-0.5 text-[11px] font-medium ${isActive(n.href) ? "text-accent" : "text-ink-soft"}`}>
+                  <span className={`grid h-8 w-14 place-items-center rounded-full transition-colors ${isActive(n.href) ? "bg-accent/15" : ""}`}><Icon>{n.icon}</Icon></span>
+                  <span className={`max-w-full truncate px-1 ${isActive(n.href) ? "font-bold" : ""}`}>{t(n.key)}</span>
                 </Link>
               </li>
             ))}

@@ -4,8 +4,11 @@ import { legPasses } from "@/features/tickets/passes";
 import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
 import { DeparturePicker } from "@/components/Pickers";
-import { Pixel } from "@/components/Pixel";
-import { passSvg, postcardSvg } from "@/components/art";
+import { useState } from "react";
+import { ArtImage } from "@/components/ArtImage";
+import { PostcardViewer, postcardJob } from "@/components/PostcardViewer";
+import { getSceneAvailable } from "@/features/art/available";
+import type { Arrival } from "@/features/travel/journey";
 import type { MessageKey } from "@/i18n";
 
 const DAY = 86_400_000;
@@ -13,6 +16,7 @@ const DAY = 86_400_000;
 export default function JournalPage() {
   const { state, journey, timeZone } = useApp();
   const { t, name, fmt, date } = useI18n();
+  const [viewing, setViewing] = useState<Arrival | null>(null);
   if (!state.plan || !journey) return <DeparturePicker />;
 
   const totalMin = Math.round(state.ledger.reduce((m, s) => m + s.focusedMs, 0) / 60000);
@@ -64,8 +68,13 @@ export default function JournalPage() {
         {firstByCity.size === 0 ? <p className="rounded-2xl border border-dashed border-line p-5 text-ink-soft">{t("journal.empty")}</p> : (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[...firstByCity.values()].reverse().map((a) => {
-              const svg = postcardSvg(a, timeZone);
-              return svg && <li key={a.cityId}><Pixel className="overflow-hidden rounded-lg shadow" svg={svg} label={name(getCity(a.cityId).name)} /></li>;
+              return getSceneAvailable(a.cityId) && (
+                <li key={a.cityId}>
+                  <button onClick={() => setViewing(a)} className="tap block w-full text-left" aria-haspopup="dialog">
+                    <ArtImage className="rounded-lg shadow transition-transform hover:-translate-y-0.5" job={postcardJob(a, timeZone)} alt={name(getCity(a.cityId).name)} />
+                  </button>
+                </li>
+              );
             })}
           </ul>
         )}
@@ -75,7 +84,7 @@ export default function JournalPage() {
         <h2 className="mb-3 text-lg font-bold">{t("journal.passes")}</h2>
         {passes.length === 0 ? <p className="rounded-2xl border border-dashed border-line p-5 text-ink-soft">{t("journal.empty")}</p> : (
           <ul className="grid gap-4 lg:grid-cols-2">
-            {passes.map((p) => <li key={p.legIndex}><Pixel svg={passSvg(p)} label={`${name(getCity(p.fromId).name)} → ${name(getCity(p.toId).name)}`} /></li>)}
+            {passes.map((p) => <li key={p.legIndex}><ArtImage job={{ kind: "pass", input: p }} alt={`${name(getCity(p.fromId).name)} → ${name(getCity(p.toId).name)}`} /></li>)}
           </ul>
         )}
       </section>
@@ -93,6 +102,7 @@ export default function JournalPage() {
           {state.ledger.length === 0 && <li className="px-4 py-3 text-sm text-ink-soft">{t("journal.empty")}</li>}
         </ul>
       </section>
+      <PostcardViewer arrival={viewing} timeZone={timeZone} onClose={() => setViewing(null)} />
     </div>
   );
 }

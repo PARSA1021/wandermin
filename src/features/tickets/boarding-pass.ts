@@ -250,6 +250,9 @@ export function composeBoardingPass(p: BoardingPassContent, accent: Color): Pixe
   return c;
 }
 
+/** Accent for a pass: the destination scene's accent colour. */
+export const passAccent = (toId: string): Color => getScene(toId)?.accent ?? "#283152";
+
 export function renderBoardingPassSvg(p: BoardingPassContent, accent: Color, displayScale = 4): string {
   const pass = composeBoardingPass(p, accent);
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");

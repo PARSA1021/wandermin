@@ -6,6 +6,7 @@ import { Shell } from "./Shell";
 import { ArrivalSheet } from "./ArrivalSheet";
 import { FlightCompanion } from "./FlightCompanion";
 import { OfflinePill } from "./InstallCard";
+import { AppBadge, UpdateToast } from "./AppSignals";
 
 export function ClientRoot({ children }: { children: ReactNode }) {
   useEffect(() => {
@@ -16,6 +17,8 @@ export function ClientRoot({ children }: { children: ReactNode }) {
     <AppProvider>
       <I18nProvider>
         <OfflinePill />
+        <UpdateToast />
+        <AppBadge />
         <Shell>{children}</Shell>
         <ArrivalSheet />
         <FlightCompanion />

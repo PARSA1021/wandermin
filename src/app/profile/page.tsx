@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getCity } from "@/data";
 import { PRESET_MINUTES } from "@/features/focus/timer";
 import { LOCALE_LABELS, SUPPORTED_LOCALES, type Locale } from "@/i18n";
@@ -8,6 +8,7 @@ import { useI18n } from "@/i18n/react";
 import { InstallCard } from "@/components/InstallCard";
 import { LockScreenOptions } from "@/components/LockScreenOptions";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
+import { parseBackup, type AppState } from "@/store/state";
 
 function Row({ title, children }: { title: string; children: React.ReactNode }) {
   return <div className="flex flex-col gap-2 border-b border-line py-4 last:border-0 sm:flex-row sm:items-center sm:justify-between"><span className="font-semibold">{title}</span>{children}</div>;
@@ -18,6 +19,16 @@ export default function ProfilePage() {
   const { t, name } = useI18n();
   const s = state.settings;
   const [confirmReset, setConfirmReset] = useState(false);
+  const [pending, setPending] = useState<AppState | null>(null);
+  const [importMsg, setImportMsg] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const pickBackup = async (file: File | undefined) => {
+    if (!file) return;
+    const parsed = parseBackup(await file.text());
+    if (fileRef.current) fileRef.current.value = "";
+    if (!parsed) { setImportMsg(t("profile.importInvalid")); return; }
+    setImportMsg(null); setPending(parsed);
+  };
   const exportData = () => {
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
@@ -71,10 +82,16 @@ export default function ProfilePage() {
         <h2 className="text-lg font-bold">{t("profile.data")}</h2>
         <p className="mt-1 text-sm text-ink-soft">{t("profile.dataBody")}</p>
         <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-          <button onClick={exportData} className="min-h-12 rounded-xl bg-ink px-5 font-semibold text-paper">{t("profile.export")}</button>
-          <button onClick={() => setConfirmReset(true)} className="min-h-12 rounded-xl border border-accent px-5 font-semibold text-accent">{t("profile.reset")}</button>
+          <button onClick={exportData} className="tap min-h-12 rounded-xl bg-ink px-5 font-semibold text-paper">{t("profile.export")}</button>
+          <button onClick={() => fileRef.current?.click()} className="tap min-h-12 rounded-xl border border-ink px-5 font-semibold">{t("profile.import")}</button>
+          <input ref={fileRef} type="file" accept="application/json,.json" className="sr-only" tabIndex={-1} aria-hidden="true" data-testid="backup-file" onChange={(e) => pickBackup(e.target.files?.[0])} />
+          <button onClick={() => setConfirmReset(true)} className="tap min-h-12 rounded-xl border border-accent px-5 font-semibold text-accent">{t("profile.reset")}</button>
         </div>
+        {importMsg && <p role="status" className="mt-3 text-sm font-semibold">{importMsg}</p>}
       </section>
+      <ConfirmSheet open={!!pending} title={t("profile.import")} body={t("profile.importConfirm")}
+        confirmLabel={t("profile.importAction")} cancelLabel={t("common.cancel")} onCancel={() => setPending(null)}
+        onConfirm={() => { if (pending) dispatch({ type: "import", state: pending }); setPending(null); setImportMsg(t("profile.importDone")); }} />
       <ConfirmSheet open={confirmReset} title={t("profile.reset")} body={t("profile.resetConfirm")} destructive
         confirmLabel={t("profile.reset")} cancelLabel={t("common.cancel")} onCancel={() => setConfirmReset(false)}
         onConfirm={() => { setConfirmReset(false); dispatch({ type: "reset" }); }} />

@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ClientRoot } from "@/components/ClientRoot";
+import { splashStartupImages } from "@/config/splash";
 
 export const metadata: Metadata = {
   title: "WANDERMIN",
   description: "Every Minute Takes You Somewhere. A focus timer that turns focused minutes into a journey around the world.",
   applicationName: "WANDERMIN",
-  appleWebApp: { capable: true, title: "WANDERMIN", statusBarStyle: "default" },
+  appleWebApp: { capable: true, title: "WANDERMIN", statusBarStyle: "default", startupImage: splashStartupImages() },
   formatDetection: { telephone: false },
 };
 

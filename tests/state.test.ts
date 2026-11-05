@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { initialState, parseState, reduce, type AppState } from "@/store/state";
+import { initialState, parseBackup, parseState, reduce, type AppState } from "@/store/state";
 import { legPasses, livePass } from "@/features/tickets/passes";
 import { legDistanceKm } from "@/features/travel/graph";
 
@@ -142,5 +142,26 @@ describe("undo and break notices", () => {
     const s = parseState(old);
     expect(s.settings.theme).toBe("system");
     expect(s.undo).toBeNull();
+  });
+});
+
+describe("backup restore", () => {
+  it("accepts an exported backup and drops any running session", () => {
+    let s = reduce(trip(), { type: "start", id: "s1", minutes: 25, activity: "studying", now: T });
+    s = reduce(s, { type: "finish", now: T + 25 * min });
+    const withRunning = reduce(s, { type: "start", id: "s2", minutes: 25, activity: "studying", now: T + 30 * min });
+    const parsed = parseBackup(JSON.stringify(withRunning));
+    expect(parsed).not.toBeNull();
+    const fresh = reduce(initialState(), { type: "settings", patch: { theme: "dark" } });
+    const restored = reduce(fresh, { type: "import", state: parsed! });
+    expect(restored.ledger).toHaveLength(1);
+    expect(restored.active).toBeNull();
+    expect(restored.settings.theme).toBe("dark"); // device look is kept
+  });
+
+  it("rejects files that aren't backups", () => {
+    expect(parseBackup("not json")).toBeNull();
+    expect(parseBackup(JSON.stringify({ hello: 1 }))).toBeNull();
+    expect(parseBackup(JSON.stringify({ version: 1, ledger: [{ id: 3 }], plan: null }))).toBeNull();
   });
 });
