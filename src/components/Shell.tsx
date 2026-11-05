@@ -60,7 +60,8 @@ export function Shell({ children }: { children: ReactNode }) {
   const { t } = useI18n();
   // distraction-free focus screen on phones while a session runs
   // and during first-run onboarding, which is its own full-screen flow
-  const immersive = (pathname === "/focus" && !!state.active) || !state.plan;
+  // the welcome flow (shown on the main tabs until a trip exists) hides the tabs; Profile always keeps them
+  const immersive = (pathname === "/focus" && !!state.active) || (!state.plan && !pathname.startsWith("/profile"));
 
   useEffect(() => {
     document.documentElement.dataset.motion = state.settings.reduceMotion ? "reduce" : "full";

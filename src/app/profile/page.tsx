@@ -1,5 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { afterLayersClosed } from "@/components/backStack";
 import { getCity } from "@/data";
 import { PRESET_MINUTES } from "@/features/focus/timer";
 import { LOCALE_LABELS, SUPPORTED_LOCALES, type Locale } from "@/i18n";
@@ -20,6 +22,13 @@ export default function ProfilePage() {
   const { t, name } = useI18n();
   const s = state.settings;
   const [confirmReset, setConfirmReset] = useState(false);
+  const router = useRouter();
+  /** Start over: clear the trip and take the user straight to the welcome screen to plan a new one. */
+  const startOver = () => {
+    dispatch({ type: "reset" });
+    // wait for the confirm sheet's history entry to go, then replace this page with the welcome screen
+    setTimeout(() => afterLayersClosed(() => router.replace("/")), 0);
+  };
   const [showIntro, setShowIntro] = useState(false);
   const [pending, setPending] = useState<AppState | null>(null);
   const [importMsg, setImportMsg] = useState<string | null>(null);
@@ -74,7 +83,7 @@ export default function ProfilePage() {
           </span>
         </Row>
         {state.plan && state.ledger.length === 0 && (
-          <div className="pb-4"><button onClick={() => dispatch({ type: "reset" })} className="min-h-11 rounded-xl border border-ink px-4 text-sm font-semibold">{t("travel.chooseDeparture")}</button></div>
+          <div className="pb-4"><button onClick={startOver} className="tap min-h-11 rounded-xl border border-ink px-4 text-sm font-semibold">{t("travel.chooseDeparture")}</button></div>
         )}
       </section>
 
@@ -100,7 +109,7 @@ export default function ProfilePage() {
         onConfirm={() => { if (pending) dispatch({ type: "import", state: pending }); setPending(null); setImportMsg(t("profile.importDone")); }} />
       <ConfirmSheet open={confirmReset} title={t("profile.reset")} body={t("profile.resetConfirm")} destructive
         confirmLabel={t("profile.reset")} cancelLabel={t("common.cancel")} onCancel={() => setConfirmReset(false)}
-        onConfirm={() => { setConfirmReset(false); dispatch({ type: "reset" }); }} />
+        onConfirm={() => { setConfirmReset(false); startOver(); }} />
     </div>
   );
 }
