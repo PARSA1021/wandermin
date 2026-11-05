@@ -29,11 +29,26 @@ describe("journey", () => {
     expect(j.currentLeg?.travelledKm).toBeCloseTo(1250 - legDistanceKm("seoul", "tokyo"), 6);
   });
 
-  it("can pass several cities in one long session and banks km past the last stop", () => {
+  it("can pass several cities in one long session; distance past the last stop is not flown", () => {
     const j = computeJourney(plan, [s("long", 180, 0)]);
     expect(j.arrivals.map((a) => a.cityId)).toEqual(["tokyo", "osaka"]);
     expect(j.currentLeg).toBeNull();
-    expect(j.bankedKm).toBeCloseTo(9000 - legDistanceKm("seoul", "tokyo") - legDistanceKm("tokyo", "osaka"), 6);
+    expect(j.totalKm).toBeCloseTo(legDistanceKm("seoul", "tokyo") + legDistanceKm("tokyo", "osaka"), 6);
+    expect(j.totalFocusMinutes).toBe(180); // the focus time itself is still counted
+  });
+
+  it("never arrives at a city chosen after the focus happened (no banked distance)", () => {
+    // 25 min from Seoul to Osaka (17 min of flight), then Kyoto is picked an hour later
+    const first: TravelPlan = { departureId: "seoul", stops: ["osaka"], addedAt: [t0 - 1000] };
+    const ledger = [s("a", 25, 0)];
+    const j1 = computeJourney(first, ledger);
+    expect(j1.arrivals.map((a) => a.cityId)).toEqual(["osaka"]);
+    expect(j1.totalKm).toBeCloseTo(legDistanceKm("seoul", "osaka"), 6);
+    const later = rerouteTo(first, j1, "kyoto", t0 + 3600_000);
+    const j2 = computeJourney(later, ledger);
+    expect(j2.arrivals.map((a) => a.cityId)).toEqual(["osaka"]);
+    expect(j2.currentLeg?.toId).toBe("kyoto");
+    expect(j2.currentLeg?.travelledKm).toBe(0);
   });
 
   it("never double-counts a session id (ledger and compute both dedupe)", () => {

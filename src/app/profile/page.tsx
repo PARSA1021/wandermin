@@ -55,7 +55,7 @@ export default function ProfilePage() {
           <div role="radiogroup" aria-label={t("settings.theme")} className="flex overflow-hidden rounded-xl border border-line text-sm font-semibold">
             {(["system", "light", "dark"] as const).map((v) => (
               <button key={v} role="radio" aria-checked={s.theme === v} onClick={() => dispatch({ type: "settings", patch: { theme: v } })}
-                className={`min-h-11 flex-1 px-4 ${s.theme === v ? "bg-ink text-paper" : "text-ink-soft"}`}>{t(`theme.${v}`)}</button>
+                className={`min-h-11 flex-1 whitespace-nowrap px-4 max-[359px]:px-2 max-[359px]:text-sm ${s.theme === v ? "bg-ink text-paper" : "text-ink-soft"}`}>{t(`theme.${v}`)}</button>
             ))}
           </div>
         </Row>

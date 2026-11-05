@@ -14,7 +14,8 @@ import { ArtImage } from "@/components/ArtImage";
 import { postcardJob } from "@/components/PostcardViewer";
 import { getSceneAvailable } from "@/features/art/available";
 import { useNow } from "@/components/hooks";
-import { elapsedMs } from "@/features/focus/timer";
+import { elapsedMs, formatClock } from "@/features/focus/timer";
+import { plannedSessionMs } from "@/store/state";
 
 function startOfLocalDay(now: number) { const d = new Date(now); d.setHours(0, 0, 0, 0); return d.getTime(); }
 
@@ -35,6 +36,8 @@ export default function HomePage() {
   const today = state.ledger.filter((s) => s.completedAt >= startOfLocalDay(now)).reduce((m, s) => m + s.focusedMs / 60000, 0);
   const recent = [...journey.arrivals].reverse().slice(0, 3);
   const here = getCity(journey.lastCityId);
+  const quick = plannedSessionMs(state, state.settings.defaultMinutes);
+  const finalStop = state.plan.stops.at(-1);
 
   return (
     <div className="flex flex-col gap-5">
@@ -69,7 +72,9 @@ export default function HomePage() {
                 startSession(dispatch, state.settings, { minutes: state.settings.defaultMinutes, activity: state.settings.activity });
                 router.push("/focus");
               }} className="min-h-14 rounded-2xl bg-accent px-6 text-lg font-bold text-paper shadow">
-                {t("home.quickStart", { minutes: state.settings.defaultMinutes })}
+                {quick.capped && finalStop
+                  ? t("home.quickStartLand", { city: name(getCity(finalStop).name), time: formatClock(quick.ms) })
+                  : t("home.quickStart", { minutes: state.settings.defaultMinutes })}
               </button>
               <Link href="/focus" className="flex min-h-10 items-center justify-center text-sm font-semibold text-ink-soft underline underline-offset-4">{t("home.customize")}</Link>
             </div>

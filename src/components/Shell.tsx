@@ -31,7 +31,7 @@ function SessionChip() {
   const now = useNow(1000, !!active);
   if (!active) return null;
   return (
-    <Link href="/focus" className="inline-flex items-center gap-2 rounded-full bg-ink px-3 py-1.5 text-sm font-semibold text-paper tabular">
+    <Link href="/focus" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-ink px-3 py-1.5 text-sm font-semibold text-paper tabular">
       <span className={`h-2 w-2 rounded-full ${active.pausedAt ? "bg-paper-deep" : "bg-[#7fd18f]"}`} />
       {formatClock(remainingMs(active, now))}
       <span className="sr-only">{active.pausedAt ? t("focus.paused") : t("nav.focus")}</span>
@@ -85,7 +85,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <TabTitle />
       <UndoToast />
       {/* tablet rail / desktop sidebar */}
-      <aside className="sticky top-0 hidden h-dvh shrink-0 flex-col border-r border-line bg-card/60 sm:flex sm:w-20 lg:w-60">
+      <aside className="sticky top-0 hidden h-dvh shrink-0 flex-col overflow-y-auto border-r border-line bg-card/60 pl-[env(safe-area-inset-left)] sm:flex sm:w-[calc(5rem+env(safe-area-inset-left))] lg:w-60">
         <div className="px-3 pb-6 pt-6 lg:px-6">
           <div className="text-center text-sm font-black tracking-[0.18em] text-ink lg:text-left lg:text-lg">
             <span className="lg:hidden">WM</span><span className="hidden lg:inline">WANDERMIN</span>
@@ -108,7 +108,7 @@ export function Shell({ children }: { children: ReactNode }) {
         {!immersive && pathname !== "/focus" && state.active && (
           <div className="sticky top-0 z-20 flex justify-end px-4 pt-3 lg:hidden"><SessionChip /></div>
         )}
-        <main key={pathname} className={`page-in mx-auto w-full max-w-5xl px-4 pt-[max(1rem,env(safe-area-inset-top))] sm:px-6 sm:pt-8 lg:px-10 ${immersive ? "pb-8" : "pb-28 sm:pb-10"}`}>{children}</main>
+        <main key={pathname} className={`page-in mx-auto w-full max-w-5xl px-4 pt-[max(1rem,env(safe-area-inset-top))] pr-[max(1rem,env(safe-area-inset-right))] sm:px-6 sm:pt-8 sm:pr-[max(1.5rem,env(safe-area-inset-right))] lg:px-10 short:pt-3 ${immersive ? "pb-8" : "pb-28 sm:pb-10"}`}>{children}</main>
       </div>
 
       {/* phone bottom tabs */}

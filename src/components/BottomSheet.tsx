@@ -48,12 +48,12 @@ export function BottomSheet({ open, onClose, labelledBy, describedBy, role = "di
 
   // portalled to <body> so page transitions (which create stacking contexts) can't put the tab bar on top
   return createPortal(
-    <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-6" role="presentation">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)] sm:items-center sm:p-6 short:p-2" role="presentation">
       <div className="sheet-backdrop absolute inset-0 bg-black/50" style={{ opacity: Math.max(0.2, 1 - dy / 400) }} onClick={() => dismissible && onClose()} />
       <div ref={panel} role={role} aria-modal="true" aria-labelledby={labelledBy} aria-describedby={describedBy} tabIndex={-1}
         onTouchStart={(e) => start(e.touches[0]!.clientY)} onTouchMove={(e) => move(e.touches[0]!.clientY)} onTouchEnd={(e) => end(e.changedTouches[0]!.clientY)}
         style={{ transform: dy ? `translateY(${dy}px)` : undefined, transition: drag.current ? "none" : "transform .25s cubic-bezier(.2,.8,.2,1)" }}
-        className={`sheet-panel relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-3xl bg-card pb-[env(safe-area-inset-bottom)] shadow-2xl outline-none sm:rounded-3xl sm:pb-0 ${wide ? "sm:max-w-2xl" : "sm:max-w-md"}`}>
+        className={`sheet-panel relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-3xl bg-card pb-[env(safe-area-inset-bottom)] shadow-2xl outline-none sm:rounded-3xl sm:pb-0 ${wide ? "sm:max-w-2xl wideland:max-w-4xl" : "sm:max-w-md"} short:max-h-[96dvh]`}>
         {dismissible && (
           <div className="sticky top-0 z-10 flex justify-center bg-card pb-1 pt-2 sm:hidden" aria-hidden="true">
             <span className="h-1.5 w-10 rounded-full bg-line" />

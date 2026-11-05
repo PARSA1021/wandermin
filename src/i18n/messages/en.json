@@ -28,7 +28,8 @@
     "today": "Today",
     "quickStart": "Start {minutes} min",
     "customize": "Change time or activity",
-    "nextFlight": "Start next flight"
+    "nextFlight": "Start next flight",
+    "quickStartLand": "Fly to {city} · {time}"
   },
   "timer": {
     "start": "Start focus",
@@ -50,7 +51,8 @@
       "personal": "Personal project",
       "custom": "Custom activity"
     },
-    "completedWhileAwayMinutes": "Your {minutes}-minute session finished while you were away."
+    "completedWhileAwayMinutes": "Your {minutes}-minute session finished while you were away.",
+    "landsIn": "to {city} · {time}"
   },
   "travel": {
     "distance": "{km} km",
@@ -112,7 +114,8 @@
     "cancelSession": "Cancel session",
     "keepGoing": "Keep focusing",
     "cancelled": "Session cancelled",
-    "shortcuts": "Space: pause or resume"
+    "shortcuts": "Space: pause or resume",
+    "landsHint": "{city} is {time} of focus away. The session ends as you land."
   },
   "arrival": {
     "title": "Welcome to {city}!",
@@ -242,6 +245,8 @@
     "board": "Board and focus · {minutes} min",
     "later": "Not now — go to Home",
     "howItWorks": "How WANDERMIN works",
-    "moreFlights": "More direct flights ({n})"
+    "moreFlights": "More direct flights ({n})",
+    "landsInOne": "This flight lands in {time} — the session ends as you land.",
+    "boardTime": "Board and focus · {time}"
   }
 }

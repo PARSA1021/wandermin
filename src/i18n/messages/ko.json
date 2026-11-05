@@ -28,7 +28,8 @@
     "today": "오늘",
     "quickStart": "{minutes}분 바로 시작",
     "customize": "시간·활동 바꾸기",
-    "nextFlight": "다음 비행 시작"
+    "nextFlight": "다음 비행 시작",
+    "quickStartLand": "{city}까지 {time} 바로 시작"
   },
   "timer": {
     "start": "집중 시작",
@@ -50,7 +51,8 @@
       "personal": "개인 프로젝트",
       "custom": "직접 입력"
     },
-    "completedWhileAwayMinutes": "자리를 비운 사이 {minutes}분 세션이 완료되었어요."
+    "completedWhileAwayMinutes": "자리를 비운 사이 {minutes}분 세션이 완료되었어요.",
+    "landsIn": "{city}까지 {time}"
   },
   "travel": {
     "distance": "{km}km",
@@ -112,7 +114,8 @@
     "cancelSession": "세션 취소",
     "keepGoing": "계속 집중하기",
     "cancelled": "세션을 취소했어요",
-    "shortcuts": "스페이스: 일시정지·다시 시작"
+    "shortcuts": "스페이스: 일시정지·다시 시작",
+    "landsHint": "{city}까지 집중 {time}이면 도착해요. 착륙하면 세션이 끝나요."
   },
   "arrival": {
     "title": "{city}에 오신 걸 환영해요!",
@@ -242,6 +245,8 @@
     "board": "탑승하고 집중 시작 · {minutes}분",
     "later": "나중에 할게요",
     "howItWorks": "WANDERMIN 사용법",
-    "moreFlights": "직항 더 보기 ({n})"
+    "moreFlights": "직항 더 보기 ({n})",
+    "landsInOne": "이 비행은 {time}이면 도착해요. 착륙하면 세션이 끝나요.",
+    "boardTime": "탑승하고 집중 시작 · {time}"
   }
 }

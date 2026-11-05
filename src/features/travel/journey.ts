@@ -19,6 +19,12 @@ export interface CompletedSession {
 export interface TravelPlan {
   departureId: string;
   stops: string[];
+  /**
+   * When each stop was added (epoch ms), parallel to `stops`. A session can only fly legs that
+   * existed when it finished, so choosing a new city later never "spends" old focus time on it.
+   * Missing (older saves) means "always existed".
+   */
+  addedAt?: number[];
 }
 
 export interface Arrival {
@@ -48,8 +54,6 @@ export interface Journey {
     progress: number; // 0..1
   };
   position: LatLng;
-  /** Distance flown beyond the final planned stop, held until a new stop is chosen. */
-  bankedKm: number;
 }
 
 export const sessionKm = (s: CompletedSession) => (s.focusedMs / 60000) * s.kmPerMinute;
@@ -90,14 +94,25 @@ export function computeJourney(plan: TravelPlan, ledger: readonly CompletedSessi
   const legEnds: number[] = [];
   legs.reduce((acc, l) => (legEnds.push(acc + l.km), acc + l.km), 0);
 
+  // legs available to a session = the leading stops that had been added by the time it finished
+  const addedAt = plan.addedAt ?? [];
+  const availableLegs = (t: number) => {
+    let n = 0;
+    while (n < legs.length && (addedAt[n] ?? 0) <= t) n++;
+    return n;
+  };
+
   const arrivals: Arrival[] = [];
   let km = 0;
   let minutes = 0;
   let next = 0;
   for (const s of sessions) {
-    const add = sessionKm(s);
+    const open = availableLegs(s.completedAt);
+    const routeEnd = open > 0 ? legEnds[open - 1]! : 0;
+    // distance beyond the end of the route as it was is not flown anywhere (no banking)
+    const add = Math.max(0, Math.min(sessionKm(s), routeEnd - km));
     const addMin = s.focusedMs / 60000;
-    while (next < legs.length && km + add >= legEnds[next]! - 1e-9) {
+    while (next < open && km + add >= legEnds[next]! - 1e-9) {
       const leg = legs[next]!;
       const neededKm = legEnds[next]! - km;
       arrivals.push({
@@ -119,10 +134,9 @@ export function computeJourney(plan: TravelPlan, ledger: readonly CompletedSessi
   const lastCityId = next === 0 ? plan.departureId : legs[next - 1]!.toId;
   if (done) {
     const city = getCity(lastCityId);
-    const end = legEnds.at(-1) ?? 0;
     return {
       totalKm: km, totalFocusMinutes: minutes, arrivals, lastCityId, currentLeg: null,
-      position: { lat: city.lat, lng: city.lng }, bankedKm: Math.max(0, km - end),
+      position: { lat: city.lat, lng: city.lng },
     };
   }
   const leg = legs[next]!;
@@ -136,7 +150,6 @@ export function computeJourney(plan: TravelPlan, ledger: readonly CompletedSessi
       travelledKm, remainingKm: leg.km - travelledKm, progress,
     },
     position: interpolateGreatCircle(getCity(leg.fromId), getCity(leg.toId), progress),
-    bankedKm: 0,
   };
 }
 
@@ -144,11 +157,22 @@ export function computeJourney(plan: TravelPlan, ledger: readonly CompletedSessi
  * Change the route without touching history. Visited stops stay; a leg already in progress
  * is kept (no mid-air teleport); the new path is appended from the city that leg ends at.
  */
-export function rerouteTo(plan: TravelPlan, journey: Journey, targetId: string): TravelPlan {
+export function rerouteTo(plan: TravelPlan, journey: Journey, targetId: string, now = Date.now()): TravelPlan {
   const lockedCount = journey.arrivals.length + (journey.currentLeg && journey.currentLeg.travelledKm > 0 ? 1 : 0);
   const kept = plan.stops.slice(0, lockedCount);
+  const keptAt = kept.map((_, i) => plan.addedAt?.[i] ?? 0);
   const from = kept.at(-1) ?? plan.departureId;
   const path = shortestPath(from, targetId);
   if (!path) throw new Error(`No route from ${from} to ${targetId}`);
-  return { departureId: plan.departureId, stops: [...kept, ...path.slice(1)] };
+  const added = path.slice(1);
+  return { departureId: plan.departureId, stops: [...kept, ...added], addedAt: [...keptAt, ...added.map(() => now)] };
+}
+
+/** Distance left to the final planned stop — the most a new focus session can fly. */
+export function routeRemainingKm(plan: TravelPlan, journey: Journey): number {
+  if (!journey.currentLeg) return 0;
+  const cities = [plan.departureId, ...plan.stops];
+  let rest = journey.currentLeg.remainingKm;
+  for (let i = journey.currentLeg.index + 1; i < plan.stops.length; i++) rest += legDistanceKm(cities[i]!, cities[i + 1]!);
+  return rest;
 }

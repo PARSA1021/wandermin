@@ -1,6 +1,13 @@
 @import "tailwindcss";
+/* layout variants: `short` = a phone on its side (little height); `wideland` = any landscape screen with room for two columns */
+@custom-variant short (@media (orientation: landscape) and (max-height: 560px));
+/* `tiny` = the shortest landscape phones (old iPhone SE on its side, 320px tall) */
+@custom-variant tiny (@media (orientation: landscape) and (max-height: 380px));
+@custom-variant wideland (@media (orientation: landscape) and (min-width: 560px));
 
 @theme {
+  /* landscape phones (568px+) get the side rail; portrait phones (≤430px) keep the bottom tabs */
+  --breakpoint-sm: 35rem;
   --color-paper: #f4ecd8;
   --color-paper-deep: #e9dfc8;
   --color-card: #fbf6ea;
@@ -79,3 +86,7 @@ button, nav, [role="tab"], [role="switch"], summary, .tap { -webkit-user-select:
 .rise-late { animation: rise .45s .25s cubic-bezier(.2,.8,.2,1) both; }
 @media (prefers-reduced-motion: reduce) { .rise, .rise-late, .sheet-panel, .sheet-backdrop, .page-in, .art-skeleton, .skeleton { animation: none; } }
 html[data-motion="reduce"] :is(.rise, .rise-late, .sheet-panel, .sheet-backdrop, .page-in, .art-skeleton, .skeleton) { animation: none; }
+
+/* very large monitors: scale the whole rem-based UI up instead of leaving a thin column in a sea of space */
+@media (min-width: 1920px) and (min-height: 1000px) { html { font-size: 112.5%; } }
+@media (min-width: 2400px) and (min-height: 1300px) { html { font-size: 125%; } }

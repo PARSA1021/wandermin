@@ -5,6 +5,7 @@ import { TRAVEL_CONFIG } from "@/config/travel";
 import { BREAK_MINUTES, CUSTOM_RANGE, PRESET_MINUTES, elapsedMs, formatClock, isPaused, remainingMs, type ActivityId } from "@/features/focus/timer";
 import { livePass } from "@/features/tickets/passes";
 import { useApp } from "@/store/AppProvider";
+import { plannedSessionMs } from "@/store/state";
 import { useI18n } from "@/i18n/react";
 import { DestinationPicker } from "@/components/Pickers";
 import { Onboarding } from "@/components/Onboarding";
@@ -57,6 +58,9 @@ export default function FocusPage() {
   const [custom, setCustom] = useState("");
   const [activity, setActivity] = useState<ActivityId>(state.settings.activity);
   const [customActivity, setCustomActivity] = useState("");
+  // a session (re)starting swaps the setup form for the timer: show it from the top
+  const activeId = active?.id;
+  useEffect(() => { if (activeId) window.scrollTo({ top: 0 }); }, [activeId]);
   const [justFinished, setJustFinished] = useState(false);
   const [confirm, setConfirm] = useState<null | "finish" | "cancel">(null);
   const closeConfirm = useCallback(() => setConfirm(null), []);
@@ -102,20 +106,23 @@ export default function FocusPage() {
       : t("focus.focusing", { activity: active.activity === "custom" && active.customActivity ? active.customActivity : t(`timer.activity.${active.activity}` as MessageKey) });
     const paused = isPaused(active);
     return (
-      <section className="mx-auto flex max-w-2xl flex-col items-center gap-6 pt-6 text-center sm:pt-10">
+      <section className="mx-auto flex max-w-2xl flex-col items-center gap-6 pt-6 text-center sm:pt-10 wideland:max-w-5xl wideland:flex-row wideland:items-start wideland:justify-center wideland:gap-x-8 short:gap-x-5 short:pt-2">
+        <div className="flex flex-col items-center gap-3 wideland:sticky wideland:top-4">
         <p className="text-sm font-semibold text-ink-soft">{paused ? t("focus.paused") : label}</p>
-        <div className="relative grid aspect-square w-[min(78vw,20rem)] place-items-center">
+        <div className="relative grid aspect-square w-[min(78vw,20rem)] place-items-center wideland:w-[min(38vw,24rem)] short:w-[min(34vw,calc(100dvh-5rem))]">
           <TimerRing progress={elapsedMs(active, now) / active.plannedMs} paused={paused} kind={active.kind} />
           <p className={`tabular relative font-bold tracking-tight ${remaining >= 3_600_000 ? "text-5xl sm:text-6xl" : "text-6xl sm:text-7xl"} ${paused ? "opacity-60" : ""}`} role="timer" aria-live="off" aria-label={t("timer.remaining", { time: formatClock(remaining) })}>
             {formatClock(remaining)}
           </p>
         </div>
+        </div>
+        <div className="flex w-full max-w-xl flex-col items-center gap-6 wideland:min-w-0 wideland:flex-1 short:gap-3">
         {pass && <ArtImage eager className="w-full max-w-xl" job={{ kind: "pass", input: pass }} alt={`${name(getCity(pass.fromId).name)} → ${name(getCity(pass.toId).name)}`} />}
         <div className="grid w-full max-w-md grid-cols-3 gap-2">
-          <button onClick={togglePause} className="min-h-14 rounded-2xl bg-ink font-semibold text-paper">{paused ? t("timer.resume") : t("timer.pause")}</button>
+          <button onClick={togglePause} className="min-h-14 whitespace-nowrap rounded-2xl bg-ink px-2 font-semibold text-paper short:min-h-12 short:text-sm">{paused ? t("timer.resume") : t("timer.pause")}</button>
           <button onClick={() => { if (active.kind === "break") dispatch({ type: "finish", now: Date.now() }); else setConfirm("finish"); }}
-            className="min-h-14 rounded-2xl border border-ink font-semibold">{t("timer.complete")}</button>
-          <button onClick={() => setConfirm("cancel")} className="min-h-14 rounded-2xl border border-line font-semibold text-ink-soft">{t("timer.cancel")}</button>
+            className="min-h-14 whitespace-nowrap rounded-2xl border border-ink px-2 font-semibold short:min-h-12 short:text-sm">{t("timer.complete")}</button>
+          <button onClick={() => setConfirm("cancel")} className="min-h-14 whitespace-nowrap rounded-2xl border border-line px-2 font-semibold text-ink-soft short:min-h-12 short:text-sm">{t("timer.cancel")}</button>
         </div>
         <p className="hidden text-xs text-ink-soft sm:block" aria-hidden="true">{t("focus.shortcuts")}</p>
         <ConfirmSheet open={confirm === "finish"} title={t("focus.finishTitle")}
@@ -133,12 +140,17 @@ export default function FocusPage() {
         )}
         <div className="w-full max-w-md text-left"><LockScreenOptions collapsible /></div>
         <p className="max-w-md text-xs text-ink-soft">{t("focus.awayNote")}</p>
+        </div>
       </section>
     );
   }
 
   const chosen = custom ? Number(custom) : minutes;
   const valid = Number.isFinite(chosen) && chosen >= CUSTOM_RANGE.min && chosen <= CUSTOM_RANGE.max;
+  // when the final stop is closer than the chosen length, the session ends as the plane lands
+  const plannedRun = valid ? plannedSessionMs(state, chosen) : null;
+  const finalStop = state.plan?.stops.at(-1);
+  const landing = plannedRun?.capped && finalStop ? { ms: plannedRun.ms, city: name(getCity(finalStop).name) } : null;
   const preview = journey?.currentLeg ? livePass(state.plan, state.ledger, timeZone, { startedAt: now, elapsedMinutes: 0, kmPerMinute: TRAVEL_CONFIG.kmPerMinute }) : null;
 
   return (
@@ -179,15 +191,16 @@ export default function FocusPage() {
             )}
           </fieldset>
           <LockScreenOptions collapsible />
+          {landing && <p className="rounded-xl bg-accent/10 px-4 py-3 text-sm font-semibold text-accent" role="note">{t("focus.landsHint", { city: landing.city, time: formatClock(landing.ms) })}</p>}
           <p className="text-center text-xs text-ink-soft">{t("focus.tooShort")}</p>
           {/* the start button stays in reach of the thumb, above the tab bar */}
-          <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-10 -mx-4 bg-gradient-to-t from-paper via-paper to-transparent px-4 pb-2 pt-6 sm:static sm:mx-0 sm:bg-none sm:p-0">
+          <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-10 -mx-4 bg-gradient-to-t from-paper via-paper to-transparent px-4 pb-2 pt-6 sm:bottom-0 sm:not-short:static sm:not-short:mx-0 sm:not-short:bg-none sm:not-short:p-0 short:pt-3">
             <button disabled={!valid} onClick={() => {
               setJustFinished(false);
               buzz(20);
               startSession(dispatch, state.settings, { minutes: chosen, activity, customActivity: activity === "custom" ? customActivity.trim() : undefined, remember: !custom });
             }} className="min-h-16 w-full rounded-2xl bg-accent text-lg font-bold text-paper shadow-lg disabled:opacity-40">
-              {t("timer.start")} · {valid ? t("timer.duration", { count: chosen }) : "—"}
+              {t("timer.start")} · {!valid ? "—" : landing ? t("timer.landsIn", { city: landing.city, time: formatClock(landing.ms) }) : t("timer.duration", { count: chosen })}
             </button>
           </div>
         </>

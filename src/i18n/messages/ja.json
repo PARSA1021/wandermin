@@ -28,7 +28,8 @@
     "today": "今日",
     "quickStart": "{minutes}分ですぐ開始",
     "customize": "時間・内容を変える",
-    "nextFlight": "次のフライトを開始"
+    "nextFlight": "次のフライトを開始",
+    "quickStartLand": "{city}まで {time} すぐ開始"
   },
   "timer": {
     "start": "集中を始める",
@@ -50,7 +51,8 @@
       "personal": "個人プロジェクト",
       "custom": "カスタム"
     },
-    "completedWhileAwayMinutes": "離れている間に{minutes}分のセッションが完了しました。"
+    "completedWhileAwayMinutes": "離れている間に{minutes}分のセッションが完了しました。",
+    "landsIn": "{city}まで {time}"
   },
   "travel": {
     "distance": "{km} km",
@@ -112,7 +114,8 @@
     "cancelSession": "セッションを取り消す",
     "keepGoing": "集中を続ける",
     "cancelled": "セッションを取り消しました",
-    "shortcuts": "スペース：一時停止・再開"
+    "shortcuts": "スペース：一時停止・再開",
+    "landsHint": "{city}まであと集中{time}。着陸するとセッションが終わります。"
   },
   "arrival": {
     "title": "{city}へようこそ！",
@@ -242,6 +245,8 @@
     "board": "搭乗して集中・{minutes}分",
     "later": "あとで",
     "howItWorks": "WANDERMINの使い方",
-    "moreFlights": "ほかの直行便 ({n})"
+    "moreFlights": "ほかの直行便 ({n})",
+    "landsInOne": "このフライトは{time}で到着。着陸するとセッションが終わります。",
+    "boardTime": "搭乗して集中・{time}"
   }
 }

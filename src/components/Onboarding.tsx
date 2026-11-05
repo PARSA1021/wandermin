@@ -9,6 +9,7 @@ import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
 import { LOCALE_LABELS, SUPPORTED_LOCALES } from "@/i18n";
 import { ArtImage } from "./ArtImage";
+import { formatClock } from "@/features/focus/timer";
 import { buzz, startSession } from "./session";
 
 /** A best guess at the nearest departure city from the device time zone (the user can change it). */
@@ -24,11 +25,11 @@ const SAMPLE: PostcardJob = { kind: "postcard", cityId: "tokyo", fromId: "seoul"
 
 function Step({ icon, title, body }: { icon: ReactNode; title: string; body: string }) {
   return (
-    <li className="flex items-start gap-3">
-      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-accent/15 text-accent" aria-hidden="true">
+    <li className="flex items-start gap-3 tiny:items-center">
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-accent/15 text-accent short:h-8 short:w-8 tiny:h-7 tiny:w-7" aria-hidden="true">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{icon}</svg>
       </span>
-      <span><b className="block">{title}</b><span className="text-sm text-ink-soft">{body}</span></span>
+      <span><b className="block">{title}</b><span className="text-sm text-ink-soft short:text-xs tiny:hidden">{body}</span></span>
     </li>
   );
 }
@@ -37,14 +38,14 @@ function Step({ icon, title, body }: { icon: ReactNode; title: string; body: str
 export function IntroContent() {
   const { t } = useI18n();
   return (
-    <>
-      <ArtImage eager job={SAMPLE} alt={t("welcome.sampleAlt")} className="rise rounded-lg shadow-lg" />
-      <ul className="mt-6 grid gap-4">
+    <div className="wideland:grid wideland:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] wideland:items-center wideland:gap-6 tiny:block">
+      <ArtImage eager job={SAMPLE} alt={t("welcome.sampleAlt")} className="rise rounded-lg shadow-lg short:mx-auto short:w-[min(100%,calc((100dvh-13rem)*1.46))] tiny:hidden" />
+      <ul className="mt-6 grid gap-4 wideland:mt-0 short:gap-1.5 tiny:mt-3 tiny:gap-1">
         <Step icon={<><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2.5 2.5M9.5 2.5h5" /></>} title={t("welcome.how1Title")} body={t("welcome.how1", { km: TRAVEL_CONFIG.kmPerMinute })} />
         <Step icon={<path d="M2 16l20-7-3 9-6-3-3 4-1-5z" />} title={t("welcome.how2Title")} body={t("welcome.how2")} />
         <Step icon={<><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 15l5-4 4 3 3-2 6 4" /></>} title={t("welcome.how3Title")} body={t("welcome.how3")} />
       </ul>
-    </>
+    </div>
   );
 }
 
@@ -69,17 +70,20 @@ export function Onboarding() {
   const flightMin = leg ? Math.ceil(leg.km / TRAVEL_CONFIG.kmPerMinute) : 0;
   const minutes = state.settings.defaultMinutes;
   const sessions = Math.max(1, Math.ceil(flightMin / minutes));
+  // a first flight shorter than the session: the session will end as the plane lands
+  const flightMs = leg ? Math.ceil((leg.km / TRAVEL_CONFIG.kmPerMinute) * 60) * 1000 : 0;
+  const landsFirst = leg !== undefined && flightMs < minutes * 60_000;
   const go = (n: number) => { buzz(8); setStep(n); window.scrollTo({ top: 0 }); };
   const commitPlan = () => { dispatch({ type: "choose-departure", departureId: from }); dispatch({ type: "set-destination", cityId: to }); };
 
   const steps = 4;
   const Footer = ({ children }: { children: ReactNode }) => (
-    <div className="sticky bottom-0 -mx-5 mt-8 bg-gradient-to-t from-paper via-paper to-paper/0 px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-6 sm:static sm:mx-0 sm:bg-none sm:px-0">{children}</div>
+    <div className="sticky bottom-0 z-10 -mx-4 mt-auto bg-gradient-to-t from-paper via-paper to-paper/0 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-6 short:pb-2 short:pt-3 wideland:mx-auto wideland:w-full wideland:max-w-md">{children}</div>
   );
-  const primary = "tap flex min-h-14 w-full items-center justify-center rounded-2xl bg-ink px-5 text-lg font-semibold text-paper";
+  const primary = "tap flex min-h-14 w-full items-center justify-center rounded-2xl bg-ink px-5 text-lg font-semibold text-paper short:min-h-11 short:text-base";
 
   return (
-    <div className="mx-auto flex min-h-[calc(100dvh-2rem)] max-w-md flex-col">
+    <div className="mx-auto flex min-h-[calc(100dvh-2rem)] max-w-md flex-col wideland:max-w-3xl short:min-h-[calc(100dvh-1rem)]">
       {/* top bar: back, progress, language */}
       <div className="flex items-center gap-3 pt-1">
         <button onClick={() => go(step - 1)} aria-label={t("welcome.back")} className={`tap grid h-10 w-10 place-items-center rounded-full ${step === 0 ? "invisible" : ""}`}>
@@ -91,7 +95,7 @@ export function Onboarding() {
         <div role="group" aria-label={t("onboarding.language")} className="flex overflow-hidden rounded-full border border-line text-xs font-semibold">
           {SUPPORTED_LOCALES.map((l) => (
             <button key={l} lang={l} aria-pressed={locale === l} onClick={() => dispatch({ type: "settings", patch: { locale: l } })}
-              className={`min-h-9 px-2.5 ${locale === l ? "bg-ink text-paper" : "text-ink-soft"}`}>{LOCALE_LABELS[l]}</button>
+              className={`min-h-9 whitespace-nowrap px-2.5 max-[359px]:px-1.5 ${locale === l ? "bg-ink text-paper" : "text-ink-soft"}`}>{LOCALE_LABELS[l]}</button>
           ))}
         </div>
       </div>
@@ -100,12 +104,12 @@ export function Onboarding() {
         {step === 0 && (
           <>
             <p className="text-xs font-black tracking-[0.25em] text-accent">WANDERMIN</p>
-            <h1 className="mt-2 text-3xl font-bold leading-tight">{t("app.slogan")}</h1>
-            <p className="mt-2 text-ink-soft">{t("welcome.lead")}</p>
-            <div className="mt-5"><IntroContent /></div>
+            <h1 className="mt-2 text-3xl font-bold leading-tight short:text-2xl">{t("app.slogan")}</h1>
+            <p className="mt-2 text-ink-soft short:mt-1 short:text-sm">{t("welcome.lead")}</p>
+            <div className="mt-5 short:mt-3"><IntroContent /></div>
             <Footer>
               <button onClick={() => go(1)} className={primary}>{t("welcome.start")}</button>
-              <p className="mt-3 text-center text-xs text-ink-soft">{t("welcome.private")}</p>
+              <p className="mt-3 text-center text-xs text-ink-soft short:mt-1 tiny:hidden">{t("welcome.private")}</p>
             </Footer>
           </>
         )}
@@ -114,7 +118,7 @@ export function Onboarding() {
           <>
             <h1 className="text-2xl font-bold">{t("welcome.fromTitle")}</h1>
             <p className="mt-1 text-ink-soft">{t("welcome.fromBody")}</p>
-            <ul className="mt-5 grid gap-2" role="radiogroup" aria-label={t("welcome.fromTitle")}>
+            <ul className="mt-5 grid gap-2 wideland:grid-cols-2 short:mt-3" role="radiogroup" aria-label={t("welcome.fromTitle")}>
               {DEPARTURE_CITIES.map((c) => {
                 const on = c.id === from;
                 return (
@@ -138,7 +142,7 @@ export function Onboarding() {
           <>
             <h1 className="text-2xl font-bold">{t("welcome.toTitle", { city: name(getCity(from).name) })}</h1>
             <p className="mt-1 text-ink-soft">{t("welcome.toBody")}</p>
-            <ul className="mt-5 grid gap-2" role="radiogroup" aria-label={t("welcome.toTitle", { city: name(getCity(from).name) })}>
+            <ul className="mt-5 grid gap-2 wideland:grid-cols-2 short:mt-3" role="radiogroup" aria-label={t("welcome.toTitle", { city: name(getCity(from).name) })}>
               {suggestions.map((s, i) => {
                 const city = getCity(s.cityId), on = s.cityId === to, min = Math.ceil(s.km / TRAVEL_CONFIG.kmPerMinute);
                 return (
@@ -170,17 +174,19 @@ export function Onboarding() {
           <>
             <h1 className="text-2xl font-bold">{t("welcome.boardTitle")}</h1>
             <p className="mt-1 text-ink-soft">{t("welcome.boardBody", { minutes: flightMin, city: name(getCity(to).name) })}</p>
-            <ArtImage eager className="rise mt-5" alt={`${name(getCity(from).name)} → ${name(getCity(to).name)}`}
+            <div className="wideland:grid wideland:grid-cols-[3fr_2fr] wideland:items-center wideland:gap-5">
+            <ArtImage eager className="rise mt-5 short:mt-3" alt={`${name(getCity(from).name)} → ${name(getCity(to).name)}`}
               job={{ kind: "pass", input: { fromId: from, toId: to, boardedAt: Date.now(), minutesFlown: 0, kmPerMinute: TRAVEL_CONFIG.kmPerMinute, sessions: 0, timeZone } }} />
-            <div className="mt-5 rounded-2xl border border-line bg-card p-4 text-sm">
-              <p className="font-semibold">{sessions === 1 ? t("welcome.oneSession", { minutes }) : t("welcome.nSessions", { minutes, n: sessions })}</p>
+            <div className="mt-5 rounded-2xl border border-line bg-card p-4 text-sm short:mt-3">
+              <p className="font-semibold">{landsFirst ? t("welcome.landsInOne", { time: formatClock(flightMs) }) : sessions === 1 ? t("welcome.oneSession", { minutes }) : t("welcome.nSessions", { minutes, n: sessions })}</p>
               <p className="mt-1 text-ink-soft">{t("welcome.awayOk")}</p>
+            </div>
             </div>
             <Footer>
               <button onClick={() => { commitPlan(); startSession(dispatch, state.settings, { minutes, activity: state.settings.activity }); buzz(20); router.push("/focus"); }} className={primary}>
-                {t("welcome.board", { minutes })}
+                {landsFirst ? t("welcome.boardTime", { time: formatClock(flightMs) }) : t("welcome.board", { minutes })}
               </button>
-              <button onClick={() => { commitPlan(); window.scrollTo({ top: 0 }); }} className="tap mt-2 min-h-12 w-full rounded-2xl font-semibold text-ink-soft">{t("welcome.later")}</button>
+              <button onClick={() => { commitPlan(); window.scrollTo({ top: 0 }); }} className="tap mt-2 min-h-12 w-full rounded-2xl font-semibold text-ink-soft short:mt-0 short:min-h-10">{t("welcome.later")}</button>
             </Footer>
           </>
         )}

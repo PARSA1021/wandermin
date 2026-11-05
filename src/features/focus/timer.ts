@@ -29,12 +29,15 @@ export const MIN_RECORD_MS = 60_000;
 
 export function startSession(opts: {
   id: string; kind?: SessionKind; activity: ActivityId; customActivity?: string; minutes: number; kmPerMinute: number; now: number;
+  /** Upper bound for the planned time — the flight time left to the final stop, so the timer lands with the plane. */
+  maxMs?: number;
 }): ActiveSession {
   const minutes = Math.round(opts.minutes);
   if (!Number.isFinite(minutes) || minutes < 1 || minutes > CUSTOM_RANGE.max) throw new Error("Invalid duration");
+  const cap = opts.maxMs !== undefined && Number.isFinite(opts.maxMs) && opts.maxMs > 0 ? Math.max(1000, Math.ceil(opts.maxMs / 1000) * 1000) : Infinity;
   return {
     id: opts.id, kind: opts.kind ?? "focus", activity: opts.activity, customActivity: opts.customActivity,
-    plannedMs: minutes * 60_000, startedAt: opts.now, pausedAt: null, pausedTotalMs: 0, kmPerMinute: opts.kmPerMinute,
+    plannedMs: Math.min(minutes * 60_000, cap), startedAt: opts.now, pausedAt: null, pausedTotalMs: 0, kmPerMinute: opts.kmPerMinute,
   };
 }
 

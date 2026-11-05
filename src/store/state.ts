@@ -4,7 +4,7 @@
  */
 import { TRAVEL_CONFIG } from "@/config/travel";
 import { complete, pause, resume, startSession, type ActiveSession, type ActivityId, type SessionKind } from "@/features/focus/timer";
-import { addSession, computeJourney, rerouteTo, type CompletedSession, type TravelPlan } from "@/features/travel/journey";
+import { addSession, computeJourney, rerouteTo, routeRemainingKm, type CompletedSession, type TravelPlan } from "@/features/travel/journey";
 import type { Locale } from "@/i18n/config";
 
 export const STATE_VERSION = 1;
@@ -64,7 +64,7 @@ export const UNDO_MS = 8_000;
 
 export type Action =
   | { type: "choose-departure"; departureId: string }
-  | { type: "set-destination"; cityId: string }
+  | { type: "set-destination"; cityId: string; now?: number }
   | { type: "start"; id: string; minutes: number; activity: ActivityId; kind?: SessionKind; customActivity?: string; now: number }
   | { type: "pause"; now: number }
   | { type: "resume"; now: number }
@@ -77,6 +77,27 @@ export type Action =
   | { type: "settings"; patch: Partial<Settings> }
   | { type: "reset" }
   | { type: "import"; state: AppState };
+
+/**
+ * Focus time left until the plane reaches the final planned stop (undefined when there is no flight
+ * to fly). A focus session never runs past it: the timer ends as the plane lands, so the boarding
+ * pass, the distance and the clock always agree.
+ */
+export function flightLeftMs(state: AppState): number | undefined {
+  if (!state.plan) return undefined;
+  const journey = computeJourney(state.plan, state.ledger);
+  const km = routeRemainingKm(state.plan, journey);
+  return km > 0 ? (km / TRAVEL_CONFIG.kmPerMinute) * 60_000 : undefined;
+}
+
+/** The session length a start button should promise: the chosen minutes, or less if the flight lands sooner. */
+export function plannedSessionMs(state: AppState, minutes: number): { ms: number; capped: boolean } {
+  const left = flightLeftMs(state);
+  const ms = minutes * 60_000;
+  if (left === undefined || left >= ms) return { ms, capped: false };
+  const capped = Math.max(1000, Math.ceil(left / 1000) * 1000);
+  return { ms: capped, capped: true };
+}
 
 function finishActive(state: AppState, now: number, auto: boolean): AppState {
   if (!state.active) return state;
@@ -108,13 +129,17 @@ export function reduce(state: AppState, action: Action): AppState {
     case "set-destination": {
       if (!state.plan || state.active) return state; // don't re-plan mid-flight
       const journey = computeJourney(state.plan, state.ledger);
-      return { ...state, plan: rerouteTo(state.plan, journey, action.cityId) };
+      return { ...state, plan: rerouteTo(state.plan, journey, action.cityId, action.now ?? Date.now()) };
     }
     case "start":
       if (state.active) return state;
       return {
         ...state,
-        active: startSession({ id: action.id, kind: action.kind, activity: action.activity, customActivity: action.customActivity, minutes: action.minutes, kmPerMinute: TRAVEL_CONFIG.kmPerMinute, now: action.now }),
+        active: startSession({
+          id: action.id, kind: action.kind, activity: action.activity, customActivity: action.customActivity,
+          minutes: action.minutes, kmPerMinute: TRAVEL_CONFIG.kmPerMinute, now: action.now,
+          maxMs: (action.kind ?? "focus") === "focus" ? flightLeftMs(state) : undefined,
+        }),
         notice: null,
         undo: null,
       };

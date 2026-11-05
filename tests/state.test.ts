@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { initialState, parseBackup, parseState, reduce, type AppState } from "@/store/state";
+import { initialState, parseBackup, parseState, plannedSessionMs, reduce, type AppState } from "@/store/state";
+import { computeJourney } from "@/features/travel/journey";
 import { legPasses, livePass } from "@/features/tickets/passes";
 import { legDistanceKm } from "@/features/travel/graph";
 
@@ -8,19 +9,19 @@ const min = 60_000;
 
 function trip(): AppState {
   let s = reduce(initialState(), { type: "choose-departure", departureId: "seoul" });
-  s = reduce(s, { type: "set-destination", cityId: "tokyo" });
+  s = reduce(s, { type: "set-destination", cityId: "tokyo", now: T - 60_000 });
   return s;
 }
 
 describe("app state", () => {
   it("plans a first flight and records an arrival after a 25-minute session", () => {
     let s = trip();
-    expect(s.plan).toEqual({ departureId: "seoul", stops: ["tokyo"] });
+    expect(s.plan).toEqual({ departureId: "seoul", stops: ["tokyo"], addedAt: [T - 60_000] });
     s = reduce(s, { type: "start", id: "s1", minutes: 25, activity: "studying", now: T });
     expect(s.active?.id).toBe("s1");
     s = reduce(s, { type: "reconcile", now: T + 10 * min });
     expect(s.active).not.toBeNull(); // not due yet
-    s = reduce(s, { type: "reconcile", now: T + 25 * min + 1000 });
+    s = reduce(s, { type: "reconcile", now: T + s.active!.plannedMs + 1000 }); // lands just before 25 min
     expect(s.active).toBeNull();
     expect(s.ledger).toHaveLength(1);
     expect(s.pendingArrivals).toEqual(["tokyo"]);
@@ -31,9 +32,10 @@ describe("app state", () => {
 
   it("says so honestly when a session finished while the app was closed", () => {
     let s = reduce(trip(), { type: "start", id: "s1", minutes: 25, activity: "studying", now: T });
+    const planned = s.active!.plannedMs; // Seoul → Tokyo lands after ~23 of the 25 minutes
     s = reduce(s, { type: "reconcile", now: T + 2 * 60 * min });
-    expect(s.notice).toEqual({ kind: "completed-while-away", minutes: 25 });
-    expect(s.ledger[0]!.completedAt).toBe(T + 25 * min);
+    expect(s.notice).toEqual({ kind: "completed-while-away", minutes: Math.round(planned / min) });
+    expect(s.ledger[0]!.completedAt).toBe(T + planned);
   });
 
   it("does not record a cancelled session as travel", () => {
@@ -163,5 +165,45 @@ describe("backup restore", () => {
     expect(parseBackup("not json")).toBeNull();
     expect(parseBackup(JSON.stringify({ hello: 1 }))).toBeNull();
     expect(parseBackup(JSON.stringify({ version: 1, ledger: [{ id: 3 }], plan: null }))).toBeNull();
+  });
+});
+
+describe("sessions land with the plane", () => {
+  it("shortens a focus session to the flight time left, so the pass and the timer finish together", () => {
+    let st = reduce(initialState(), { type: "choose-departure", departureId: "seoul" });
+    st = reduce(st, { type: "set-destination", cityId: "osaka", now: T - 1000 });
+    const { ms, capped } = plannedSessionMs(st, 25);
+    expect(capped).toBe(true);
+    const flightMs = (legDistanceKm("seoul", "osaka") / 50) * 60000;
+    expect(ms).toBeGreaterThanOrEqual(flightMs);
+    expect(ms - flightMs).toBeLessThan(1000);
+    st = reduce(st, { type: "start", id: "s1", minutes: 25, activity: "studying", now: T });
+    expect(st.active!.plannedMs).toBe(ms);
+    st = reduce(st, { type: "reconcile", now: T + ms });
+    expect(st.active).toBeNull();
+    expect(st.pendingArrivals).toEqual(["osaka"]);
+    const j = computeJourney(st.plan!, st.ledger);
+    expect(j.totalKm).toBeCloseTo(legDistanceKm("seoul", "osaka"), 6);
+  });
+
+  it("keeps the chosen length when the flight is longer, and never caps breaks", () => {
+    let st = reduce(initialState(), { type: "choose-departure", departureId: "seoul" });
+    st = reduce(st, { type: "set-destination", cityId: "tokyo", now: T - 1000 }); // ~23 min
+    expect(plannedSessionMs(st, 15)).toEqual({ ms: 15 * 60000, capped: false });
+    const brk = reduce(st, { type: "start", id: "b", minutes: 30, activity: "studying", kind: "break", now: T });
+    expect(brk.active!.plannedMs).toBe(30 * 60000);
+  });
+
+  it("picking a new city after arriving never produces an arrival by itself", () => {
+    let st = reduce(initialState(), { type: "choose-departure", departureId: "seoul" });
+    st = reduce(st, { type: "set-destination", cityId: "osaka", now: T - 1000 });
+    st = reduce(st, { type: "start", id: "s1", minutes: 25, activity: "studying", now: T });
+    st = reduce(st, { type: "reconcile", now: T + 40 * min });
+    st = reduce(st, { type: "ack-arrival", cityId: "osaka" });
+    st = reduce(st, { type: "set-destination", cityId: "kyoto", now: T + 41 * min });
+    expect(st.pendingArrivals).toEqual([]);
+    const j = computeJourney(st.plan!, st.ledger);
+    expect(j.currentLeg?.toId).toBe("kyoto");
+    expect(j.currentLeg?.travelledKm).toBe(0);
   });
 });

@@ -182,6 +182,28 @@ Onboarding shows the three nearest first flights plus "More direct flights" for 
 Shared scene helpers added: `leaf` (mottled canopy texture), `palm`, `windows`.
 The baked coastline now unwraps rings that cross the antimeridian (no more lines across the map).
 
+## Flight accounting fix (Nov 2026)
+
+- **No banked distance.** Each planned stop records when it was added (`plan.addedAt`); a session can
+  only fly legs that existed when it finished. Choosing a city later never spends old focus time on it,
+  so picking a destination can no longer produce an arrival or a postcard by itself.
+- **Sessions land with the plane.** A focus session is capped at the flight time left to the final
+  planned stop (`flightLeftMs`), so the timer, the boarding pass and the distance always finish together.
+  Start buttons say so ("Fly to Osaka · 16:35"); breaks are never capped.
+- **Distance = route flown.** `journey.totalKm` no longer includes time past the final stop; total focus
+  minutes still count every minute.
+- Older saves (no `addedAt`) keep their previous history unchanged.
+
+## Layouts for every screen
+
+Tested at 17 viewports (320×568 up to 2560×1440, phones and tablets in both orientations):
+- `sm` breakpoint is 560px, so every phone on its side gets the side rail instead of bottom tabs.
+- Custom variants in `globals.css`: `wideland` (landscape with room for two columns), `short`
+  (landscape ≤560px tall) and `tiny` (≤380px tall). Landscape puts the timer ring beside the boarding
+  pass, the arrival sheet's pass beside the postcard, and the postcard viewer beside its details.
+- Primary buttons stay pinned on short screens; labels never wrap; safe-area insets on notched phones.
+- Very large monitors scale the rem-based UI (112.5% at ≥1920px, 125% at ≥2400px).
+
 ## Deploy to Vercel
 
 The app is a standard Next.js project: Vercel detects it with no settings to change

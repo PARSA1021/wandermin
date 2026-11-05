@@ -1,5 +1,5 @@
 "use client";
-import { getCity } from "@/data";
+import { CITIES, getCity } from "@/data";
 import { legPasses } from "@/features/tickets/passes";
 import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
@@ -64,7 +64,7 @@ export default function JournalPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-lg font-bold">{t("journal.postcards")} <span className="font-normal text-ink-soft tabular">{firstByCity.size}/30</span></h2>
+        <h2 className="mb-3 text-lg font-bold">{t("journal.postcards")} <span className="font-normal text-ink-soft tabular">{firstByCity.size}/{CITIES.length}</span></h2>
         {firstByCity.size === 0 ? <p className="rounded-2xl border border-dashed border-line p-5 text-ink-soft">{t("journal.empty")}</p> : (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[...firstByCity.values()].reverse().map((a) => {
