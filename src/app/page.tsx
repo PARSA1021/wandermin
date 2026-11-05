@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { buzz, startSession } from "@/components/session";
-import { getCity, getCountry } from "@/data";
+import { CITIES, COUNTRIES, getCity, getCountry } from "@/data";
 import { TRAVEL_CONFIG } from "@/config/travel";
 import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
@@ -18,6 +18,7 @@ import { getSceneAvailable } from "@/features/art/available";
 import { useNow } from "@/components/hooks";
 import { elapsedMs, formatClock } from "@/features/focus/timer";
 import { plannedSessionMs } from "@/store/state";
+import { livePass } from "@/features/tickets/passes";
 
 function startOfLocalDay(now: number) { const d = new Date(now); d.setHours(0, 0, 0, 0); return d.getTime(); }
 
@@ -36,10 +37,15 @@ export default function HomePage() {
   const liveProgress = leg ? liveKm / leg.legKm : 0;
   const liveRemaining = leg ? leg.legKm - liveKm : 0;
   const today = state.ledger.filter((s) => s.completedAt >= startOfLocalDay(now)).reduce((m, s) => m + s.focusedMs / 60000, 0);
-  const recent = [...journey.arrivals].reverse().slice(0, 3);
+  const recent = [...journey.arrivals].reverse().slice(0, 6);
   const here = getCity(journey.lastCityId);
   const quick = plannedSessionMs(state, state.settings.defaultMinutes);
   const finalStop = state.plan.stops.at(-1);
+  const stampCount = new Set([...(state.ledger.length ? [getCity(state.plan.departureId).countryCode] : []), ...journey.arrivals.map((a) => getCity(a.cityId).countryCode)]).size;
+  // the boarding pass for the leg ahead (live while a session runs)
+  const heroPass = leg ? livePass(state.plan, state.ledger, timeZone, state.active?.kind === "focus"
+    ? { startedAt: state.active.startedAt, elapsedMinutes: elapsedMs(state.active, now) / 60000, kmPerMinute: state.active.kmPerMinute }
+    : { startedAt: Math.floor(now / 300_000) * 300_000, elapsedMinutes: 0, kmPerMinute: TRAVEL_CONFIG.kmPerMinute }) : null;
 
   return (
     <div className="flex flex-col gap-5">
@@ -59,7 +65,9 @@ export default function HomePage() {
       <InstallCard dismissible />
 
       {leg ? (
-        <section className="grid gap-4 rounded-3xl border border-line bg-card p-5 sm:grid-cols-[1fr_auto] sm:items-center sm:p-6">
+        <section className="grid gap-4 rounded-3xl border border-line bg-card p-4 sm:p-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-center">
+          {heroPass && <ArtImage eager className="w-full" job={{ kind: "pass", input: heroPass }} alt={`${name(getCity(heroPass.fromId).name)} → ${name(getCity(heroPass.toId).name)}`} />}
+          <div className="flex flex-col gap-4">
           <div>
             <p className="text-sm font-semibold text-ink-soft">{t("home.nextDestination", { city: name(getCity(leg.toId).name) })} · {name(getCountry(getCity(leg.toId).countryCode).name)}</p>
             <div className="mt-3 h-3 overflow-hidden rounded-full bg-paper-deep" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(liveProgress * 100)}>
@@ -85,6 +93,7 @@ export default function HomePage() {
               <Link href="/focus" className="flex min-h-10 items-center justify-center text-sm font-semibold text-ink-soft underline underline-offset-4">{t("home.customize")}</Link>
             </div>
           )}
+          </div>
         </section>
       ) : (
         <>
@@ -93,31 +102,54 @@ export default function HomePage() {
         </>
       )}
 
-      <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          [t("journal.totalFocus"), t("journal.minutesShort", { minutes: fmt(Math.round(journey.totalFocusMinutes)) })],
-          [t("home.today"), t("journal.minutesShort", { minutes: fmt(Math.round(today)) })],
-          [t("journal.distance"), `${fmt(Math.round(journey.totalKm))} km`],
-          [t("journal.cities"), fmt(new Set(journey.arrivals.map((a) => a.cityId)).size)],
-        ].map(([label, value], i) => (
-          <div key={i} className="rounded-2xl border border-line bg-card p-4">
-            <p className="text-xs text-ink-soft">{label}</p>
-            <p className="mt-1 text-xl font-bold tabular">{value}</p>
-          </div>
-        ))}
-      </section>
+      {state.ledger.length > 0 && (
+        <section aria-label={t("home.statsLabel")} className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
+          {[
+            [t("journal.totalFocus"), t("journal.minutesShort", { minutes: fmt(Math.round(journey.totalFocusMinutes)) })],
+            [t("home.today"), t("journal.minutesShort", { minutes: fmt(Math.round(today)) })],
+            [t("journal.distance"), `${fmt(Math.round(journey.totalKm))} km`],
+            [t("journal.cities"), fmt(new Set(journey.arrivals.map((a) => a.cityId)).size)],
+          ].map(([label, value], i) => (
+            <div key={i} className="flex shrink-0 items-baseline gap-2 rounded-full border border-line bg-card px-4 py-2">
+              <span className="text-xs text-ink-soft">{label}</span>
+              <span className="font-bold tabular">{value}</span>
+            </div>
+          ))}
+          {/* the collections, one tap from Home */}
+          {[[t("collection.title"), `${new Set(journey.arrivals.map((a) => a.cityId)).size}/${CITIES.length}`], [t("passport.title"), `${stampCount}/${COUNTRIES.length}`]].map(([label, value]) => (
+            <Link key={label} href="/journal" className="tap flex shrink-0 items-baseline gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-2">
+              <span className="text-xs text-accent">{label}</span>
+              <span className="font-bold tabular text-accent">{value}</span>
+            </Link>
+          ))}
+        </section>
+      )}
 
       <section>
-        <h2 className="mb-3 text-lg font-bold">{t("home.recent")}</h2>
+        <div className="mb-3 flex items-baseline justify-between gap-3">
+          <h2 className="text-lg font-bold">{t("home.recent")}</h2>
+          {recent.length > 0 && <Link href="/journal" className="tap -my-2 inline-flex min-h-11 items-center px-2 text-sm font-semibold text-ink-soft underline underline-offset-4">{t("home.seeAll")}</Link>}
+        </div>
         {recent.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-line p-5 text-ink-soft">
-            {t("home.noDiscoveries", { minutes: leg ? Math.ceil(leg.remainingKm / TRAVEL_CONFIG.kmPerMinute) : 0 })}
-          </p>
+          leg ? (
+            // the first postcard, still faded: what's waiting at the end of this flight
+            <div className="grid items-center gap-4 rounded-2xl border border-dashed border-line p-4 sm:grid-cols-[minmax(0,14rem)_1fr]">
+              <div className="ghost-card overflow-hidden rounded-md">
+                <ArtImage job={{ kind: "postcard", cityId: leg.toId, fromId: leg.fromId, arrivedAt: Date.UTC(2026, 0, 1), focusMinutesAtArrival: 0, timeZone }} alt="" />
+              </div>
+              <p className="text-ink-soft">
+                <b className="block text-ink">{t("home.firstCardTitle", { city: name(getCity(leg.toId).name) })}</b>
+                {t("home.noDiscoveries", { minutes: Math.ceil(leg.remainingKm / TRAVEL_CONFIG.kmPerMinute) })}
+              </p>
+            </div>
+          ) : (
+            <p className="rounded-2xl border border-dashed border-line p-5 text-ink-soft">{t("journal.empty")}</p>
+          )
         ) : (
-          <ul className="grid gap-3 sm:grid-cols-3">
+          <ul className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0">
             {recent.map((a) => {
               return getSceneAvailable(a.cityId) && (
-                <li key={`${a.cityId}-${a.arrivedAt}`}>
+                <li key={`${a.cityId}-${a.arrivedAt}`} className="w-[78%] shrink-0 snap-start sm:w-auto">
                   <Link href="/journal" className="tap block"><ArtImage className="rounded-lg shadow" job={postcardJob(a, timeZone)} alt={name(getCity(a.cityId).name)} /></Link>
                 </li>
               );

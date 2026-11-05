@@ -245,6 +245,21 @@ flight, and subtitles on the map and journal.
   redrawn every minute (and on audio ticks while the screen is off). iOS 16+ can enlarge it on the lock
   screen; Android uses it as the player background. A full custom lock-screen UI needs a native app.
 
+## Window view and a calmer Home (Nov 2026)
+
+- **Window view** (`components/WindowView.tsx`): inside the progress ring, a round plane window with the
+  wing. The sky follows the traveller's local time (dawn, day, dusk, night with stars and the moon);
+  flat pixel clouds drift slowly in three layers and stop when paused; for the last fifth of a leg the
+  destination's skyline fades in below. Timer sits under the window. Profile → "View from the window"
+  switches back to the classic ring; Reduced motion keeps it still.
+- **Home**: the flight card leads with the live boarding pass; new travellers see only the flight and
+  their first-postcard goal (no empty stats); stats become one compact row; recent postcards are a
+  swipeable row with "See all".
+- **Fixes found while building it**: a hop shorter than a minute (Osaka → Kyoto, 43 km) could never land,
+  because the session was shortened below the 1-minute recording minimum — flight-length sessions now
+  run at least a minute. Boarding passes now follow the same no-banking rule as the journey, so a new
+  leg never starts at "2%".
+
 ## Deploy to Vercel
 
 The app is a standard Next.js project: Vercel detects it with no settings to change

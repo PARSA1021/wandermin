@@ -67,6 +67,10 @@ export default function ProfilePage() {
             ))}
           </div>
         </Row>
+        <Row title={t("settings.windowView")}>
+          <button role="switch" aria-checked={s.windowView} onClick={() => dispatch({ type: "settings", patch: { windowView: !s.windowView } })}
+            className={`min-h-11 rounded-full px-5 font-semibold ${s.windowView ? "bg-ink text-paper" : "border border-line"}`}>{s.windowView ? t("common.on") : t("common.off")}</button>
+        </Row>
         <Row title={t("profile.defaultMinutes")}>
           <select value={s.defaultMinutes} onChange={(e) => dispatch({ type: "settings", patch: { defaultMinutes: Number(e.target.value) } })}
             className="min-h-11 rounded-xl border border-line bg-paper px-3 tabular">

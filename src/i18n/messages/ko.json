@@ -29,7 +29,10 @@
     "quickStart": "{minutes}분 바로 시작",
     "customize": "시간·활동 바꾸기",
     "nextFlight": "다음 비행 시작",
-    "quickStartLand": "{city}까지 {time} 바로 시작"
+    "quickStartLand": "{city}까지 {time} 바로 시작",
+    "seeAll": "모두 보기",
+    "statsLabel": "지금까지의 여행",
+    "firstCardTitle": "{city}에 도착하면 이 엽서를 받아요"
   },
   "timer": {
     "start": "집중 시작",
@@ -74,7 +77,10 @@
     "language": "언어",
     "departure": "출발 도시",
     "reduceMotion": "모션 줄이기",
-    "theme": "화면 테마"
+    "theme": "화면 테마",
+    "windowView": "집중 중 창밖 풍경 보기",
+    "on": "켜짐",
+    "off": "꺼짐"
   },
   "onboarding": {
     "title": "어디에서 여행을 시작할까요?",

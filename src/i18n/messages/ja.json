@@ -29,7 +29,10 @@
     "quickStart": "{minutes}分ですぐ開始",
     "customize": "時間・内容を変える",
     "nextFlight": "次のフライトを開始",
-    "quickStartLand": "{city}まで {time} すぐ開始"
+    "quickStartLand": "{city}まで {time} すぐ開始",
+    "seeAll": "すべて見る",
+    "statsLabel": "これまでの旅",
+    "firstCardTitle": "{city}に着くとこのポストカードがもらえます"
   },
   "timer": {
     "start": "集中を始める",
@@ -74,7 +77,10 @@
     "language": "言語",
     "departure": "出発地",
     "reduceMotion": "動きを減らす",
-    "theme": "テーマ"
+    "theme": "テーマ",
+    "windowView": "集中中に窓の外の景色を見る",
+    "on": "オン",
+    "off": "オフ"
   },
   "onboarding": {
     "title": "どこから旅を始めますか？",

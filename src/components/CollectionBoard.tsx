@@ -81,7 +81,7 @@ export function CollectionBoard({ onOpen }: { onOpen: (a: Arrival) => void }) {
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {got.map((a) => (
           <li key={a.cityId}>
-            <button onClick={() => onOpen(a)} className="tap block w-full text-left" aria-haspopup="dialog">
+            <button onClick={() => onOpen(a)} className="tap block w-full text-left" aria-haspopup="dialog" data-collected="">
               <ArtImage className="rounded-md shadow transition-transform hover:-translate-y-0.5" job={postcardJob(a, timeZone)} alt={name(getCity(a.cityId).name)} />
             </button>
           </li>

@@ -3,7 +3,7 @@
  * The storage adapter is separate so account sync can be added later without touching screens.
  */
 import { TRAVEL_CONFIG } from "@/config/travel";
-import { complete, pause, resume, startSession, type ActiveSession, type ActivityId, type SessionKind } from "@/features/focus/timer";
+import { MIN_RECORD_MS, complete, pause, resume, startSession, type ActiveSession, type ActivityId, type SessionKind } from "@/features/focus/timer";
 import { addSession, computeJourney, rerouteTo, routeRemainingKm, type CompletedSession, type TravelPlan } from "@/features/travel/journey";
 import type { Locale } from "@/i18n/config";
 
@@ -24,6 +24,8 @@ export interface Settings {
   theme: "system" | "light" | "dark";
   /** Lock-screen options panel open on the Focus screen. */
   showLockOptions: boolean;
+  /** Show the view from the plane window inside the timer ring (off = classic timer). */
+  windowView: boolean;
 }
 
 export interface CancelledSession { id: string; cancelledAt: number; focusedMs: number }
@@ -53,7 +55,7 @@ export interface AppState {
 
 export const initialState = (): AppState => ({
   version: STATE_VERSION,
-  settings: { locale: null, reduceMotion: false, defaultMinutes: 25, activity: "studying", wakeLock: false, cabinSound: false, lockNotice: false, installDismissed: false, theme: "system", showLockOptions: false },
+  settings: { locale: null, reduceMotion: false, defaultMinutes: 25, activity: "studying", wakeLock: false, cabinSound: false, lockNotice: false, installDismissed: false, theme: "system", showLockOptions: false, windowView: true },
   plan: null,
   ledger: [],
   cancelled: [],
@@ -94,7 +96,8 @@ export function flightLeftMs(state: AppState): number | undefined {
   if (!state.plan) return undefined;
   const journey = computeJourney(state.plan, state.ledger);
   const km = routeRemainingKm(state.plan, journey);
-  return km > 0 ? (km / TRAVEL_CONFIG.kmPerMinute) * 60_000 : undefined;
+  // never shorter than the minimum recorded session, or a sub-minute hop (Osaka → Kyoto) could never land
+  return km > 0 ? Math.max(MIN_RECORD_MS, (km / TRAVEL_CONFIG.kmPerMinute) * 60_000) : undefined;
 }
 
 /** The session length a start button should promise: the chosen minutes, or less if the flight lands sooner. */

@@ -243,3 +243,33 @@ describe("flight to-do notes", () => {
     expect(s.noteReview).toBeNull();
   });
 });
+
+describe("very short hops", () => {
+  it("a leg under a minute (Osaka → Kyoto, 43 km) still lands: the session runs the minimum recorded minute", () => {
+    let st = reduce(initialState(), { type: "choose-departure", departureId: "osaka" });
+    st = reduce(st, { type: "set-destination", cityId: "kyoto", now: T - 1000 });
+    const { ms } = plannedSessionMs(st, 25);
+    expect(ms).toBe(60_000);
+    st = reduce(st, { type: "start", id: "k1", minutes: 25, activity: "studying", now: T });
+    expect(st.active!.plannedMs).toBe(60_000);
+    st = reduce(st, { type: "reconcile", now: T + 61_000 });
+    expect(st.ledger).toHaveLength(1);
+    expect(st.pendingArrivals).toEqual(["kyoto"]);
+    expect(computeJourney(st.plan!, st.ledger).totalKm).toBeCloseTo(legDistanceKm("osaka", "kyoto"), 6);
+  });
+});
+
+describe("passes agree with the journey", () => {
+  it("time left over after the last stop is not shown on the next leg's pass", () => {
+    let st = reduce(initialState(), { type: "choose-departure", departureId: "osaka" });
+    st = reduce(st, { type: "set-destination", cityId: "kyoto", now: T - 1000 });
+    st = reduce(st, { type: "start", id: "k1", minutes: 25, activity: "studying", now: T });
+    st = reduce(st, { type: "reconcile", now: T + 61_000 }); // 1 min = 50 km for a 43 km hop
+    st = reduce(st, { type: "ack-arrival", cityId: "kyoto" });
+    st = reduce(st, { type: "set-destination", cityId: "tokyo", now: T + 2 * min });
+    const next = livePass(st.plan!, st.ledger, "Asia/Tokyo", { startedAt: T + 3 * min, elapsedMinutes: 0, kmPerMinute: 50 });
+    expect(next!.toId).toBe("tokyo");
+    expect(next!.minutesFlown).toBe(0);
+    expect(computeJourney(st.plan!, st.ledger).currentLeg!.travelledKm).toBe(0);
+  });
+});

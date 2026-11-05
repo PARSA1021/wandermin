@@ -18,11 +18,15 @@ export function legPasses(plan: TravelPlan, ledger: readonly CompletedSession[],
   const cities = [plan.departureId, ...plan.stops];
   const legs = plan.stops.map((to, i) => ({ fromId: cities[i]!, toId: to, km: legDistanceKm(cities[i]!, to) }));
   const passes: LegPass[] = [];
+  // same rule as the journey: a session only flies legs that existed when it finished, never past them
+  const addedAt = plan.addedAt ?? [];
+  const openLegs = (t: number) => { let n = 0; while (n < legs.length && (addedAt[n] ?? 0) <= t) n++; return n; };
   let leg = 0, legStartKm = 0, km = 0;
   for (const s of sessions) {
     let add = sessionKm(s);
     let sessionStart = s.startedAt ?? s.completedAt - s.focusedMs;
-    while (add > 1e-9 && leg < legs.length) {
+    const open = openLegs(s.completedAt);
+    while (add > 1e-9 && leg < open) {
       const L = legs[leg]!;
       const room = legStartKm + L.km - km;
       const used = Math.min(add, room);

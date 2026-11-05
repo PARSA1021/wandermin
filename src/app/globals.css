@@ -139,3 +139,22 @@ html[data-motion="reduce"] .confetti { display: none; }
 @keyframes stamp-in { 0% { opacity: 0; transform: scale(1.5); } 60% { opacity: 1; transform: scale(.94); } 100% { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .stamp-in { animation: none; } }
 html[data-motion="reduce"] .stamp-in { animation: none; }
+
+/* window view: clouds drift slowly past; they stop when the session is paused */
+.window-drift { animation: window-drift linear infinite; }
+@keyframes window-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.window-view.is-paused .window-drift { animation-play-state: paused; }
+.window-view { box-shadow: 0 0 0 6px var(--color-card), 0 0 0 7px var(--color-line); }
+@media (prefers-reduced-motion: reduce) { .window-drift { animation: none; } }
+html[data-motion="reduce"] .window-drift { animation: none; }
+
+/* the blind comes down when a session is paused */
+.window-blind { position: absolute; inset: 0 0 auto 0; height: 0; z-index: 3; background: repeating-linear-gradient(to bottom, #f4efe6 0 6px, #e4ddd0 6px 7px); box-shadow: 0 3px 6px #0002; transition: height .6s cubic-bezier(.3,.7,.3,1); }
+.window-view.is-paused .window-blind { height: 52%; }
+html[data-theme="dark"] .window-blind { background: repeating-linear-gradient(to bottom, #4a4f62 0 6px, #3c4152 6px 7px); }
+@media (prefers-reduced-motion: reduce) { .window-blind { transition: none; } }
+.wing-light { animation: wing-light 1.6s steps(1) infinite; }
+@keyframes wing-light { 0%, 12% { opacity: 1; } 13%, 100% { opacity: 0; } }
+.window-view.is-paused .wing-light { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .wing-light { animation: none; opacity: 1; } }
+html[data-motion="reduce"] .wing-light { animation: none; opacity: 1; }

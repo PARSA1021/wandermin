@@ -29,7 +29,10 @@
     "quickStart": "Start {minutes} min",
     "customize": "Change time or activity",
     "nextFlight": "Start next flight",
-    "quickStartLand": "Fly to {city} · {time}"
+    "quickStartLand": "Fly to {city} · {time}",
+    "seeAll": "See all",
+    "statsLabel": "Your travel so far",
+    "firstCardTitle": "This postcard is waiting in {city}"
   },
   "timer": {
     "start": "Start focus",
@@ -74,7 +77,10 @@
     "language": "Language",
     "departure": "Departure city",
     "reduceMotion": "Reduce motion",
-    "theme": "Theme"
+    "theme": "Theme",
+    "windowView": "View from the window while focusing",
+    "on": "On",
+    "off": "Off"
   },
   "onboarding": {
     "title": "Where does your journey begin?",

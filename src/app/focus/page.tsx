@@ -13,6 +13,8 @@ import { Notice } from "@/components/Notice";
 import { ArtImage } from "@/components/ArtImage";
 import { TakeoffOverlay } from "@/components/Takeoff";
 import { NoteReview } from "@/components/NoteReview";
+import { WindowView } from "@/components/WindowView";
+import type { PostcardJob } from "@/features/art/jobs";
 import { useNow, useWakeLock } from "@/components/hooks";
 import { LockScreenOptions } from "@/components/LockScreenOptions";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
@@ -109,6 +111,13 @@ export default function FocusPage() {
     const label = active.kind === "break" ? t("focus.onBreak")
       : t("focus.focusing", { activity: active.activity === "custom" && active.customActivity ? active.customActivity : t(`timer.activity.${active.activity}` as MessageKey) });
     const paused = isPaused(active);
+    // the view from the window: progress of the current leg, the destination scene for the approach
+    const windowOn = state.settings.windowView;
+    const leg = journey?.currentLeg;
+    const flightProgress = active.kind === "focus" && leg ? Math.min(1, (leg.travelledKm + elapsedMin * active.kmPerMinute) / leg.legKm) : 0;
+    const windowDest: PostcardJob | null = active.kind === "focus" && leg
+      ? { kind: "postcard", cityId: leg.toId, fromId: leg.fromId, arrivedAt: Date.UTC(2026, 0, 1), focusMinutesAtArrival: 0, timeZone }
+      : null;
     return (
       <section className="mx-auto flex max-w-2xl flex-col items-center gap-6 pt-6 text-center sm:pt-10 wideland:max-w-5xl wideland:flex-row wideland:items-start wideland:justify-center wideland:gap-x-8 short:gap-x-5 short:pt-2">
         {active.kind === "focus" && pass && (
@@ -118,12 +127,24 @@ export default function FocusPage() {
         <p className="text-sm font-semibold text-ink-soft">{paused ? t("focus.paused") : label}</p>
         {pass && !paused && <p className="-mt-1 text-xs text-ink-soft">{t("focus.inFlightHint", { city: name(getCity(pass.toId).name), rate: TRAVEL_CONFIG.kmPerMinute })}</p>}
         {active.note && <p className="max-w-xs rounded-full bg-paper-deep/70 px-4 py-1.5 text-sm font-semibold">{t("note.onboard", { note: active.note })}</p>}
-        <div className="relative grid aspect-square w-[min(78vw,20rem)] place-items-center wideland:w-[min(38vw,24rem)] short:w-[min(34vw,calc(100dvh-5rem))]">
-          <TimerRing progress={elapsedMs(active, now) / active.plannedMs} paused={paused} kind={active.kind} />
-          <p className={`tabular relative font-bold tracking-tight ${remaining >= 3_600_000 ? "text-5xl sm:text-6xl" : "text-6xl sm:text-7xl"} ${paused ? "opacity-60" : ""}`} role="timer" aria-live="off" aria-label={t("timer.remaining", { time: formatClock(remaining) })}>
-            {formatClock(remaining)}
-          </p>
-        </div>
+        {windowOn ? (
+          <>
+            <div className="relative aspect-square w-[min(72vw,19rem)] wideland:w-[min(34vw,22rem)] short:w-[min(30vw,calc(100dvh-10rem))]">
+              <WindowView progress={flightProgress} paused={paused} now={now} destination={windowDest} />
+              <TimerRing progress={elapsedMs(active, now) / active.plannedMs} paused={paused} kind={active.kind} />
+            </div>
+            <p className={`tabular -mt-1 font-bold tracking-tight ${remaining >= 3_600_000 ? "text-5xl" : "text-6xl"} short:text-5xl ${paused ? "opacity-60" : ""}`} role="timer" aria-live="off" aria-label={t("timer.remaining", { time: formatClock(remaining) })}>
+              {formatClock(remaining)}
+            </p>
+          </>
+        ) : (
+          <div className="relative grid aspect-square w-[min(78vw,20rem)] place-items-center wideland:w-[min(38vw,24rem)] short:w-[min(34vw,calc(100dvh-5rem))]">
+            <TimerRing progress={elapsedMs(active, now) / active.plannedMs} paused={paused} kind={active.kind} />
+            <p className={`tabular relative font-bold tracking-tight ${remaining >= 3_600_000 ? "text-5xl sm:text-6xl" : "text-6xl sm:text-7xl"} ${paused ? "opacity-60" : ""}`} role="timer" aria-live="off" aria-label={t("timer.remaining", { time: formatClock(remaining) })}>
+              {formatClock(remaining)}
+            </p>
+          </div>
+        )}
         </div>
         <div className="flex w-full max-w-xl flex-col items-center gap-6 wideland:min-w-0 wideland:flex-1 short:gap-3">
         {pass && <ArtImage eager className="w-full max-w-xl" job={{ kind: "pass", input: pass }} alt={`${name(getCity(pass.fromId).name)} → ${name(getCity(pass.toId).name)}`} />}
