@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCity, getCountry } from "@/data";
 import { legDistanceKm } from "@/features/travel/graph";
 import { useApp } from "@/store/AppProvider";
@@ -12,6 +12,13 @@ export default function RoutePage() {
   const { state, journey } = useApp();
   const { t, name, fmt, date } = useI18n();
   const [changing, setChanging] = useState(false);
+  // "Change destination" from Home lands here with #change: open the picker and bring it into view
+  useEffect(() => {
+    if (location.hash !== "#change") return;
+    setChanging(true);
+    history.replaceState(history.state, "", location.pathname);
+    setTimeout(() => document.getElementById("dest-search")?.scrollIntoView({ block: "center", behavior: "smooth" }), 150);
+  }, []);
   if (!state.plan || !journey) return <Onboarding />;
   const cities = [state.plan.departureId, ...state.plan.stops];
   const arrivedAt = (i: number) => journey.arrivals.find((a) => a.legIndex === i - 1)?.arrivedAt;
@@ -50,7 +57,7 @@ export default function RoutePage() {
       {!state.active && journey.currentLeg && !changing && (
         <button onClick={() => setChanging(true)} className="min-h-12 self-start rounded-xl border border-ink px-5 font-semibold">{t("journey.change")}</button>
       )}
-      {(!journey.currentLeg || changing) && !state.active && <DestinationPicker onDone={() => setChanging(false)} />}
+      {(!journey.currentLeg || changing) && !state.active && <DestinationPicker startOnPick={!changing} onDone={() => setChanging(false)} />}
     </div>
   );
 }

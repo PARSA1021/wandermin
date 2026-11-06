@@ -68,7 +68,8 @@ button, nav, [role="tab"], [role="switch"], summary, .tap { -webkit-user-select:
 .pixelated { image-rendering: pixelated; image-rendering: crisp-edges; }
 /* opacity-only pulse: runs on the compositor, so loading placeholders cost no main-thread time */
 @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
-.art-skeleton { background: var(--color-paper-deep); animation: pulse-soft 1.6s ease-in-out infinite; border-radius: 8px; will-change: opacity; }
+/* a still placeholder: dozens of pulsing ones would each need their own GPU layer while a list scrolls */
+.art-skeleton { background: var(--color-paper-deep); border-radius: 8px; }
 .skeleton { background: var(--color-paper-deep); border-radius: 12px; animation: pulse-soft 1.6s ease-in-out infinite; will-change: opacity; }
 
 /* sheets slide up; pages fade in when switching tabs */
@@ -95,7 +96,9 @@ html[data-motion="reduce"] :is(.rise, .rise-late, .sheet-panel, .sheet-backdrop,
 .ghost-card { background: var(--color-paper-deep); position: relative; }
 /* hide the card's text strip: an unvisited city has no arrival date or route yet */
 .ghost-card::before { content: ""; position: absolute; inset: auto 0 0 0; height: 30%; z-index: 1; background: var(--color-paper-deep); }
-.ghost-card img { filter: grayscale(1) sepia(.35) contrast(.7) brightness(1.08) blur(.6px); opacity: .42; }
+.ghost-card img { opacity: .42; } /* the faded colours are baked into the image (artClient fade) */
+/* long lists: rows far off screen skip layout and paint until scrolled near */
+.offscreen-lazy { content-visibility: auto; contain-intrinsic-size: auto 180px; }
 .ghost-card::after { content: ""; position: absolute; inset: 0; border: 2px dashed color-mix(in srgb, var(--color-ink-soft) 35%, transparent); border-radius: inherit; pointer-events: none; }
 .no-scrollbar { scrollbar-width: none; } .no-scrollbar::-webkit-scrollbar { display: none; }
 
@@ -104,6 +107,7 @@ html[data-motion="reduce"] :is(.rise, .rise-late, .sheet-panel, .sheet-backdrop,
 .takeoff-sky { background: linear-gradient(to bottom, #7fb0e0, #cfe2ee 70%, var(--color-paper)); }
 html[data-theme="dark"] .takeoff-sky { background: linear-gradient(to bottom, #1c2f5e, #3a4f7e 70%, var(--color-paper)); }
 .takeoff-runway { background: repeating-linear-gradient(90deg, #5a5f6e 0 28px, #f3ece0 28px 44px); animation: runway 1s linear both; }
+.takeoff-plane, .takeoff-cloud, .takeoff-runway { will-change: transform; }
 .takeoff-plane { animation: plane-roll 1.9s cubic-bezier(.45,.05,.4,1) both; }
 .takeoff-cloud { left: 105%; animation: cloud-by 1.6s .25s linear both; }
 .takeoff-title { animation: rise .4s .15s cubic-bezier(.2,.8,.2,1) both; }
@@ -141,7 +145,8 @@ html[data-motion="reduce"] .confetti { display: none; }
 html[data-motion="reduce"] .stamp-in { animation: none; }
 
 /* window view: clouds drift slowly past; they stop when the session is paused */
-.window-drift { animation: window-drift linear infinite; }
+.window-drift { animation: window-drift linear infinite; will-change: transform; }
+.window-view { contain: layout paint; transform: translateZ(0); }
 @keyframes window-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .window-view.is-paused .window-drift { animation-play-state: paused; }
 .window-view { box-shadow: 0 0 0 6px var(--color-card), 0 0 0 7px var(--color-line); }
@@ -158,3 +163,17 @@ html[data-theme="dark"] .window-blind { background: repeating-linear-gradient(to
 .window-view.is-paused .wing-light { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) { .wing-light { animation: none; opacity: 1; } }
 html[data-motion="reduce"] .wing-light { animation: none; opacity: 1; }
+
+/* Calm flight: a minute in, everything but the window and the clock fades; a tap brings it back. */
+.calm-fade, .calm-hint, .calm-dim { transition: opacity .35s ease, filter .35s ease; }
+.calm-hint { opacity: 0; }
+.is-calm .calm-fade { opacity: 0; pointer-events: none; transition: opacity 1.8s ease; }
+.is-calm .calm-hint { opacity: .8; transition: opacity 1.8s ease 1.2s; }
+.is-calm .calm-dim { filter: brightness(.84) saturate(.9); transition: filter 2.4s ease; }
+/* night cabin: the lights go down around the window; the clock stays readable in soft light */
+.calm-night { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: #070a14; opacity: 0; transition: opacity .35s ease; }
+.is-calm .calm-night { opacity: .94; transition: opacity 2.4s ease; }
+.is-calm { --color-paper-deep: #1f2537; }
+.is-calm > :not(.calm-night):not(.fixed) { position: relative; z-index: 1; }
+.is-calm [role="timer"], .is-calm .calm-hint { color: #e8e1d2; transition: color 2.4s ease; }
+.is-calm .window-view { box-shadow: 0 0 0 6px #1b2133, 0 0 0 7px #2a3146; }

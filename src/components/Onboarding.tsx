@@ -8,7 +8,7 @@ import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
 import { LOCALE_LABELS, SUPPORTED_LOCALES } from "@/i18n";
 import { ArtImage } from "./ArtImage";
-import { formatClock } from "@/features/focus/timer";
+import { ceilMinutes } from "@/features/focus/timer";
 import { buzz, startSession } from "./session";
 import { cabin } from "./cabin";
 
@@ -205,7 +205,7 @@ export function Onboarding() {
             <ArtImage eager className="rise mt-5 short:mt-3" alt={`${name(getCity(from).name)} → ${name(getCity(to).name)}`}
               job={{ kind: "pass", input: { fromId: from, toId: to, boardedAt: Date.now(), minutesFlown: 0, kmPerMinute: TRAVEL_CONFIG.kmPerMinute, sessions: 0, timeZone } }} />
             <div className="mt-5 rounded-2xl border border-line bg-card p-4 text-sm short:mt-3">
-              <p className="font-semibold">{landsFirst ? t("welcome.landsInOne", { time: formatClock(flightMs) }) : sessions === 1 ? t("welcome.oneSession", { minutes }) : t("welcome.nSessions", { minutes, n: sessions })}</p>
+              <p className="font-semibold">{landsFirst ? t("welcome.landsInOne", { time: t("timer.duration", { count: ceilMinutes(flightMs) }) }) : sessions === 1 ? t("welcome.oneSession", { minutes }) : t("welcome.nSessions", { minutes, n: sessions })}</p>
               <p className="mt-1 text-ink-soft">{t("welcome.awayOk")}</p>
             </div>
             </div>
@@ -215,7 +215,7 @@ export function Onboarding() {
                 if (state.settings.cabinSound) cabin.start(); // audio must start inside the tap (iOS)
                 leave(() => { commitPlan(); startSession(dispatch, state.settings, { minutes, activity: state.settings.activity }); router.push("/focus"); });
               }} className={primary}>
-                {landsFirst ? t("welcome.boardTime", { time: formatClock(flightMs) }) : t("welcome.board", { minutes })}
+                {landsFirst ? t("welcome.boardTime", { time: t("timer.duration", { count: ceilMinutes(flightMs) }) }) : t("welcome.board", { minutes })}
               </button>
               <button onClick={() => leave(() => { commitPlan(); window.scrollTo({ top: 0 }); })} className="tap mt-2 min-h-12 w-full rounded-2xl font-semibold text-ink-soft short:mt-0 short:min-h-10">{t("welcome.later")}</button>
             </Footer>

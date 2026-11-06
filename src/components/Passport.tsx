@@ -4,6 +4,7 @@ import { COUNTRIES, getCity, getCountry } from "@/data";
 import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
 import { PLANE_BITS } from "./Takeoff";
+import { localDate } from "@/features/travel/localTime";
 
 const INKS = ["#c8322a", "#2f5fa8", "#2f7a52", "#7a4ab0", "#b8642a", "#283152", "#b03a66"];
 const hash = (s: string) => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
@@ -46,7 +47,8 @@ export function Stamp({ info, size = 112 }: { info: StampInfo; size?: number }) 
   );
 }
 
-export const fmtDate = (t: number) => { const d = new Date(t); return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; };
+/** A stamp is dated in the local time of the place it was stamped (or the traveller's own, without one). */
+export const fmtDate = (t: number, timeZone?: string) => { if (timeZone) return localDate(t, timeZone); const d = new Date(t); return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; };
 
 /** Stamps in the order they were earned: the departure country first, then each new country reached. */
 export function useStamps(): StampInfo[] {
@@ -56,12 +58,12 @@ export function useStamps(): StampInfo[] {
   const seen = new Set<string>();
   const home = getCountry(getCity(state.plan.departureId).countryCode);
   const firstFlight = state.ledger.length ? Math.min(...state.ledger.map((s) => s.startedAt ?? s.completedAt)) : null;
-  if (firstFlight !== null) { out.push({ code: home.code, label: home.postcardLabel, date: fmtDate(firstFlight), kind: "departure" }); seen.add(home.code); }
+  if (firstFlight !== null) { out.push({ code: home.code, label: home.postcardLabel, date: fmtDate(firstFlight, getCity(state.plan.departureId).tz), kind: "departure" }); seen.add(home.code); }
   for (const a of journey.arrivals) {
     const c = getCountry(getCity(a.cityId).countryCode);
     if (seen.has(c.code)) continue;
     seen.add(c.code);
-    out.push({ code: c.code, label: c.postcardLabel, date: fmtDate(a.arrivedAt), kind: "arrival" });
+    out.push({ code: c.code, label: c.postcardLabel, date: fmtDate(a.arrivedAt, getCity(a.cityId).tz), kind: "arrival" });
   }
   return out;
 }

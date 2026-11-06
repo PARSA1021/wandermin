@@ -16,6 +16,8 @@ export interface CompletedSession {
   /** The flight's to-do, and whether the user said they got it done. */
   note?: string;
   noteDone?: boolean;
+  /** Flown start to finish: never paused, not ended early. */
+  nonstop?: boolean;
 }
 
 /** Where the traveller started and the ordered cities they intend to fly to. */

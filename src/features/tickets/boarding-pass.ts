@@ -63,7 +63,8 @@ export function buildBoardingPass(input: BoardingPassInput): BoardingPassContent
   const state: PassState = input.arrivedAt !== undefined ? "arrived" : input.sessions > 0 || input.minutesFlown > 0 ? "in-flight" : "boarding";
   // the seat belongs to the flight, so it never changes between the live, preview and stored pass
   const h = hash(`seat|${from.code}|${to.code}`);
-  const b = clock(input.boardedAt, input.timeZone);
+  // like a real pass: boarding in the departure city's local time, arrival in the destination's
+  const b = clock(input.boardedAt, from.tz ?? input.timeZone);
   return {
     state,
     toId: to.id,
@@ -74,7 +75,7 @@ export function buildBoardingPass(input: BoardingPassInput): BoardingPassContent
     date: b.date,
     year: b.year,
     boarding: b.time,
-    arrived: input.arrivedAt !== undefined ? clock(input.arrivedAt, input.timeZone).time : undefined,
+    arrived: input.arrivedAt !== undefined ? clock(input.arrivedAt, to.tz ?? input.timeZone).time : undefined,
     km: Math.round(km),
     focusMinutes: Math.ceil(focusMinutes),
     progress: state === "arrived" ? 1 : progress,

@@ -12,6 +12,12 @@ export function AppBadge() {
     if (!nav.setAppBadge) return;
     (count > 0 ? nav.setAppBadge(count) : nav.clearAppBadge?.())?.catch(() => {});
   }, [count]);
+  // once there is something worth keeping, ask the browser not to evict it under storage pressure
+  const hasRecords = state.ledger.length > 0;
+  useEffect(() => {
+    if (!hasRecords) return;
+    navigator.storage?.persisted?.().then((done) => { if (!done) return navigator.storage.persist?.(); }).catch(() => {});
+  }, [hasRecords]);
   return null;
 }
 

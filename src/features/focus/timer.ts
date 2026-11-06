@@ -83,8 +83,11 @@ export function complete(s: ActiveSession, now: number): { record: CompletedSess
   const whileAway = naturalEnd !== null && now - naturalEnd > 5_000;
   const completedAt = naturalEnd !== null && focused >= s.plannedMs ? Math.min(now, naturalEnd) : now;
   if (s.kind === "break" || focused < MIN_RECORD_MS) return { record: null, whileAway, focusedMs: focused };
-  return { record: { id: s.id, completedAt, focusedMs: focused, kmPerMinute: s.kmPerMinute, activity: s.customActivity || s.activity, startedAt: s.startedAt, ...(s.note ? { note: s.note } : {}) }, whileAway, focusedMs: focused };
+  return { record: { id: s.id, completedAt, focusedMs: focused, kmPerMinute: s.kmPerMinute, activity: s.customActivity || s.activity, startedAt: s.startedAt, ...(s.note ? { note: s.note } : {}), ...(s.pausedTotalMs === 0 && s.pausedAt === null && focused >= s.plannedMs ? { nonstop: true } : {}) }, whileAway, focusedMs: focused };
 }
+
+/** Whole minutes for labels ("7 min"), rounded up so a 6:31 flight reads as 7 — the same figure the boarding pass shows. */
+export const ceilMinutes = (ms: number) => Math.max(1, Math.ceil(ms / 60000 - 1e-9));
 
 /** "25:00", or "1:05:00" for an hour or more. Rounds up so 0:00 only shows at the very end. */
 export function formatClock(ms: number): string {

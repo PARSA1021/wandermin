@@ -11,6 +11,10 @@ import { BottomSheet } from "./BottomSheet";
 import { Stamp, fmtDate } from "./Passport";
 import { afterLayersClosed } from "./backStack";
 import { ShareButton, postcardJob } from "./PostcardViewer";
+import { NextFlights } from "./Pickers";
+import { hoursAhead, localClock } from "@/features/travel/localTime";
+
+const fmtHours = (h: number) => (Number.isInteger(h) ? String(h) : h.toFixed(1).replace(/\.0$/, ""));
 
 /** Pixel confetti bursting from the arrival stamp: fixed directions, so it looks the same every time. */
 const CONFETTI = Array.from({ length: 14 }, (_, i) => {
@@ -47,6 +51,12 @@ export function ArrivalSheet() {
         <p className="text-xs font-black tracking-[0.25em] text-accent">{t("journey.arrived").toUpperCase()}</p>
         <h2 id="arrival-title" className="mt-1 text-2xl font-bold sm:text-3xl">{t("arrival.title", { city: name(city.name) })}</h2>
         <p className="mt-1 text-sm text-ink-soft">{t("arrival.reached", { minutes: Math.round(arrival.focusMinutesAtArrival) })}</p>
+        {journey.arrivals.length === 1 && <p className="mt-2 text-sm font-semibold text-ink" data-where-cards="">📮 {t("arrival.whereCards")}</p>}
+        {state.ledger.find((s) => s.id === arrival.sessionId)?.nonstop && (
+          <p className="nonstop-badge mt-2 inline-flex items-center gap-2 rounded-full border border-[#c9a13b]/60 bg-[#f6e7b8] px-3 py-1 text-xs font-bold text-[#6b5210]" data-nonstop="">
+            <span aria-hidden="true">✦</span>{t("flight.nonstop")} · <span className="font-semibold">{t("flight.nonstopBody")}</span>
+          </p>
+        )}
 
         {pass && (
           <div className="relative mt-5 short:mt-3">
@@ -59,16 +69,22 @@ export function ArrivalSheet() {
 
         <dl className="rise-late mt-5 grid grid-cols-2 gap-3 rounded-2xl border border-line bg-paper p-4 text-sm sm:grid-cols-3 wideland:col-start-1 short:mt-3 short:p-3">
           <div className="flex items-center gap-2">
-            {firstInCountry && <span className="stamp-in shrink-0" style={{ animationDelay: "900ms" }}><Stamp size={56} info={{ code: country.code, label: country.postcardLabel, date: fmtDate(arrival.arrivedAt), kind: "arrival" }} /></span>}
+            {firstInCountry && <span className="stamp-in shrink-0" style={{ animationDelay: "900ms" }}><Stamp size={56} info={{ code: country.code, label: country.postcardLabel, date: fmtDate(arrival.arrivedAt, city.tz), kind: "arrival" }} /></span>}
             <div><dt className="text-ink-soft">{name(country.name)}</dt><dd className="font-semibold">{firstInCountry ? t("passport.newStamp") : "✓"}</dd></div>
           </div>
           <div><dt className="text-ink-soft">{t("arrival.capital")}</dt><dd className="font-semibold">{country.capital ? name(country.capital) : "—"}</dd></div>
-          <div className="col-span-2 sm:col-span-1"><dt className="text-ink-soft">{t("arrival.landmark")}</dt><dd className="font-semibold">{name(city.landmark.name)}</dd></div>
+          <div><dt className="text-ink-soft">{t("arrival.landmark")}</dt><dd className="font-semibold">{name(city.landmark.name)}</dd></div>
+          <div data-local-time=""><dt className="text-ink-soft">{t("arrival.localTime")}</dt>
+            <dd className="font-semibold tabular">{localClock(arrival.arrivedAt, city.tz)}
+              <span className="block text-xs font-normal text-ink-soft">{(() => { const h = hoursAhead(city.tz, timeZone, arrival.arrivedAt); const n = fmtHours(Math.abs(h)); return h === 0 ? t("arrival.sameTime") : h > 0 ? t("arrival.ahead", { hours: n }) : t("arrival.behind", { hours: n }); })()}</span>
+            </dd>
+          </div>
         </dl>
+        {routeDone && <div className="wideland:col-start-1"><NextFlights onPick={ack} navigate={(go) => setTimeout(() => afterLayersClosed(go), 0)} /></div>}
 
         <div className="mt-5 flex flex-col gap-2 sm:flex-row-reverse wideland:col-start-1 short:mt-3 tiny:flex-col">
-          <button ref={closeRef} onClick={() => { ack(); if (routeDone) setTimeout(() => afterLayersClosed(() => router.push("/")), 0); }} className="tap min-h-12 flex-1 whitespace-nowrap rounded-xl bg-ink px-4 font-semibold text-paper">
-            {routeDone ? t("arrival.chooseNext") : t("arrival.next")}
+          <button ref={closeRef} data-arrival-close="" onClick={() => { ack(); if (routeDone) setTimeout(() => afterLayersClosed(() => router.push("/")), 0); }} className={`tap min-h-12 flex-1 whitespace-nowrap rounded-xl px-4 font-semibold ${routeDone ? "border border-ink text-ink" : "bg-ink text-paper"}`}>
+            {routeDone ? t("arrival.otherPlaces") : t("arrival.next")}
           </button>
           {hasCard && <ShareButton job={job} className="flex-1" />}
         </div>

@@ -6,7 +6,7 @@ import { useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
 import { formatClock, remainingMs } from "@/features/focus/timer";
 import type { MessageKey } from "@/i18n";
-import { useNow } from "./hooks";
+import { secondPhase, useNow } from "./hooks";
 import { UndoToast } from "./UndoToast";
 import { buzz } from "./session";
 import { getCity } from "@/data";
@@ -16,7 +16,7 @@ const NAV: { href: string; key: MessageKey; icon: ReactNode }[] = [
   { href: "/map", key: "nav.map", icon: <><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18" /></> },
   { href: "/focus", key: "nav.focus", icon: <><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2.5 2.5M9.5 2.5h5" /></> },
   { href: "/journal", key: "nav.journal", icon: <><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z" /><path d="M5 17a3 3 0 0 1 3-3h11" /></> },
-  { href: "/profile", key: "nav.profile", icon: <><circle cx="12" cy="8" r="4" /><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" /></> },
+  { href: "/profile", key: "nav.profile", icon: <><path d="M4 7h9M17 7h3M4 17h3M11 17h9" /><circle cx="15" cy="7" r="2" /><circle cx="9" cy="17" r="2" /></> },
 ];
 
 const Icon = ({ children }: { children: ReactNode }) => (
@@ -28,7 +28,7 @@ function SessionChip() {
   const { state } = useApp();
   const { t } = useI18n();
   const active = state.active;
-  const now = useNow(1000, !!active);
+  const now = useNow(1000, !!active && !active.pausedAt, secondPhase(active));
   if (!active) return null;
   return (
     <Link href="/focus" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-ink px-3 py-1.5 text-sm font-semibold text-paper tabular">
@@ -44,7 +44,7 @@ function TabTitle() {
   const { state, journey } = useApp();
   const { t, name } = useI18n();
   const active = state.active;
-  const now = useNow(1000, !!active && !active.pausedAt);
+  const now = useNow(1000, !!active && !active.pausedAt, secondPhase(active));
   useEffect(() => {
     if (!active) { document.title = "WANDERMIN"; return; }
     const where = active.kind === "break" ? t("focus.onBreak") : journey?.currentLeg ? `→ ${name(getCity(journey.currentLeg.toId).name)}` : "";
@@ -114,7 +114,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
       {/* phone bottom tabs */}
       {!immersive && (
-        <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur sm:hidden">
+        <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-card pb-[env(safe-area-inset-bottom)] sm:hidden">
           <ul className="grid grid-cols-5">
             {NAV.map((n) => (
               <li key={n.href}>

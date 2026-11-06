@@ -37,10 +37,10 @@ describe("i18n runtime", () => {
     const i = createI18n({ initial: "en", root, storage });
     const listener = vi.fn();
     const off = i.subscribe(listener);
-    expect(i.t("nav.journal")).toBe("Travel Journal");
+    expect(i.t("nav.journal")).toBe("Postcards");
     i.setLocale("ja");
     expect(listener).toHaveBeenCalledTimes(1);
-    expect(i.t("nav.journal")).toBe("旅の記録");
+    expect(i.t("nav.journal")).toBe("ポストカード");
     expect(root.lang).toBe("ja");
     expect(resolveInitialLocale({ storage })).toBe("ja");
     i.setLocale("ja"); // no-op

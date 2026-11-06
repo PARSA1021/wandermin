@@ -9,8 +9,9 @@ import { BottomSheet } from "./BottomSheet";
 import { shareOrSave } from "./artClient";
 import { buzz } from "./session";
 
+/** The postcard is dated in the city's own local time — the day you'd write on it there. */
 export const postcardJob = (a: Arrival, timeZone: string): PostcardJob => ({
-  kind: "postcard", cityId: a.cityId, fromId: a.fromId, arrivedAt: a.arrivedAt, focusMinutesAtArrival: a.focusMinutesAtArrival, timeZone,
+  kind: "postcard", cityId: a.cityId, fromId: a.fromId, arrivedAt: a.arrivedAt, focusMinutesAtArrival: a.focusMinutesAtArrival, timeZone: getCity(a.cityId).tz ?? timeZone,
 });
 
 /** Share through the system share sheet (or save) — one button used everywhere a postcard appears. */

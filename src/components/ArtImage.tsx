@@ -33,7 +33,7 @@ export function ArtImage({ job, alt, className = "", eager = false }: { job: Art
   return (
     <div ref={box} className={`relative overflow-hidden ${className}`} style={{ aspectRatio: RATIO[job.kind] }}>
       {src ? (
-        <img src={src} alt={alt} draggable={false} className="pixelated block h-full w-full select-none" />
+        <img src={src} alt={alt} draggable={false} decoding="async" className="pixelated block h-full w-full select-none" />
       ) : (
         <div role="img" aria-label={alt} className="art-skeleton h-full w-full" />
       )}

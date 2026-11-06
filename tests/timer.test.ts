@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { complete, elapsedMs, expectedEndAt, formatClock, isDue, pause, pausedMs, remainingMs, resume, startSession } from "@/features/focus/timer";
+import { ceilMinutes, complete, elapsedMs, expectedEndAt, formatClock, isDue, pause, pausedMs, remainingMs, resume, startSession } from "@/features/focus/timer";
 
 const T = Date.UTC(2026, 10, 4, 13, 0);
 const min = 60_000;
@@ -38,7 +38,7 @@ describe("timer", () => {
   it("records a finished session at its natural end when it completed while the app was closed", () => {
     const r = complete(s0(), T + 3 * 60 * min);
     expect(r.whileAway).toBe(true);
-    expect(r.record).toEqual({ id: "a", completedAt: T + 25 * min, focusedMs: 25 * min, kmPerMinute: 50, activity: "studying", startedAt: T });
+    expect(r.record).toEqual({ id: "a", completedAt: T + 25 * min, focusedMs: 25 * min, kmPerMinute: 50, activity: "studying", startedAt: T, nonstop: true });
   });
 
   it("records an early finish with only the focused minutes, and skips sub-minute sessions and breaks", () => {
@@ -57,5 +57,18 @@ describe("timer", () => {
     expect(formatClock(59_001)).toBe("1:00");
     expect(formatClock(0)).toBe("0:00");
     expect(formatClock(90 * min)).toBe("1:30:00");
+  });
+
+  it("marks a flight nonstop only when it ran to the end without a pause", () => {
+    expect(complete(s0(), T + 25 * min).record?.nonstop).toBe(true);
+    expect(complete(s0(), T + 20 * min).record?.nonstop).toBeUndefined(); // ended early
+    const paused = resume(pause(s0(), T + 5 * min), T + 6 * min);
+    expect(complete(paused, T + 40 * min).record?.nonstop).toBeUndefined(); // paused once
+  });
+
+  it("labels durations in whole minutes, rounded up like the boarding pass", () => {
+    expect(ceilMinutes(6 * min + 31_000)).toBe(7);
+    expect(ceilMinutes(25 * min)).toBe(25);
+    expect(ceilMinutes(5_000)).toBe(1);
   });
 });

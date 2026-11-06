@@ -15,7 +15,7 @@ function Switch({ on, label, hint, onChange, note }: { on: boolean; label: strin
       </div>
       <button role="switch" aria-checked={on} aria-label={label} onClick={onChange}
         className={`relative mt-1 h-8 w-14 shrink-0 rounded-full transition-colors ${on ? "bg-ok" : "bg-line"}`}>
-        <span className={`absolute top-1 h-6 w-6 rounded-full bg-card shadow transition-all ${on ? "left-7" : "left-1"}`} />
+        <span className={`absolute top-1 left-1 h-6 w-6 rounded-full bg-card shadow transition-transform ${on ? "translate-x-6" : ""}`} />
       </button>
     </div>
   );

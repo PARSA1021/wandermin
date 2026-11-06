@@ -22,6 +22,8 @@ export interface City {
   lng: number;
   /** Three-letter city code used on postmarks (IATA metropolitan code where one exists). */
   code: string;
+  /** IANA time zone, for local times on passes, postcards and arrivals. */
+  tz: string;
   /** Can be chosen as a starting point. */
   departure: boolean;
   landmark: Landmark;

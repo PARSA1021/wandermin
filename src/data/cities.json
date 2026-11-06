@@ -13,6 +13,7 @@
       "lat": 37.5665,
       "lng": 126.978,
       "code": "SEL",
+      "tz": "Asia/Seoul",
       "departure": true,
       "landmark": {
         "id": "n-seoul-tower",
@@ -37,6 +38,7 @@
       "lat": 35.6762,
       "lng": 139.6503,
       "code": "TYO",
+      "tz": "Asia/Tokyo",
       "departure": true,
       "landmark": {
         "id": "tokyo-tower",
@@ -61,6 +63,7 @@
       "lat": 34.6937,
       "lng": 135.5023,
       "code": "OSA",
+      "tz": "Asia/Tokyo",
       "departure": false,
       "landmark": {
         "id": "osaka-castle",
@@ -85,6 +88,7 @@
       "lat": 35.0116,
       "lng": 135.7681,
       "code": "KYO",
+      "tz": "Asia/Tokyo",
       "departure": false,
       "landmark": {
         "id": "kiyomizu-dera",
@@ -109,6 +113,7 @@
       "lat": 25.033,
       "lng": 121.5654,
       "code": "TPE",
+      "tz": "Asia/Taipei",
       "departure": false,
       "landmark": {
         "id": "taipei-101",
@@ -133,6 +138,7 @@
       "lat": 22.3193,
       "lng": 114.1694,
       "code": "HKG",
+      "tz": "Asia/Hong_Kong",
       "departure": false,
       "landmark": {
         "id": "victoria-peak",
@@ -157,6 +163,7 @@
       "lat": 1.3521,
       "lng": 103.8198,
       "code": "SIN",
+      "tz": "Asia/Singapore",
       "departure": false,
       "landmark": {
         "id": "marina-bay-sands",
@@ -181,6 +188,7 @@
       "lat": 13.7563,
       "lng": 100.5018,
       "code": "BKK",
+      "tz": "Asia/Bangkok",
       "departure": false,
       "landmark": {
         "id": "wat-arun",
@@ -205,6 +213,7 @@
       "lat": 21.0285,
       "lng": 105.8542,
       "code": "HAN",
+      "tz": "Asia/Ho_Chi_Minh",
       "departure": false,
       "landmark": {
         "id": "hoan-kiem-lake",
@@ -229,6 +238,7 @@
       "lat": -8.4095,
       "lng": 115.1889,
       "code": "DPS",
+      "tz": "Asia/Makassar",
       "departure": false,
       "landmark": {
         "id": "tanah-lot",
@@ -253,6 +263,7 @@
       "lat": 51.5074,
       "lng": -0.1278,
       "code": "LON",
+      "tz": "Europe/London",
       "departure": true,
       "landmark": {
         "id": "big-ben",
@@ -277,6 +288,7 @@
       "lat": 48.8566,
       "lng": 2.3522,
       "code": "PAR",
+      "tz": "Europe/Paris",
       "departure": true,
       "landmark": {
         "id": "eiffel-tower",
@@ -301,6 +313,7 @@
       "lat": 41.9028,
       "lng": 12.4964,
       "code": "ROM",
+      "tz": "Europe/Rome",
       "departure": false,
       "landmark": {
         "id": "colosseum",
@@ -325,6 +338,7 @@
       "lat": 45.4408,
       "lng": 12.3155,
       "code": "VCE",
+      "tz": "Europe/Rome",
       "departure": false,
       "landmark": {
         "id": "rialto-bridge",
@@ -349,6 +363,7 @@
       "lat": 41.3874,
       "lng": 2.1686,
       "code": "BCN",
+      "tz": "Europe/Madrid",
       "departure": false,
       "landmark": {
         "id": "sagrada-familia",
@@ -373,6 +388,7 @@
       "lat": 52.3676,
       "lng": 4.9041,
       "code": "AMS",
+      "tz": "Europe/Amsterdam",
       "departure": false,
       "landmark": {
         "id": "canal-ring",
@@ -397,6 +413,7 @@
       "lat": 50.0755,
       "lng": 14.4378,
       "code": "PRG",
+      "tz": "Europe/Prague",
       "departure": false,
       "landmark": {
         "id": "charles-bridge",
@@ -421,6 +438,7 @@
       "lat": 47.3769,
       "lng": 8.5417,
       "code": "ZRH",
+      "tz": "Europe/Zurich",
       "departure": false,
       "landmark": {
         "id": "grossmunster",
@@ -445,6 +463,7 @@
       "lat": 48.2082,
       "lng": 16.3738,
       "code": "VIE",
+      "tz": "Europe/Vienna",
       "departure": false,
       "landmark": {
         "id": "schonbrunn-palace",
@@ -469,6 +488,7 @@
       "lat": 41.0082,
       "lng": 28.9784,
       "code": "IST",
+      "tz": "Europe/Istanbul",
       "departure": false,
       "landmark": {
         "id": "hagia-sophia",
@@ -493,6 +513,7 @@
       "lat": 40.7128,
       "lng": -74.006,
       "code": "NYC",
+      "tz": "America/New_York",
       "departure": true,
       "landmark": {
         "id": "statue-of-liberty",
@@ -517,6 +538,7 @@
       "lat": 34.0522,
       "lng": -118.2437,
       "code": "LAX",
+      "tz": "America/Los_Angeles",
       "departure": false,
       "landmark": {
         "id": "griffith-observatory",
@@ -541,6 +563,7 @@
       "lat": 37.7749,
       "lng": -122.4194,
       "code": "SFO",
+      "tz": "America/Los_Angeles",
       "departure": false,
       "landmark": {
         "id": "golden-gate-bridge",
@@ -565,6 +588,7 @@
       "lat": 49.2827,
       "lng": -123.1207,
       "code": "YVR",
+      "tz": "America/Vancouver",
       "departure": false,
       "landmark": {
         "id": "stanley-park",
@@ -589,6 +613,7 @@
       "lat": 43.6532,
       "lng": -79.3832,
       "code": "YTO",
+      "tz": "America/Toronto",
       "departure": false,
       "landmark": {
         "id": "cn-tower",
@@ -613,6 +638,7 @@
       "lat": 19.4326,
       "lng": -99.1332,
       "code": "MEX",
+      "tz": "America/Mexico_City",
       "departure": false,
       "landmark": {
         "id": "palacio-bellas-artes",
@@ -637,6 +663,7 @@
       "lat": -33.8688,
       "lng": 151.2093,
       "code": "SYD",
+      "tz": "Australia/Sydney",
       "departure": false,
       "landmark": {
         "id": "sydney-opera-house",
@@ -661,6 +688,7 @@
       "lat": -37.8136,
       "lng": 144.9631,
       "code": "MEL",
+      "tz": "Australia/Melbourne",
       "departure": false,
       "landmark": {
         "id": "flinders-street-station",
@@ -685,6 +713,7 @@
       "lat": 30.0444,
       "lng": 31.2357,
       "code": "CAI",
+      "tz": "Africa/Cairo",
       "departure": false,
       "landmark": {
         "id": "giza-pyramids",
@@ -709,6 +738,7 @@
       "lat": -33.9249,
       "lng": 18.4241,
       "code": "CPT",
+      "tz": "Africa/Johannesburg",
       "departure": false,
       "landmark": {
         "id": "table-mountain",
@@ -733,6 +763,7 @@
       "lat": 35.1796,
       "lng": 129.0756,
       "code": "PUS",
+      "tz": "Asia/Seoul",
       "landmark": {
         "id": "gwangan-bridge",
         "name": {
@@ -756,6 +787,7 @@
       "lat": 33.4996,
       "lng": 126.5312,
       "code": "CJU",
+      "tz": "Asia/Seoul",
       "landmark": {
         "id": "seongsan-ilchulbong",
         "name": {
@@ -779,6 +811,7 @@
       "lat": 31.2304,
       "lng": 121.4737,
       "code": "SHA",
+      "tz": "Asia/Shanghai",
       "landmark": {
         "id": "oriental-pearl-tower",
         "name": {
@@ -802,6 +835,7 @@
       "lat": 16.0544,
       "lng": 108.2022,
       "code": "DAD",
+      "tz": "Asia/Ho_Chi_Minh",
       "landmark": {
         "id": "dragon-bridge",
         "name": {
@@ -825,6 +859,7 @@
       "lat": 3.139,
       "lng": 101.6869,
       "code": "KUL",
+      "tz": "Asia/Kuala_Lumpur",
       "landmark": {
         "id": "petronas-towers",
         "name": {
@@ -848,6 +883,7 @@
       "lat": 27.1767,
       "lng": 78.0081,
       "code": "AGR",
+      "tz": "Asia/Kolkata",
       "landmark": {
         "id": "taj-mahal",
         "name": {
@@ -871,6 +907,7 @@
       "lat": 25.2048,
       "lng": 55.2708,
       "code": "DXB",
+      "tz": "Asia/Dubai",
       "landmark": {
         "id": "burj-khalifa",
         "name": {
@@ -894,6 +931,7 @@
       "lat": 38.7223,
       "lng": -9.1393,
       "code": "LIS",
+      "tz": "Europe/Lisbon",
       "landmark": {
         "id": "belem-tower",
         "name": {
@@ -917,6 +955,7 @@
       "lat": 37.9838,
       "lng": 23.7275,
       "code": "ATH",
+      "tz": "Europe/Athens",
       "landmark": {
         "id": "parthenon",
         "name": {
@@ -940,6 +979,7 @@
       "lat": 64.1466,
       "lng": -21.9426,
       "code": "REK",
+      "tz": "Atlantic/Reykjavik",
       "landmark": {
         "id": "hallgrimskirkja",
         "name": {
@@ -963,6 +1003,7 @@
       "lat": 52.52,
       "lng": 13.405,
       "code": "BER",
+      "tz": "Europe/Berlin",
       "landmark": {
         "id": "brandenburg-gate",
         "name": {
@@ -986,6 +1027,7 @@
       "lat": 31.6295,
       "lng": -7.9811,
       "code": "RAK",
+      "tz": "Africa/Casablanca",
       "landmark": {
         "id": "koutoubia",
         "name": {
@@ -1009,6 +1051,7 @@
       "lat": -1.2921,
       "lng": 36.8219,
       "code": "NBO",
+      "tz": "Africa/Nairobi",
       "landmark": {
         "id": "nairobi-national-park",
         "name": {
@@ -1032,6 +1075,7 @@
       "lat": -6.1659,
       "lng": 39.2026,
       "code": "ZNZ",
+      "tz": "Africa/Dar_es_Salaam",
       "landmark": {
         "id": "stone-town",
         "name": {
@@ -1055,6 +1099,7 @@
       "lat": 21.3069,
       "lng": -157.8583,
       "code": "HNL",
+      "tz": "Pacific/Honolulu",
       "landmark": {
         "id": "diamond-head",
         "name": {
@@ -1078,6 +1123,7 @@
       "lat": 23.1136,
       "lng": -82.3666,
       "code": "HAV",
+      "tz": "America/Havana",
       "landmark": {
         "id": "el-capitolio",
         "name": {
@@ -1101,6 +1147,7 @@
       "lat": -13.532,
       "lng": -71.9675,
       "code": "CUZ",
+      "tz": "America/Lima",
       "landmark": {
         "id": "cusco-cathedral",
         "name": {
@@ -1124,6 +1171,7 @@
       "lat": -22.9068,
       "lng": -43.1729,
       "code": "RIO",
+      "tz": "America/Sao_Paulo",
       "landmark": {
         "id": "christ-the-redeemer",
         "name": {
@@ -1147,6 +1195,7 @@
       "lat": -34.6037,
       "lng": -58.3816,
       "code": "BUE",
+      "tz": "America/Argentina/Buenos_Aires",
       "landmark": {
         "id": "obelisco",
         "name": {
@@ -1170,6 +1219,7 @@
       "lat": -36.8485,
       "lng": 174.7633,
       "code": "AKL",
+      "tz": "Pacific/Auckland",
       "landmark": {
         "id": "sky-tower",
         "name": {

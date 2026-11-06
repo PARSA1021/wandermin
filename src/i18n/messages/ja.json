@@ -5,10 +5,10 @@
   },
   "nav": {
     "home": "ホーム",
-    "map": "世界地図",
+    "map": "地図",
     "focus": "集中",
-    "journal": "旅の記録",
-    "profile": "プロフィール"
+    "journal": "ポストカード",
+    "profile": "設定"
   },
   "home": {
     "greeting": {
@@ -32,14 +32,17 @@
     "quickStartLand": "{city}まで {time} すぐ開始",
     "seeAll": "すべて見る",
     "statsLabel": "これまでの旅",
-    "firstCardTitle": "{city}に着くとこのポストカードがもらえます"
+    "firstCardTitle": "{city}に着くとこのポストカードがもらえます",
+    "oneTap": "すぐ出発 →",
+    "changeDest": "目的地を変える",
+    "oneTapShort": "出発 →"
   },
   "timer": {
     "start": "集中を始める",
     "pause": "一時停止",
     "resume": "再開",
-    "complete": "完了",
-    "cancel": "キャンセル",
+    "complete": "今すぐ終える",
+    "cancel": "記録せずにやめる",
     "remaining": "残り {time}",
     "duration": "{count}分",
     "custom": "カスタム",
@@ -87,18 +90,23 @@
     "body": "集中した1分ごとに50km進みます。出発地を選んでください。",
     "step1": "集中すると飛びます。1分で50km進みます。",
     "step2": "実在の都市に着くと、その街のポストカードがもらえます。",
-    "step3": "旅の記録にすべてのフライトが残ります。休む日があっても大丈夫。",
+    "step3": "ポストカードにすべてのはがきとフライトが残ります。休む日があっても大丈夫。",
     "language": "言語",
     "pick": "出発地を選んでください。"
   },
   "destination": {
     "title": "次の目的地を選んでください",
     "suggested": "おすすめ",
-    "anywhere": "または好きな場所へ",
+    "anywhere": "都市を検索",
     "pick": "都市を選ぶ…",
     "via": "{stops}経由",
     "minutes": "{km} km · 約{minutes}分",
-    "go": "ここへ出発"
+    "go": "ここへ出発",
+    "searchPlaceholder": "都市・国の名前（例：パリ、日本）",
+    "results": "検索結果",
+    "noResults": "見つかりません。今は50都市に飛べます。国名でも探してみてください。",
+    "newStamp": "新スタンプ",
+    "newCountries": "新しい国へ"
   },
   "focus": {
     "duration": "集中時間",
@@ -107,23 +115,30 @@
     "customActivity": "アクティビティ名",
     "paused": "一時停止中",
     "focusing": "{activity}に集中中",
-    "finishConfirm": "今終わりますか？{minutes}分が記録されます。",
-    "cancelConfirm": "セッションをキャンセルしますか？旅の距離には含まれません。",
+    "finishConfirm": "ここまでの{minutes}分が記録され、次のフライトはここから続きます。",
+    "cancelConfirm": "このフライトは旅の距離に残りません。",
     "keepAwake": "画面をオンのままにする",
-    "awayNote": "アプリを離れても大丈夫。時間は計算され続け、戻ると反映されます。機内の音をオンにすると、画面がオフでも多くの場合時間どおりに着陸が記録されます（端末によります）。",
+    "awayNote": "アプリを離れても時間は進み、戻ると反映されます。",
     "breakDone": "休憩終了。次のフライトの準備はいいですか？",
     "takeBreak": "{minutes}分休憩する",
     "onBreak": "休憩中",
     "tooShort": "1分未満のセッションは記録されません。",
-    "finishTitle": "セッションを終えますか？",
-    "cancelTitle": "セッションを取り消しますか？",
-    "cancelSession": "セッションを取り消す",
+    "finishTitle": "ここで終えますか？",
+    "cancelTitle": "記録せずにやめますか？",
+    "cancelSession": "やめる",
     "keepGoing": "集中を続ける",
     "cancelled": "セッションを取り消しました",
     "shortcuts": "スペース：一時停止・再開",
     "landsHint": "{city}まであと集中{time}。着陸するとセッションが終わります。",
     "flightHint": "{city}まで{km}km・集中1分ごとに{rate}km進みます",
-    "inFlightHint": "集中1分ごとに{city}へ{rate}km近づきます"
+    "inFlightHint": "集中1分ごとに{city}へ{rate}km近づきます",
+    "done": "集中完了",
+    "setupSummary": "{minutes}・{activity}",
+    "setupChange": "設定を変える",
+    "setupDone": "閉じる",
+    "calmHint": "タップで操作ボタンを表示",
+    "untilLanding": "{city}到着まで",
+    "localAt": "{city}の現地時刻 {time}"
   },
   "arrival": {
     "title": "{city}へようこそ！",
@@ -132,7 +147,14 @@
     "reached": "集中{minutes}分で到着",
     "next": "続ける",
     "newCountry": "新しい国のスタンプ！",
-    "chooseNext": "次の目的地を選ぶ"
+    "chooseNext": "次の目的地を選ぶ",
+    "whereCards": "このはがきは「ポストカード」タブに保管されます。",
+    "localTime": "現地時刻",
+    "sameTime": "あなたと同じ時間帯",
+    "ahead": "あなたより{hours}時間進んでいる",
+    "behind": "あなたより{hours}時間遅れている",
+    "otherPlaces": "ほかの場所を選ぶ",
+    "nextFlights": "次のフライト・タップですぐ出発"
   },
   "journal": {
     "totalFocus": "累計集中",
@@ -163,8 +185,8 @@
     "departureLocked": "{city}から旅を始めました。飛行後は出発地を変更できません。",
     "defaultMinutes": "デフォルトのセッション",
     "data": "データ",
-    "dataBody": "すべての記録はこの端末にのみ保存されます。ブラウザのデータを消す前にバックアップしてください。",
-    "export": "バックアップを書き出す（JSON）",
+    "dataBody": "すべての記録はこの端末にのみ保存されます。機種変更やブラウザのデータ削除の前にバックアップを保存してください。",
+    "export": "バックアップを保存",
     "reset": "旅の記録をすべて削除",
     "resetConfirm": "すべてのセッション、ポストカード、搭乗券を削除しますか？元に戻せません。",
     "import": "バックアップから復元",
@@ -195,10 +217,10 @@
     "iosKeep": "Safariではホーム画面に追加すると旅の記録が安全に保たれます。共有 →「ホーム画面に追加」。"
   },
   "companion": {
-    "cabin": "機内の音",
-    "cabinHint": "やさしい機内の音が流れます。ロック画面のプレーヤーに目的地の景色・進み具合・着陸時刻の大きなフライトカードが表示され、そこから一時停止もできます。",
-    "notify": "ロック画面の通知",
-    "notifyHint": "集中中、着陸予定時刻を通知で表示します。",
+    "cabin": "機内の音＋ロック画面カード",
+    "cabinHint": "やさしい機内の音を流すと、ロック画面に目的地と着陸時刻のカードが表示され、そこから一時停止もできます。",
+    "notify": "着陸の通知",
+    "notifyHint": "集中中は着陸予定時刻を表示し、到着したらお知らせします。",
     "denied": "通知がブロックされています。ブラウザまたは端末の設定で許可してください。",
     "unsupported": "このブラウザでは利用できません。",
     "iosInstallFirst": "iPhone・iPadでは、ホーム画面にインストールすると通知を使えます。",
@@ -211,7 +233,7 @@
     "arrivedBody": "新しいポストカードが届きました。",
     "doneTitle": "セッション完了",
     "doneBody": "集中{minutes}分を飛行しました。",
-    "lockTitle": "ロック解除せずに進行を確認"
+    "lockTitle": "ロック画面にフライトを表示"
   },
   "theme": {
     "system": "端末に合わせる",
@@ -233,13 +255,13 @@
     "how2Title": "到着でポストカード",
     "how2": "実在の都市に着くと、その街のピクセルアートのポストカードがもらえます。",
     "how3Title": "あなたの旅の記録",
-    "how3": "すべてのフライトが旅の記録と地図に残ります。休む日があっても大丈夫。",
+    "how3": "すべてのフライトがポストカードと地図に残ります。休む日があっても大丈夫。",
     "start": "はじめる",
     "private": "登録不要。記録はすべてこの端末にだけ保存されます。",
     "back": "戻る",
     "progress": "{total}ステップ中{step}",
     "fromTitle": "どこから出発しますか？",
-    "fromBody": "出発空港です。あとでプロフィールから選び直せます。",
+    "fromBody": "出発空港です。あとで設定から選び直せます。",
     "nearYou": "近い",
     "next": "次へ",
     "toTitle": "{city}からの最初のフライト",
@@ -278,7 +300,9 @@
     "go": "ここへ行く",
     "flyingCta": "フライトを続ける",
     "flying": "すでにここへ向かっています。",
-    "busy": "このセッションが終わると目的地を変えられます。"
+    "busy": "このセッションが終わると目的地を変えられます。",
+    "showAll": "まだの都市をあと{n}件見る",
+    "showLess": "近い都市だけ表示"
   },
   "region": {
     "asia": "アジア",
@@ -305,5 +329,22 @@
     "empty": "最初のフライトで出国スタンプが押されます。",
     "left": "スタンプを待つ国があと{n}か国",
     "newStamp": "パスポートに新しいスタンプ"
+  },
+  "flight": {
+    "nonstop": "ノンストップ飛行",
+    "nonstopBody": "一度も止まらず最後まで飛びました。",
+    "nonstopCount": "ノンストップ {n}"
+  },
+  "firstTrip": {
+    "title": "はじめての旅",
+    "hide": "閉じる",
+    "fly": "最初のフライトに出る",
+    "flyHint": "上の赤いボタンで離陸。集中している間、飛行機が飛びます。",
+    "card": "最初のはがきを受け取る",
+    "cardHint": "到着するとその都市のはがきがポストカードに集まります。アプリを離れても時間は進みます。",
+    "next": "次の都市を選ぶ",
+    "nextHint": "おすすめの都市をタップするとすぐ出発。好きな都市は検索で探せます。",
+    "doneSr": "完了",
+    "seeCards": "受け取ったはがきを見る →"
   }
 }

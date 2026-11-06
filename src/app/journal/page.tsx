@@ -48,6 +48,10 @@ export default function JournalPage() {
         <h1 className="text-2xl font-bold sm:text-3xl">{t("nav.journal")}</h1>
         <p className="mt-1 text-sm text-ink-soft">{t("journal.subtitle")}</p>
       </header>
+      <CollectionBoard onOpen={setViewing} />
+
+      <Passport />
+
       <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {tiles.map(([label, value]) => (
           <div key={label} className="rounded-2xl border border-line bg-card p-4"><p className="text-xs text-ink-soft">{label}</p><p className="mt-1 text-xl font-bold tabular">{value}</p></div>
@@ -67,15 +71,11 @@ export default function JournalPage() {
         </div>
       </section>
 
-      <Passport />
-
-      <CollectionBoard onOpen={setViewing} />
-
       <section>
         <h2 className="mb-3 text-lg font-bold">{t("journal.passes")}</h2>
         {passes.length === 0 ? <p className="rounded-2xl border border-dashed border-line p-5 text-ink-soft">{t("journal.empty")}</p> : (
           <ul className="grid gap-4 lg:grid-cols-2">
-            {passes.map((p) => <li key={p.legIndex}><ArtImage job={{ kind: "pass", input: p }} alt={`${name(getCity(p.fromId).name)} → ${name(getCity(p.toId).name)}`} /></li>)}
+            {passes.map((p) => <li key={p.legIndex} className="offscreen-lazy"><ArtImage job={{ kind: "pass", input: p }} alt={`${name(getCity(p.fromId).name)} → ${name(getCity(p.toId).name)}`} /></li>)}
           </ul>
         )}
       </section>

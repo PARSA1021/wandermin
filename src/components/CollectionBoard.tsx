@@ -30,6 +30,7 @@ export function CollectionBoard({ onOpen }: { onOpen: (a: Arrival) => void }) {
   const { t, name } = useI18n();
   const [region, setRegion] = useState<Region | "all">("all");
   const [locked, setLocked] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
 
   const from = journey?.currentLeg && journey.currentLeg.travelledKm > 0 ? journey.currentLeg.toId : journey?.lastCityId ?? state.plan?.departureId ?? "";
   const collected = useMemo(() => {
@@ -52,13 +53,15 @@ export function CollectionBoard({ onOpen }: { onOpen: (a: Arrival) => void }) {
   const got = [...collected.values()].reverse().filter((a) => inRegion(a.cityId));
   const rest = CITIES.filter((c) => !collected.has(c.id) && inRegion(c.id))
     .sort((a, b) => (routes.get(a.id)?.km ?? 1e9) - (routes.get(b.id)?.km ?? 1e9));
+  const GHOSTS = 6;
+  const shown = showAll ? rest : rest.slice(0, GHOSTS);
   const count = (r: Region | "all") => {
     const all = CITIES.filter((c) => r === "all" || c.region === r);
     return `${all.filter((c) => collected.has(c.id)).length}/${all.length}`;
   };
   const ghostJob = (cityId: string): PostcardJob => {
     const path = routes.get(cityId)?.path;
-    return { kind: "postcard", cityId, fromId: path && path.length > 1 ? path.at(-2)! : cityId, arrivedAt: GHOST_DATE, focusMinutesAtArrival: 0, timeZone };
+    return { kind: "postcard", cityId, fromId: path && path.length > 1 ? path.at(-2)! : cityId, arrivedAt: GHOST_DATE, focusMinutesAtArrival: 0, timeZone, ghost: true };
   };
 
   return (
@@ -80,17 +83,17 @@ export function CollectionBoard({ onOpen }: { onOpen: (a: Arrival) => void }) {
 
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {got.map((a) => (
-          <li key={a.cityId}>
+          <li key={a.cityId} className="offscreen-lazy">
             <button onClick={() => onOpen(a)} className="tap block w-full text-left" aria-haspopup="dialog" data-collected="">
               <ArtImage className="rounded-md shadow transition-transform hover:-translate-y-0.5" job={postcardJob(a, timeZone)} alt={name(getCity(a.cityId).name)} />
             </button>
           </li>
         ))}
-        {rest.map((c) => {
+        {shown.map((c) => {
           const r = routes.get(c.id);
           const here = c.id === from;
           return (
-            <li key={c.id}>
+            <li key={c.id} className="offscreen-lazy">
               <button onClick={() => { buzz(6); setLocked(c.id); }} aria-haspopup="dialog"
                 className="tap ghost-card relative block w-full overflow-hidden rounded-md text-left"
                 aria-label={`${name(c.name)} · ${t("collection.locked")}`}>
@@ -105,6 +108,12 @@ export function CollectionBoard({ onOpen }: { onOpen: (a: Arrival) => void }) {
           );
         })}
       </ul>
+      {rest.length > GHOSTS && (
+        <button onClick={() => { buzz(6); setShowAll((v) => !v); }} aria-expanded={showAll}
+          className="tap mt-3 min-h-12 w-full rounded-xl border border-line bg-card font-semibold text-ink-soft">
+          {showAll ? t("collection.showLess") : t("collection.showAll", { n: rest.length - GHOSTS })}
+        </button>
+      )}
       {got.length + rest.length === 0 && <p className="rounded-2xl border border-dashed border-line p-5 text-ink-soft">{t("journal.empty")}</p>}
       <LockedCitySheet cityId={locked} route={locked ? routes.get(locked) ?? null : null} here={locked === from} job={locked ? ghostJob(locked) : null} onClose={() => setLocked(null)} />
     </section>

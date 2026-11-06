@@ -5,10 +5,10 @@
   },
   "nav": {
     "home": "홈",
-    "map": "세계 지도",
+    "map": "지도",
     "focus": "집중",
-    "journal": "여행 일지",
-    "profile": "프로필"
+    "journal": "엽서함",
+    "profile": "설정"
   },
   "home": {
     "greeting": {
@@ -32,14 +32,17 @@
     "quickStartLand": "{city}까지 {time} 바로 시작",
     "seeAll": "모두 보기",
     "statsLabel": "지금까지의 여행",
-    "firstCardTitle": "{city}에 도착하면 이 엽서를 받아요"
+    "firstCardTitle": "{city}에 도착하면 이 엽서를 받아요",
+    "oneTap": "바로 출발 →",
+    "changeDest": "목적지 바꾸기",
+    "oneTapShort": "출발 →"
   },
   "timer": {
     "start": "집중 시작",
     "pause": "일시정지",
     "resume": "다시 시작",
-    "complete": "완료",
-    "cancel": "취소",
+    "complete": "지금 마치기",
+    "cancel": "기록하지 않고 그만두기",
     "remaining": "{time} 남음",
     "duration": "{count}분",
     "custom": "직접 입력",
@@ -87,18 +90,23 @@
     "body": "집중한 1분마다 50km를 날아가요. 출발할 도시를 골라 주세요.",
     "step1": "집중하면 비행해요. 1분에 50km씩 날아가요.",
     "step2": "실제 도시에 도착하면 그 도시의 엽서를 받아요.",
-    "step3": "여행 일지에 모든 비행이 남아요. 쉬는 날이 있어도 괜찮아요.",
+    "step3": "엽서함에 모든 엽서와 비행이 남아요. 쉬는 날이 있어도 괜찮아요.",
     "language": "언어",
     "pick": "출발할 도시를 골라 주세요."
   },
   "destination": {
     "title": "다음 목적지를 골라 주세요",
     "suggested": "추천",
-    "anywhere": "또는 원하는 곳으로",
+    "anywhere": "도시 검색",
     "pick": "도시 선택…",
     "via": "{stops} 경유",
     "minutes": "{km}km · 약 {minutes}분",
-    "go": "이곳으로 출발"
+    "go": "이곳으로 출발",
+    "searchPlaceholder": "도시·나라 이름 (예: 파리, 일본, ㅍㄹ)",
+    "results": "검색 결과",
+    "noResults": "찾는 도시가 없어요. 지금은 50개 도시로 날아갈 수 있어요. 나라 이름으로도 찾아보세요.",
+    "newStamp": "새 도장",
+    "newCountries": "새 나라로"
   },
   "focus": {
     "duration": "집중 시간",
@@ -107,23 +115,30 @@
     "customActivity": "활동 이름",
     "paused": "일시정지됨",
     "focusing": "{activity} 집중 중",
-    "finishConfirm": "지금 마칠까요? {minutes}분이 기록돼요.",
-    "cancelConfirm": "세션을 취소할까요? 여행 거리에는 반영되지 않아요.",
+    "finishConfirm": "지금까지 집중한 {minutes}분이 기록되고, 다음 비행은 이 자리에서 이어서 날아가요.",
+    "cancelConfirm": "이번 비행은 여행 거리에 남지 않아요.",
     "keepAwake": "화면 켜두기",
-    "awayNote": "앱을 나가도 괜찮아요. 시간은 계속 계산되고 돌아오면 반영돼요. 기내 소음을 켜 두면 화면이 꺼져 있어도 대부분 제시간에 착륙이 기록돼요(기기에 따라 달라요).",
+    "awayNote": "앱을 나가도 시간은 계속 흘러요. 돌아오면 그대로 반영돼요.",
     "breakDone": "휴식이 끝났어요. 다음 비행을 준비할까요?",
     "takeBreak": "{minutes}분 휴식하기",
     "onBreak": "휴식 중",
     "tooShort": "1분 미만의 세션은 기록되지 않아요.",
-    "finishTitle": "세션을 마칠까요?",
-    "cancelTitle": "세션을 취소할까요?",
-    "cancelSession": "세션 취소",
+    "finishTitle": "여기서 마칠까요?",
+    "cancelTitle": "기록하지 않고 그만둘까요?",
+    "cancelSession": "그만두기",
     "keepGoing": "계속 집중하기",
     "cancelled": "세션을 취소했어요",
     "shortcuts": "스페이스: 일시정지·다시 시작",
     "landsHint": "{city}까지 집중 {time}이면 도착해요. 착륙하면 세션이 끝나요.",
     "flightHint": "{city}까지 {km}km · 집중 1분에 {rate}km씩 날아가요",
-    "inFlightHint": "집중하는 1분마다 {city}에 {rate}km씩 가까워져요"
+    "inFlightHint": "집중하는 1분마다 {city}에 {rate}km씩 가까워져요",
+    "done": "집중 완료",
+    "setupSummary": "{minutes} · {activity}",
+    "setupChange": "설정 바꾸기",
+    "setupDone": "접기",
+    "calmHint": "화면을 탭하면 버튼이 다시 보여요",
+    "untilLanding": "{city} 도착까지",
+    "localAt": "{city} 현지 시각 {time}"
   },
   "arrival": {
     "title": "{city}에 오신 걸 환영해요!",
@@ -132,7 +147,14 @@
     "reached": "집중 {minutes}분 만에 도착",
     "next": "계속하기",
     "newCountry": "새 나라 스탬프!",
-    "chooseNext": "다음 목적지 고르기"
+    "chooseNext": "다음 목적지 고르기",
+    "whereCards": "받은 엽서는 언제든 [엽서함] 탭에서 다시 볼 수 있어요.",
+    "localTime": "현지 시각",
+    "sameTime": "나와 같은 시간대",
+    "ahead": "나보다 {hours}시간 빠름",
+    "behind": "나보다 {hours}시간 느림",
+    "otherPlaces": "다른 곳 고르기",
+    "nextFlights": "다음 비행 · 누르면 바로 출발"
   },
   "journal": {
     "totalFocus": "누적 집중",
@@ -163,11 +185,11 @@
     "departureLocked": "{city}에서 여행을 시작했어요. 비행을 시작한 뒤에는 출발지를 바꿀 수 없어요.",
     "defaultMinutes": "기본 세션 길이",
     "data": "내 데이터",
-    "dataBody": "모든 기록은 이 기기에만 저장돼요. 브라우저 데이터를 지우기 전에 백업을 내보내 주세요.",
-    "export": "백업 내보내기 (JSON)",
+    "dataBody": "모든 기록은 이 기기에만 저장돼요. 휴대폰을 바꾸거나 브라우저 데이터를 지우기 전에 기록 파일로 저장해 두세요.",
+    "export": "기록 파일로 저장하기",
     "reset": "여행 기록 전체 삭제",
     "resetConfirm": "모든 세션, 엽서, 탑승권을 지울까요? 되돌릴 수 없어요.",
-    "import": "백업 불러오기",
+    "import": "저장한 기록 파일 불러오기",
     "importConfirm": "이 기기의 여행 기록을 백업 내용으로 바꿀까요?",
     "importDone": "백업을 불러왔어요.",
     "importInvalid": "WANDERMIN 백업 파일이 아니에요.",
@@ -195,10 +217,10 @@
     "iosKeep": "Safari에서는 홈 화면에 설치해야 여행 기록이 안전하게 보관돼요. 공유 → 홈 화면에 추가를 눌러 주세요."
   },
   "companion": {
-    "cabin": "기내 소음",
-    "cabinHint": "잔잔한 기내 소음이 흘러요. 잠금 화면 플레이어에 목적지 풍경·진행 막대·착륙 시각이 담긴 비행 카드가 크게 보이고, 잠금 화면에서 일시정지할 수 있어요.",
-    "notify": "잠금 화면 알림",
-    "notifyHint": "집중하는 동안 착륙 예정 시각을 알림으로 보여줘요.",
+    "cabin": "기내 소음 + 잠금 화면 비행 카드",
+    "cabinHint": "잔잔한 기내 소음을 틀어 두면 잠금 화면에 목적지와 착륙 시각이 담긴 비행 카드가 떠요. 거기서 일시정지도 할 수 있어요.",
+    "notify": "착륙 알림",
+    "notifyHint": "집중하는 동안 착륙 예정 시각을 보여 주고, 도착하면 알려 드려요.",
     "denied": "알림이 차단되어 있어요. 브라우저나 기기 설정에서 허용해 주세요.",
     "unsupported": "이 브라우저에서는 사용할 수 없어요.",
     "iosInstallFirst": "아이폰·아이패드에서는 홈 화면에 앱을 설치한 뒤 알림을 쓸 수 있어요.",
@@ -211,7 +233,7 @@
     "arrivedBody": "새 엽서가 기다리고 있어요.",
     "doneTitle": "세션 완료",
     "doneBody": "집중 {minutes}분을 비행했어요.",
-    "lockTitle": "잠금 해제 없이 진행 확인"
+    "lockTitle": "잠금 화면에 비행 보기"
   },
   "theme": {
     "system": "기기 설정",
@@ -233,13 +255,13 @@
     "how2Title": "도착하면 엽서",
     "how2": "실제 도시에 도착하면 그 도시의 픽셀 아트 엽서를 받아요.",
     "how3Title": "나만의 여행 기록",
-    "how3": "모든 비행이 여행 일지와 지도에 남아요. 쉬는 날이 있어도 괜찮아요.",
+    "how3": "모든 비행이 엽서함과 지도에 남아요. 쉬는 날이 있어도 괜찮아요.",
     "start": "시작하기",
     "private": "가입 없이 바로 써요. 모든 기록은 이 기기에만 저장돼요.",
     "back": "뒤로",
     "progress": "{total}단계 중 {step}단계",
     "fromTitle": "어디에서 출발할까요?",
-    "fromBody": "출발 공항이에요. 나중에 프로필에서 다시 고를 수 있어요.",
+    "fromBody": "출발 공항이에요. 나중에 설정에서 다시 고를 수 있어요.",
     "nearYou": "가까운 곳",
     "next": "다음",
     "toTitle": "{city}에서 첫 비행",
@@ -278,7 +300,9 @@
     "go": "이 도시로 가기",
     "flyingCta": "이어서 비행하기",
     "flying": "이미 이 도시로 가고 있어요.",
-    "busy": "지금 세션이 끝나면 목적지를 바꿀 수 있어요."
+    "busy": "지금 세션이 끝나면 목적지를 바꿀 수 있어요.",
+    "showAll": "아직 못 간 도시 {n}곳 더 보기",
+    "showLess": "가까운 곳만 보기"
   },
   "region": {
     "asia": "아시아",
@@ -305,5 +329,22 @@
     "empty": "첫 비행을 하면 여권에 출국 도장이 찍혀요.",
     "left": "도장을 기다리는 나라가 {n}곳 남았어요",
     "newStamp": "여권에 새 도장이 찍혔어요"
+  },
+  "flight": {
+    "nonstop": "논스톱 비행",
+    "nonstopBody": "한 번도 멈추지 않고 끝까지 날았어요.",
+    "nonstopCount": "논스톱 {n}"
+  },
+  "firstTrip": {
+    "title": "첫 여행 가이드",
+    "hide": "숨기기",
+    "fly": "첫 비행 띄우기",
+    "flyHint": "위의 빨간 버튼을 누르면 바로 이륙해요. 집중하는 동안 비행기가 날아가요.",
+    "card": "첫 엽서 받기",
+    "cardHint": "도착하면 그 도시의 엽서가 엽서함에 모여요. 앱을 나가도 시간은 계속 흘러요.",
+    "next": "다음 도시 고르기",
+    "nextHint": "추천 도시를 누르면 바로 출발해요. 원하는 도시는 검색으로 찾을 수 있어요.",
+    "doneSr": "완료",
+    "seeCards": "엽서함에서 받은 엽서 보기 →"
   }
 }

@@ -5,10 +5,10 @@
   },
   "nav": {
     "home": "Home",
-    "map": "World Map",
+    "map": "Map",
     "focus": "Focus",
-    "journal": "Travel Journal",
-    "profile": "Profile"
+    "journal": "Postcards",
+    "profile": "Settings"
   },
   "home": {
     "greeting": {
@@ -32,14 +32,17 @@
     "quickStartLand": "Fly to {city} · {time}",
     "seeAll": "See all",
     "statsLabel": "Your travel so far",
-    "firstCardTitle": "This postcard is waiting in {city}"
+    "firstCardTitle": "This postcard is waiting in {city}",
+    "oneTap": "Fly now →",
+    "changeDest": "Change destination",
+    "oneTapShort": "Fly →"
   },
   "timer": {
     "start": "Start focus",
     "pause": "Pause",
     "resume": "Resume",
-    "complete": "Finish",
-    "cancel": "Cancel",
+    "complete": "Finish now",
+    "cancel": "Stop without saving",
     "remaining": "{time} left",
     "duration": "{count, plural, one {# minute} other {# minutes}}",
     "custom": "Custom",
@@ -87,18 +90,23 @@
     "body": "Every focused minute flies you 50 km. Pick a home airport to begin.",
     "step1": "Focus, and you fly: every minute is 50 km.",
     "step2": "Land in a real city and collect its postcard.",
-    "step3": "Your journal keeps every flight. Missed days cost nothing.",
+    "step3": "The Postcards tab keeps every card and flight. Missed days cost nothing.",
     "language": "Language",
     "pick": "Pick a home airport to begin."
   },
   "destination": {
     "title": "Choose your next destination",
     "suggested": "Suggested",
-    "anywhere": "Or fly anywhere",
+    "anywhere": "Search any city",
     "pick": "Pick a city…",
     "via": "via {stops}",
     "minutes": "{km} km · about {minutes} min",
-    "go": "Fly there"
+    "go": "Fly there",
+    "searchPlaceholder": "City or country (e.g. Paris, Japan)",
+    "results": "Search results",
+    "noResults": "No match. 50 cities are open for now — try a country name too.",
+    "newStamp": "New stamp",
+    "newCountries": "New countries"
   },
   "focus": {
     "duration": "Duration",
@@ -107,23 +115,30 @@
     "customActivity": "Activity name",
     "paused": "Paused",
     "focusing": "Focusing on {activity}",
-    "finishConfirm": "Finish now? {minutes} minutes will count.",
-    "cancelConfirm": "Cancel this session? It won't count toward your trip.",
+    "finishConfirm": "The {minutes} minutes so far will count, and your next flight picks up from here.",
+    "cancelConfirm": "This flight won't count toward your trip.",
     "keepAwake": "Keep screen on",
-    "awayNote": "Leaving the app is fine: time keeps counting and catches up when you return. With cabin sound on, the landing is usually recorded on time even with the screen off (this depends on the device).",
+    "awayNote": "Leaving the app is fine — time keeps counting and catches up when you return.",
     "breakDone": "Break over. Ready for the next flight?",
     "takeBreak": "Take a {minutes}-minute break",
     "onBreak": "On a break",
     "tooShort": "Sessions under a minute aren't recorded.",
-    "finishTitle": "Finish this session?",
-    "cancelTitle": "Cancel this session?",
-    "cancelSession": "Cancel session",
+    "finishTitle": "Stop here?",
+    "cancelTitle": "Stop without saving?",
+    "cancelSession": "Stop",
     "keepGoing": "Keep focusing",
     "cancelled": "Session cancelled",
     "shortcuts": "Space: pause or resume",
     "landsHint": "{city} is {time} of focus away. The session ends as you land.",
     "flightHint": "{km} km to {city} · every focused minute flies {rate} km",
-    "inFlightHint": "Every focused minute brings {city} {rate} km closer"
+    "inFlightHint": "Every focused minute brings {city} {rate} km closer",
+    "done": "Focus done",
+    "setupSummary": "{minutes} · {activity}",
+    "setupChange": "Change",
+    "setupDone": "Done",
+    "calmHint": "Tap to show the controls",
+    "untilLanding": "until {city}",
+    "localAt": "{time} local time in {city}"
   },
   "arrival": {
     "title": "Welcome to {city}!",
@@ -132,7 +147,14 @@
     "reached": "Reached after {minutes} focus minutes",
     "next": "Continue",
     "newCountry": "New country stamp!",
-    "chooseNext": "Choose next destination"
+    "chooseNext": "Choose next destination",
+    "whereCards": "You can find this postcard any time in the Postcards tab.",
+    "localTime": "Local time",
+    "sameTime": "Same time as you",
+    "ahead": "{hours} h ahead of you",
+    "behind": "{hours} h behind you",
+    "otherPlaces": "Somewhere else",
+    "nextFlights": "Next flights · tap to take off"
   },
   "journal": {
     "totalFocus": "Total focus",
@@ -163,11 +185,11 @@
     "departureLocked": "Your journey started in {city}. The departure can't change once you've flown.",
     "defaultMinutes": "Default session",
     "data": "Your data",
-    "dataBody": "Everything is stored only on this device. Export a backup before clearing browser data.",
-    "export": "Export backup (JSON)",
+    "dataBody": "Everything is stored only on this device. Save a backup file before switching phones or clearing browser data.",
+    "export": "Save a backup file",
     "reset": "Erase all travel data",
     "resetConfirm": "Erase every session, postcard and pass? This can't be undone.",
-    "import": "Restore from backup",
+    "import": "Restore from a backup file",
     "importConfirm": "Replace this device's travel log with the backup?",
     "importDone": "Backup restored.",
     "importInvalid": "That file isn't a WANDERMIN backup.",
@@ -195,10 +217,10 @@
     "iosKeep": "In Safari, install to your home screen so your travel log is kept safely: Share → Add to Home Screen."
   },
   "companion": {
-    "cabin": "Cabin sound",
-    "cabinHint": "Plays a soft cabin hum. Your lock screen shows a large flight card — destination, progress and landing time — and you can pause from there.",
-    "notify": "Lock-screen notice",
-    "notifyHint": "Shows your landing time as a notification while you focus.",
+    "cabin": "Cabin sound + lock-screen card",
+    "cabinHint": "Plays a soft cabin hum, which puts a flight card with your destination and landing time on the lock screen — you can pause from there too.",
+    "notify": "Landing notifications",
+    "notifyHint": "Shows your landing time while you focus, and tells you when you land.",
     "denied": "Notifications are blocked. Allow them in your browser or system settings.",
     "unsupported": "Not available in this browser.",
     "iosInstallFirst": "On iPhone and iPad, notifications work after installing the app to your home screen.",
@@ -211,7 +233,7 @@
     "arrivedBody": "A new postcard is waiting for you.",
     "doneTitle": "Session complete",
     "doneBody": "{minutes} focus minutes flown.",
-    "lockTitle": "Know it's running without unlocking"
+    "lockTitle": "Show the flight on the lock screen"
   },
   "theme": {
     "system": "Match device",
@@ -233,13 +255,13 @@
     "how2Title": "Arrive, get a postcard",
     "how2": "Land in a real city and collect its pixel-art postcard.",
     "how3Title": "Your travel log",
-    "how3": "Every flight stays in your journal and on the map. Days off are fine.",
+    "how3": "Every flight stays in Postcards and on the map. Days off are fine.",
     "start": "Get started",
     "private": "No sign-up. Everything stays on this device.",
     "back": "Back",
     "progress": "Step {step} of {total}",
     "fromTitle": "Where are you flying from?",
-    "fromBody": "Your home airport. You can start over later in Profile.",
+    "fromBody": "Your home airport. You can start over later in Settings.",
     "nearYou": "Near you",
     "next": "Next",
     "toTitle": "First flight from {city}",
@@ -278,7 +300,9 @@
     "go": "Fly here",
     "flyingCta": "Keep flying",
     "flying": "You're already on your way here.",
-    "busy": "You can change your destination once this session ends."
+    "busy": "You can change your destination once this session ends.",
+    "showAll": "Show {n} more cities",
+    "showLess": "Show nearest only"
   },
   "region": {
     "asia": "Asia",
@@ -305,5 +329,22 @@
     "empty": "Your first flight puts the departure stamp in your passport.",
     "left": "{n} countries left to stamp",
     "newStamp": "New stamp in your passport"
+  },
+  "flight": {
+    "nonstop": "Nonstop flight",
+    "nonstopBody": "Flown start to finish without a pause.",
+    "nonstopCount": "Nonstop {n}"
+  },
+  "firstTrip": {
+    "title": "Your first trip",
+    "hide": "Hide",
+    "fly": "Take your first flight",
+    "flyHint": "Tap the red button above to take off. The plane flies while you focus.",
+    "card": "Collect your first postcard",
+    "cardHint": "Land and the city's postcard goes into the Postcards tab. Time keeps counting even if you leave the app.",
+    "next": "Pick your next city",
+    "nextHint": "Tap a suggested city to fly on, or search for any city.",
+    "doneSr": "done",
+    "seeCards": "See your postcards →"
   }
 }

@@ -39,7 +39,7 @@ export function TakeoffOverlay({ sessionId, startedAt, city, time }: { sessionId
       <div className="takeoff-plane absolute bottom-[17%] left-[-20%]"><PixelPlane size={72} /></div>
       <div className="absolute inset-x-0 top-[22%] text-center">
         <p className="takeoff-title text-4xl font-black tracking-tight text-ink sm:text-5xl">{t("takeoff.title")}</p>
-        <p className="takeoff-sub mt-2 text-lg font-semibold text-ink-soft tabular">{t("takeoff.body", { city, time })}</p>
+        <p className="takeoff-sub mt-2 text-lg font-bold text-ink tabular">{t("takeoff.body", { city, time })}</p>
       </div>
     </div>
   );

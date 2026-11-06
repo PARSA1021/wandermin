@@ -12,12 +12,14 @@ import { Notice } from "@/components/Notice";
 import { NoteReview } from "@/components/NoteReview";
 import { HowItWorksButton } from "@/components/HowItWorks";
 import { InstallCard } from "@/components/InstallCard";
+import { FirstTrip } from "@/components/FirstTrip";
 import { ArtImage } from "@/components/ArtImage";
 import { postcardJob } from "@/components/PostcardViewer";
 import { getSceneAvailable } from "@/features/art/available";
 import { useNow } from "@/components/hooks";
-import { elapsedMs, formatClock } from "@/features/focus/timer";
-import { plannedSessionMs } from "@/store/state";
+import { ceilMinutes, elapsedMs } from "@/features/focus/timer";
+import { flightLeftMs, plannedSessionMs } from "@/store/state";
+import { fitSessionMinutes } from "@/features/travel/next";
 import { livePass } from "@/features/tickets/passes";
 
 function startOfLocalDay(now: number) { const d = new Date(now); d.setHours(0, 0, 0, 0); return d.getTime(); }
@@ -39,7 +41,8 @@ export default function HomePage() {
   const today = state.ledger.filter((s) => s.completedAt >= startOfLocalDay(now)).reduce((m, s) => m + s.focusedMs / 60000, 0);
   const recent = [...journey.arrivals].reverse().slice(0, 6);
   const here = getCity(journey.lastCityId);
-  const quick = plannedSessionMs(state, state.settings.defaultMinutes);
+  const quickMinutes = fitSessionMinutes(state.settings.defaultMinutes, flightLeftMs(state));
+  const quick = plannedSessionMs(state, quickMinutes);
   const finalStop = state.plan.stops.at(-1);
   const stampCount = new Set([...(state.ledger.length ? [getCity(state.plan.departureId).countryCode] : []), ...journey.arrivals.map((a) => getCity(a.cityId).countryCode)]).size;
   // the boarding pass for the leg ahead (live while a session runs)
@@ -83,14 +86,17 @@ export default function HomePage() {
             <div className="flex flex-col items-stretch gap-1">
               <button onClick={() => {
                 buzz(20);
-                startSession(dispatch, state.settings, { minutes: state.settings.defaultMinutes, activity: state.settings.activity });
+                startSession(dispatch, state.settings, { minutes: quickMinutes, activity: state.settings.activity });
                 router.push("/focus");
               }} className="min-h-14 rounded-2xl bg-accent px-6 text-lg font-bold text-paper shadow">
                 {quick.capped && finalStop
-                  ? t("home.quickStartLand", { city: name(getCity(finalStop).name), time: formatClock(quick.ms) })
+                  ? t("home.quickStartLand", { city: name(getCity(finalStop).name), time: t("timer.duration", { count: ceilMinutes(quick.ms) }) })
                   : t("home.quickStart", { minutes: state.settings.defaultMinutes })}
               </button>
-              <Link href="/focus" className="flex min-h-10 items-center justify-center text-sm font-semibold text-ink-soft underline underline-offset-4">{t("home.customize")}</Link>
+              <div className="flex flex-wrap items-center justify-center gap-x-4">
+                <Link href="/focus" className="flex min-h-11 items-center text-sm font-semibold text-ink-soft underline underline-offset-4">{t("home.customize")}</Link>
+                <Link href="/map#change" className="flex min-h-11 items-center text-sm font-semibold text-ink-soft underline underline-offset-4">{t("home.changeDest")}</Link>
+              </div>
             </div>
           )}
           </div>
@@ -101,6 +107,8 @@ export default function HomePage() {
           <DestinationPicker />
         </>
       )}
+
+      <FirstTrip />
 
       {state.ledger.length > 0 && (
         <section aria-label={t("home.statsLabel")} className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
@@ -135,7 +143,7 @@ export default function HomePage() {
             // the first postcard, still faded: what's waiting at the end of this flight
             <div className="grid items-center gap-4 rounded-2xl border border-dashed border-line p-4 sm:grid-cols-[minmax(0,14rem)_1fr]">
               <div className="ghost-card overflow-hidden rounded-md">
-                <ArtImage job={{ kind: "postcard", cityId: leg.toId, fromId: leg.fromId, arrivedAt: Date.UTC(2026, 0, 1), focusMinutesAtArrival: 0, timeZone }} alt="" />
+                <ArtImage job={{ kind: "postcard", cityId: leg.toId, fromId: leg.fromId, arrivedAt: Date.UTC(2026, 0, 1), focusMinutesAtArrival: 0, timeZone, ghost: true }} alt="" />
               </div>
               <p className="text-ink-soft">
                 <b className="block text-ink">{t("home.firstCardTitle", { city: name(getCity(leg.toId).name) })}</b>

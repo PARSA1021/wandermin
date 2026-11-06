@@ -2,6 +2,7 @@
 import { useMemo } from "react";
 import type { PostcardJob } from "@/features/art/jobs";
 import { ArtImage } from "./ArtImage";
+import { localClock } from "@/features/travel/localTime";
 
 /**
  * The view from a window seat, inside the progress ring: a round plane window with the wing. The sky
@@ -59,11 +60,19 @@ const SKYLINE = (() => {
   return { h, top: (h - at(116)) / h };
 })();
 
-export function WindowView({ progress, paused, now, destination }: { progress: number; paused: boolean; now: number; destination: PostcardJob | null }) {
-  const d = new Date(now);
-  const phase = phaseOf(d.getHours() + d.getMinutes() / 60);
+/** `skyZone`: the sky is the one over the place you are flying to, in its local time. */
+/**
+ * `calm`: nobody is watching closely, so the clouds stop being a 60 fps animation and step once per
+ * render (the focus screen renders once a second) — the screen is then redrawn about once a second
+ * instead of sixty times, which is what keeps a long flight light on the battery.
+ */
+export function WindowView({ progress, paused, now, destination, skyZone, calm = false }: { progress: number; paused: boolean; now: number; destination: PostcardJob | null; skyZone?: string; calm?: boolean }) {
+  const [hh, mm] = (skyZone ? localClock(now, skyZone) : localClock(now, Intl.DateTimeFormat().resolvedOptions().timeZone)).split(":").map(Number);
+  const phase = phaseOf(hh! + mm! / 60);
   const [body, shade] = CLOUD[phase];
   const approach = destination ? Math.max(0, Math.min(1, (progress - 0.8) / 0.2)) : 0;
+  // when the smooth drift resumes, start it from where the stepped clouds are (no jump)
+  const resumeAt = useMemo(() => now, [calm]); // eslint-disable-line react-hooks/exhaustive-deps
   const stars = useMemo(() => Array.from({ length: 22 }, (_, i) => ({ x: hash(i, 1) * 100, y: hash(i, 2) * 55, s: hash(i, 3) < 0.2 ? 2 : 1 })), []);
   return (
     <div className={`window-view absolute inset-[9%] overflow-hidden rounded-full ${paused ? "is-paused" : ""}`} style={{ background: SKY[phase] }} aria-hidden="true">
@@ -78,7 +87,10 @@ export function WindowView({ progress, paused, now, destination }: { progress: n
       )}
       {/* three cloud layers, slow far ones and faster near ones */}
       {[{ top: "20%", h: "9%", dur: 90, size: 1, o: 0.55, seed: 11 }, { top: "38%", h: "12%", dur: 55, size: 1, o: 0.8, seed: 23 }, { top: "60%", h: "18%", dur: 30, size: 2, o: 1, seed: 37 }].map((l) => (
-        <div key={l.seed} className="window-drift absolute left-0 w-[200%]" style={{ top: l.top, height: l.h, opacity: l.o, animationDuration: `${l.dur}s` }}>
+        <div key={l.seed} className={`${calm ? "" : "window-drift"} absolute left-0 w-[200%]`}
+          style={calm
+            ? { top: l.top, height: l.h, opacity: l.o, transform: `translate3d(${-(((now / 1000) % l.dur) / l.dur) * 50}%, 0, 0)` }
+            : { top: l.top, height: l.h, opacity: l.o, animationDuration: `${l.dur}s`, animationDelay: `${-((resumeAt / 1000) % l.dur)}s` }}>
           <CloudStrip seed={l.seed} body={body} shade={shade} size={l.size} />
         </div>
       ))}

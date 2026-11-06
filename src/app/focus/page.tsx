@@ -2,10 +2,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { getCity } from "@/data";
 import { TRAVEL_CONFIG } from "@/config/travel";
-import { BREAK_MINUTES, CUSTOM_RANGE, PRESET_MINUTES, elapsedMs, formatClock, isPaused, remainingMs, type ActivityId } from "@/features/focus/timer";
+import { BREAK_MINUTES, CUSTOM_RANGE, ceilMinutes, PRESET_MINUTES, elapsedMs, formatClock, isPaused, remainingMs, type ActivityId } from "@/features/focus/timer";
 import { livePass } from "@/features/tickets/passes";
 import { useApp } from "@/store/AppProvider";
-import { plannedSessionMs } from "@/store/state";
+import { flightLeftMs, plannedSessionMs } from "@/store/state";
+import { fitSessionMinutes } from "@/features/travel/next";
+import { localClock } from "@/features/travel/localTime";
 import { useI18n } from "@/i18n/react";
 import { DestinationPicker } from "@/components/Pickers";
 import { Onboarding } from "@/components/Onboarding";
@@ -14,8 +16,9 @@ import { ArtImage } from "@/components/ArtImage";
 import { TakeoffOverlay } from "@/components/Takeoff";
 import { NoteReview } from "@/components/NoteReview";
 import { WindowView } from "@/components/WindowView";
+import { PixelText } from "@/components/PixelText";
 import type { PostcardJob } from "@/features/art/jobs";
-import { useNow, useWakeLock } from "@/components/hooks";
+import { secondPhase, useNow, useWakeLock } from "@/components/hooks";
 import { LockScreenOptions } from "@/components/LockScreenOptions";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { cabin } from "@/components/cabin";
@@ -42,7 +45,7 @@ function TimerRing({ progress, paused, kind }: { progress: number; paused: boole
     <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" aria-hidden="true">
       <circle cx="50" cy="50" r={r} fill="none" stroke="var(--color-paper-deep)" strokeWidth="3.5" />
       <circle cx="50" cy="50" r={r} fill="none" stroke={color} strokeWidth="3.5" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - p)}
-        transform="rotate(-90 50 50)" style={{ transition: "stroke-dashoffset .9s linear", opacity: paused ? 0.45 : 1 }} />
+        transform="rotate(-90 50 50)" style={{ opacity: paused ? 0.45 : 1 }} />
       {kind === "focus" && (
         <g transform={`translate(${50 + r * Math.cos(a)} ${50 + r * Math.sin(a)}) rotate(${p * 360})`}>
           <circle r="4.2" fill="var(--color-card)" stroke={color} strokeWidth="1" />
@@ -57,8 +60,9 @@ export default function FocusPage() {
   const { state, journey, dispatch, timeZone } = useApp();
   const { t, name, fmt } = useI18n();
   const active = state.active;
-  const now = useNow(250, !!active && !isPaused(active));
-  const [minutes, setMinutes] = useState(state.settings.defaultMinutes);
+  const now = useNow(1000, !!active && !isPaused(active), secondPhase(active));
+  // null = not picked by hand: the usual length, stretched to land in one go when the flight is just a bit longer
+  const [picked, setPicked] = useState<number | null>(null);
   const [custom, setCustom] = useState("");
   const [activity, setActivity] = useState<ActivityId>(state.settings.activity);
   const [customActivity, setCustomActivity] = useState("");
@@ -66,10 +70,14 @@ export default function FocusPage() {
   useEffect(() => { if (state.draftNote) setNote(state.draftNote); }, [state.draftNote]);
   // a session (re)starting swaps the setup form for the timer: show it from the top
   const activeId = active?.id;
-  useEffect(() => { if (activeId) window.scrollTo({ top: 0 }); }, [activeId]);
+  useEffect(() => { if (activeId && window.scrollY > 0) window.scrollTo({ top: 0 }); }, [activeId]);
   const [justFinished, setJustFinished] = useState(false);
   const [confirm, setConfirm] = useState<null | "finish" | "cancel">(null);
   const closeConfirm = useCallback(() => setConfirm(null), []);
+  const [setupOpen, setSetupOpen] = useState(false);
+  // a minute into a flight the controls fade away so only the window and the clock are left; a tap brings them back
+  const [wakeUntil, setWakeUntil] = useState(0);
+  const calm = !!active && active.kind === "focus" && !isPaused(active) && elapsedMs(active, now) > 60_000 && now > wakeUntil && !confirm;
 
   const togglePause = useCallback(() => {
     const a = state.active;
@@ -119,41 +127,45 @@ export default function FocusPage() {
       ? { kind: "postcard", cityId: leg.toId, fromId: leg.fromId, arrivedAt: Date.UTC(2026, 0, 1), focusMinutesAtArrival: 0, timeZone }
       : null;
     return (
-      <section className="mx-auto flex max-w-2xl flex-col items-center gap-6 pt-6 text-center sm:pt-10 wideland:max-w-5xl wideland:flex-row wideland:items-start wideland:justify-center wideland:gap-x-8 short:gap-x-5 short:pt-2">
+      <section onPointerDown={() => setWakeUntil(Date.now() + 8000)} onFocusCapture={() => setWakeUntil(Date.now() + 8000)} onKeyDown={() => setWakeUntil(Date.now() + 8000)} className={`${calm ? "is-calm" : ""} mx-auto flex max-w-2xl flex-col items-center gap-6 pt-6 text-center sm:pt-10 wideland:max-w-5xl wideland:flex-row wideland:items-start wideland:justify-center wideland:gap-x-8 short:gap-x-5 short:pt-2`}>
+        {/* night cabin: once calm, the screen goes dark around the window (dark pixels cost OLED screens almost nothing) */}
+        <div className="calm-night" aria-hidden="true" />
         {active.kind === "focus" && pass && (
-          <TakeoffOverlay sessionId={active.id} startedAt={active.startedAt} city={name(getCity(state.plan.stops.at(-1) ?? pass.toId).name)} time={formatClock(active.plannedMs)} />
+          <TakeoffOverlay sessionId={active.id} startedAt={active.startedAt} city={name(getCity(state.plan.stops.at(-1) ?? pass.toId).name)} time={t("timer.duration", { count: ceilMinutes(active.plannedMs) })} />
         )}
         <div className="flex flex-col items-center gap-3 wideland:sticky wideland:top-4">
-        <p className="text-sm font-semibold text-ink-soft">{paused ? t("focus.paused") : label}</p>
-        {pass && !paused && <p className="-mt-1 text-xs text-ink-soft">{t("focus.inFlightHint", { city: name(getCity(pass.toId).name), rate: TRAVEL_CONFIG.kmPerMinute })}</p>}
+        <p className="calm-fade text-sm font-semibold text-ink-soft">{paused ? t("focus.paused") : label}</p>
+        {pass && !paused && <p className="calm-fade -mt-1 text-xs text-ink-soft">{t("focus.inFlightHint", { city: name(getCity(pass.toId).name), rate: TRAVEL_CONFIG.kmPerMinute })}
+          <span className="block tabular" data-dest-time="">{t("focus.localAt", { city: name(getCity(pass.toId).name), time: localClock(now, getCity(pass.toId).tz) })}</span></p>}
         {active.note && <p className="max-w-xs rounded-full bg-paper-deep/70 px-4 py-1.5 text-sm font-semibold">{t("note.onboard", { note: active.note })}</p>}
         {windowOn ? (
           <>
-            <div className="relative aspect-square w-[min(72vw,19rem)] wideland:w-[min(34vw,22rem)] short:w-[min(30vw,calc(100dvh-10rem))]">
-              <WindowView progress={flightProgress} paused={paused} now={now} destination={windowDest} />
+            <div className="calm-dim relative aspect-square w-[min(72vw,19rem)] wideland:w-[min(34vw,22rem)] short:w-[min(30vw,calc(100dvh-10rem))]">
+              <WindowView progress={flightProgress} paused={paused} now={now} destination={windowDest} skyZone={leg ? getCity(leg.toId).tz : undefined} calm={calm} />
               <TimerRing progress={elapsedMs(active, now) / active.plannedMs} paused={paused} kind={active.kind} />
             </div>
             <p className={`tabular -mt-1 font-bold tracking-tight ${remaining >= 3_600_000 ? "text-5xl" : "text-6xl"} short:text-5xl ${paused ? "opacity-60" : ""}`} role="timer" aria-live="off" aria-label={t("timer.remaining", { time: formatClock(remaining) })}>
-              {formatClock(remaining)}
+              <PixelText text={formatClock(remaining)} height="0.86em" /><span className="sr-only">{formatClock(remaining)}</span>
             </p>
           </>
         ) : (
           <div className="relative grid aspect-square w-[min(78vw,20rem)] place-items-center wideland:w-[min(38vw,24rem)] short:w-[min(34vw,calc(100dvh-5rem))]">
             <TimerRing progress={elapsedMs(active, now) / active.plannedMs} paused={paused} kind={active.kind} />
             <p className={`tabular relative font-bold tracking-tight ${remaining >= 3_600_000 ? "text-5xl sm:text-6xl" : "text-6xl sm:text-7xl"} ${paused ? "opacity-60" : ""}`} role="timer" aria-live="off" aria-label={t("timer.remaining", { time: formatClock(remaining) })}>
-              {formatClock(remaining)}
+              <PixelText text={formatClock(remaining)} height="0.86em" /><span className="sr-only">{formatClock(remaining)}</span>
             </p>
           </div>
         )}
+        <p className="calm-hint -mt-2 text-xs text-ink-soft" aria-hidden="true">{t("focus.calmHint")}</p>
         </div>
-        <div className="flex w-full max-w-xl flex-col items-center gap-6 wideland:min-w-0 wideland:flex-1 short:gap-3">
+        <div className="calm-fade flex w-full max-w-xl flex-col items-center gap-6 wideland:min-w-0 wideland:flex-1 short:gap-3">
         {pass && <ArtImage eager className="w-full max-w-xl" job={{ kind: "pass", input: pass }} alt={`${name(getCity(pass.fromId).name)} → ${name(getCity(pass.toId).name)}`} />}
-        <div className="grid w-full max-w-md grid-cols-3 gap-2">
+        <div className="grid w-full max-w-md grid-cols-2 gap-2">
           <button onClick={togglePause} className="min-h-14 whitespace-nowrap rounded-2xl bg-ink px-2 font-semibold text-paper short:min-h-12 short:text-sm">{paused ? t("timer.resume") : t("timer.pause")}</button>
           <button onClick={() => { if (active.kind === "break") dispatch({ type: "finish", now: Date.now() }); else setConfirm("finish"); }}
             className="min-h-14 whitespace-nowrap rounded-2xl border border-ink px-2 font-semibold short:min-h-12 short:text-sm">{t("timer.complete")}</button>
-          <button onClick={() => setConfirm("cancel")} className="min-h-14 whitespace-nowrap rounded-2xl border border-line px-2 font-semibold text-ink-soft short:min-h-12 short:text-sm">{t("timer.cancel")}</button>
         </div>
+        <button onClick={() => setConfirm("cancel")} className="-mt-3 min-h-11 px-3 text-sm font-semibold text-ink-soft underline underline-offset-4 short:-mt-1">{t("timer.cancel")}</button>
         <p className="hidden text-xs text-ink-soft sm:block" aria-hidden="true">{t("focus.shortcuts")}</p>
         <ConfirmSheet open={confirm === "finish"} title={t("focus.finishTitle")}
           body={elapsedMs(active, now) < 60_000 ? t("focus.tooShort") : t("focus.finishConfirm", { minutes: Math.floor(elapsedMs(active, now) / 60000) })}
@@ -175,6 +187,7 @@ export default function FocusPage() {
     );
   }
 
+  const minutes = picked ?? fitSessionMinutes(state.settings.defaultMinutes, flightLeftMs(state));
   const chosen = custom ? Number(custom) : minutes;
   const valid = Number.isFinite(chosen) && chosen >= CUSTOM_RANGE.min && chosen <= CUSTOM_RANGE.max;
   // when the final stop is closer than the chosen length, the session ends as the plane lands
@@ -189,7 +202,9 @@ export default function FocusPage() {
       <NoteReview />
       {justFinished && !state.pendingArrivals.length && (
         <div className="rise flex flex-col gap-3 rounded-2xl border border-line bg-card p-4 sm:flex-row sm:items-center">
-          <p className="flex-1 font-semibold">✓ {t("timer.complete")}</p>
+          <p className="flex-1 font-semibold">✓ {t("focus.done")}
+            {state.ledger.at(-1)?.nonstop && <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-[#f6e7b8] px-2.5 py-0.5 text-xs font-bold text-[#6b5210]" data-nonstop="">✦ {t("flight.nonstop")}</span>}
+          </p>
           {BREAK_MINUTES.map((m) => (
             <button key={m} onClick={() => { setJustFinished(false); startSession(dispatch, state.settings, { minutes: m, activity, kind: "break" }); }}
               className="min-h-11 rounded-xl border border-ink px-4 text-sm font-semibold">{t("focus.takeBreak", { minutes: m })}</button>
@@ -199,10 +214,18 @@ export default function FocusPage() {
       {needsDestination ? <DestinationPicker /> : (
         <>
           {preview && <ArtImage eager job={{ kind: "pass", input: preview }} alt={`${name(getCity(preview.fromId).name)} → ${name(getCity(preview.toId).name)}`} />}
+          <div className="flex items-center justify-between gap-3 rounded-2xl border border-line bg-card px-4 py-2">
+            <p className="font-semibold tabular" data-setup-summary="">{t("focus.setupSummary", { minutes: !valid ? "—" : landing ? t("timer.duration", { count: ceilMinutes(landing.ms) }) : t("timer.duration", { count: chosen }), activity: activity === "custom" ? customActivity.trim() || t("timer.activity.custom") : t(`timer.activity.${activity}` as MessageKey) })}
+              {landing && <span className="font-normal text-ink-soft"> · {t("focus.untilLanding", { city: landing.city })}</span>}</p>
+            <button type="button" aria-expanded={setupOpen} aria-controls="focus-setup" onClick={() => setSetupOpen((o) => !o)}
+              className="tap -mr-2 min-h-11 shrink-0 px-2 text-sm font-semibold text-ink-soft underline underline-offset-4">{setupOpen ? t("focus.setupDone") : t("focus.setupChange")}</button>
+          </div>
+          {setupOpen && (
+          <div id="focus-setup" className="rise flex flex-col gap-6">
           <fieldset>
             <legend className="mb-2 text-sm font-bold">{t("focus.duration")}</legend>
             <div className="flex flex-wrap gap-2">
-              {PRESET_MINUTES.map((m) => <Chip key={m} on={!custom && minutes === m} onClick={() => { setCustom(""); setMinutes(m); }}>{t("timer.duration", { count: m })}</Chip>)}
+              {PRESET_MINUTES.map((m) => <Chip key={m} on={!custom && minutes === m} onClick={() => { setCustom(""); setPicked(m); }}>{t("timer.duration", { count: m })}</Chip>)}
               <label className="flex items-center gap-2">
                 <span className="sr-only">{t("focus.customMinutes")}</span>
                 <input inputMode="numeric" pattern="[0-9]*" placeholder={t("timer.custom")} value={custom} onChange={(e) => setCustom(e.target.value.replace(/\D/g, "").slice(0, 3))}
@@ -221,29 +244,30 @@ export default function FocusPage() {
                 className="mt-2 min-h-11 w-full rounded-xl border border-line bg-card px-4" />
             )}
           </fieldset>
+          <LockScreenOptions collapsible />
+          </div>
+          )}
           <label className="flex flex-col gap-2">
             <span className="text-sm font-bold">{t("note.label")}</span>
             <input value={note} maxLength={80} onChange={(e) => setNote(e.target.value)} placeholder={t("note.placeholder")} enterKeyHint="done"
               className="min-h-12 w-full rounded-xl border border-line bg-card px-4" />
             {state.draftNote && note === state.draftNote && <span className="text-xs text-ink-soft">↻ {t("note.carried")}</span>}
           </label>
-          <LockScreenOptions collapsible />
           {!landing && journey?.currentLeg && (
             <p className="rounded-xl bg-paper-deep/60 px-4 py-3 text-sm text-ink-soft" role="note">
               {t("focus.flightHint", { city: name(getCity(journey.currentLeg.toId).name), km: fmt(Math.round(journey.currentLeg.remainingKm)), rate: TRAVEL_CONFIG.kmPerMinute })}
             </p>
           )}
-          {landing && <p className="rounded-xl bg-accent/10 px-4 py-3 text-sm font-semibold text-accent" role="note">{t("focus.landsHint", { city: landing.city, time: formatClock(landing.ms) })}</p>}
-          <p className="text-center text-xs text-ink-soft">{t("focus.tooShort")}</p>
+          {landing && <p className="rounded-xl bg-paper-deep/60 px-4 py-3 text-sm text-ink-soft" role="note">{t("focus.landsHint", { city: landing.city, time: t("timer.duration", { count: ceilMinutes(landing.ms) }) })}</p>}
           {/* the start button stays in reach of the thumb, above the tab bar */}
           <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-10 -mx-4 bg-gradient-to-t from-paper via-paper to-transparent px-4 pb-2 pt-6 sm:bottom-0 sm:not-short:static sm:not-short:mx-0 sm:not-short:bg-none sm:not-short:p-0 short:pt-3">
             <button disabled={!valid} onClick={() => {
               setJustFinished(false);
               buzz(20);
-              startSession(dispatch, state.settings, { minutes: chosen, activity, customActivity: activity === "custom" ? customActivity.trim() : undefined, remember: !custom, note });
+              startSession(dispatch, state.settings, { minutes: chosen, activity, customActivity: activity === "custom" ? customActivity.trim() : undefined, remember: !custom && picked !== null, note });
               setNote("");
             }} className="min-h-16 w-full rounded-2xl bg-accent text-lg font-bold text-paper shadow-lg disabled:opacity-40">
-              {t("timer.start")} · {!valid ? "—" : landing ? t("timer.landsIn", { city: landing.city, time: formatClock(landing.ms) }) : t("timer.duration", { count: chosen })}
+              {t("timer.start")} · {!valid ? "—" : landing ? t("timer.landsIn", { city: landing.city, time: t("timer.duration", { count: ceilMinutes(landing.ms) }) }) : t("timer.duration", { count: chosen })}
             </button>
           </div>
         </>
