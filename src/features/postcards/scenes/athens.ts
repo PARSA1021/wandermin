@@ -1,6 +1,6 @@
 import { bayer, rng, type PixelCanvas } from "../pixel/canvas";
 import type { PostcardScene } from "../template";
-import { W, H, birds, leaf, sky } from "./common";
+import { W, birds, leaf, sky } from "./common";
 
 /** Athens at sunset: the Parthenon on the Acropolis rock, Lycabettus, white Plaka houses, olive trees. */
 const P = {

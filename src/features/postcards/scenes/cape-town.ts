@@ -1,6 +1,6 @@
 import { bayer, rng, type PixelCanvas } from "../pixel/canvas";
 import type { PostcardScene } from "../template";
-import { W, H, birds, people, sky, townhouses, water, type TownhouseStyle } from "./common";
+import { W, birds, people, sky, townhouses, water, type TownhouseStyle } from "./common";
 
 /** Cape Town: flat-topped Table Mountain under its tablecloth cloud, Lion's Head, the cable car, the harbour, Bo-Kaap houses. */
 const P = {

@@ -76,7 +76,7 @@ export function CollectionBoard({ onOpen }: { onOpen: (a: Arrival) => void }) {
         {(["all", ...REGIONS] as const).map((r) => (
           <button key={r} role="tab" aria-selected={region === r} onClick={() => { buzz(6); setRegion(r); }}
             className={`tap min-h-10 shrink-0 whitespace-nowrap rounded-full border px-4 text-sm font-semibold ${region === r ? "border-ink bg-ink text-paper" : "border-line bg-card text-ink-soft"}`}>
-            {t(r === "all" ? "collection.all" : (`region.${r}` as MessageKey))} <span className="tabular opacity-70">{count(r)}</span>
+            {t(r === "all" ? "collection.all" : (`region.${r}` as MessageKey))} <span className="tabular">{count(r)}</span>
           </button>
         ))}
       </div>

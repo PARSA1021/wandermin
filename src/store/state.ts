@@ -3,6 +3,7 @@
  * The storage adapter is separate so account sync can be added later without touching screens.
  */
 import { TRAVEL_CONFIG } from "@/config/travel";
+import { CITIES } from "@/data";
 import { MIN_RECORD_MS, complete, pause, resume, startSession, type ActiveSession, type ActivityId, type SessionKind } from "@/features/focus/timer";
 import { addSession, computeJourney, rerouteTo, routeRemainingKm, type CompletedSession, type TravelPlan } from "@/features/travel/journey";
 import type { Locale } from "@/i18n/config";
@@ -32,7 +33,9 @@ export interface CancelledSession { id: string; cancelledAt: number; focusedMs: 
 
 export type Notice =
   | { kind: "completed-while-away"; minutes: number }
-  | { kind: "break-over" };
+  | { kind: "break-over" }
+  /** Part of the saved data could not be read; the original was kept aside for the user to save. */
+  | { kind: "recovered" };
 
 export interface AppState {
   version: number;
@@ -225,7 +228,9 @@ export function parseBackup(raw: string): AppState | null {
   try {
     const data = JSON.parse(raw) as Partial<AppState>;
     const okLedger = Array.isArray(data.ledger) && data.ledger.every((s) => s && typeof s.id === "string" && Number.isFinite(s.completedAt) && Number.isFinite(s.focusedMs) && Number.isFinite(s.kmPerMinute));
-    const okPlan = data.plan === null || (!!data.plan && typeof data.plan.departureId === "string" && Array.isArray(data.plan.stops));
+    // a backup must only name cities this version knows; anything else is refused, not half-imported
+    const okPlan = data.plan === null || (!!data.plan && typeof data.plan.departureId === "string" && KNOWN_CITIES.has(data.plan.departureId)
+      && Array.isArray(data.plan.stops) && data.plan.stops.every((id) => KNOWN_CITIES.has(id)));
     if (data.version !== STATE_VERSION || !okLedger || !okPlan) return null;
     return parseState(raw);
   } catch {
@@ -233,15 +238,51 @@ export function parseBackup(raw: string): AppState | null {
   }
 }
 
-/** Validate a stored document; anything unreadable falls back to a fresh state rather than crashing. */
-export function parseState(raw: string | null): AppState {
-  if (!raw) return initialState();
+const KNOWN_CITIES = new Set(CITIES.map((c) => c.id));
+const finite = (n: unknown): n is number => typeof n === "number" && Number.isFinite(n);
+
+/**
+ * Make a loaded state safe to render: cities that no longer exist (a renamed or removed city, or a
+ * hand-edited file) would otherwise crash every screen. The route is cut before the first unknown
+ * city, malformed records are dropped. `lost` tells whether anything had to go.
+ */
+function sanitize(s: AppState): { state: AppState; lost: boolean } {
+  let lost = false;
+  let plan = s.plan;
+  if (plan && (typeof plan.departureId !== "string" || !KNOWN_CITIES.has(plan.departureId) || !Array.isArray(plan.stops))) {
+    return { state: { ...initialState(), settings: s.settings }, lost: true };
+  }
+  if (plan) {
+    const cut = plan.stops.findIndex((id) => !KNOWN_CITIES.has(id));
+    if (cut >= 0) {
+      lost = true;
+      plan = { ...plan, stops: plan.stops.slice(0, cut), ...(Array.isArray(plan.addedAt) ? { addedAt: plan.addedAt.slice(0, cut) } : {}) };
+    }
+  }
+  const ledger = s.ledger.filter((e) => e && typeof e.id === "string" && finite(e.completedAt) && finite(e.focusedMs) && finite(e.kmPerMinute));
+  if (ledger.length !== s.ledger.length) lost = true;
+  const a = s.active;
+  const active = a && finite(a.startedAt) && finite(a.plannedMs) && finite(a.pausedTotalMs) && finite(a.kmPerMinute) ? a : null;
+  if (a && !active) lost = true;
+  const pendingArrivals = Array.isArray(s.pendingArrivals) ? s.pendingArrivals.filter((id) => KNOWN_CITIES.has(id)) : [];
+  return { state: { ...s, plan, ledger, active, pendingArrivals, cancelled: Array.isArray(s.cancelled) ? s.cancelled : [] }, lost };
+}
+
+/**
+ * Validate a stored document; anything unreadable falls back to a fresh (or trimmed) state rather
+ * than crashing. `lost` is true when saved data could not be used as it was, so the caller can keep
+ * the original aside instead of silently overwriting it.
+ */
+export function readState(raw: string | null): { state: AppState; lost: boolean } {
+  if (!raw) return { state: initialState(), lost: false };
   try {
     const data = JSON.parse(raw) as Partial<AppState>;
-    if (data.version !== STATE_VERSION || !Array.isArray(data.ledger)) return initialState();
+    if (data.version !== STATE_VERSION || !Array.isArray(data.ledger)) return { state: initialState(), lost: true };
     const base = initialState();
-    return { ...base, ...data, undo: data.undo ?? null, notice: data.notice ?? null, settings: { ...base.settings, ...data.settings } } as AppState;
+    return sanitize({ ...base, ...data, undo: data.undo ?? null, notice: data.notice ?? null, settings: { ...base.settings, ...data.settings } } as AppState);
   } catch {
-    return initialState();
+    return { state: initialState(), lost: true };
   }
 }
+
+export const parseState = (raw: string | null): AppState => readState(raw).state;

@@ -78,6 +78,19 @@ export default function FocusPage() {
   // a minute into a flight the controls fade away so only the window and the clock are left; a tap brings them back
   const [wakeUntil, setWakeUntil] = useState(0);
   const calm = !!active && active.kind === "focus" && !isPaused(active) && elapsedMs(active, now) > 60_000 && now > wakeUntil && !confirm;
+  // night cabin: once calm, the whole page goes dark around the window (dark pixels cost OLED screens
+  // almost nothing). Set on <html> so it covers every layout, sidebar included.
+  useEffect(() => {
+    const root = document.documentElement;
+    if (calm) root.dataset.calm = ""; else delete root.dataset.calm;
+    return () => { delete root.dataset.calm; };
+  }, [calm]);
+  const flying = !!active;
+  useEffect(() => {
+    const root = document.documentElement;
+    if (flying) root.dataset.calmFx = ""; else delete root.dataset.calmFx;
+    return () => { delete root.dataset.calmFx; };
+  }, [flying]);
 
   const togglePause = useCallback(() => {
     const a = state.active;
@@ -127,9 +140,9 @@ export default function FocusPage() {
       ? { kind: "postcard", cityId: leg.toId, fromId: leg.fromId, arrivedAt: Date.UTC(2026, 0, 1), focusMinutesAtArrival: 0, timeZone }
       : null;
     return (
+      <>
+      <h1 className="sr-only">{t("nav.focus")}</h1>
       <section onPointerDown={() => setWakeUntil(Date.now() + 8000)} onFocusCapture={() => setWakeUntil(Date.now() + 8000)} onKeyDown={() => setWakeUntil(Date.now() + 8000)} className={`${calm ? "is-calm" : ""} mx-auto flex max-w-2xl flex-col items-center gap-6 pt-6 text-center sm:pt-10 wideland:max-w-5xl wideland:flex-row wideland:items-start wideland:justify-center wideland:gap-x-8 short:gap-x-5 short:pt-2`}>
-        {/* night cabin: once calm, the screen goes dark around the window (dark pixels cost OLED screens almost nothing) */}
-        <div className="calm-night" aria-hidden="true" />
         {active.kind === "focus" && pass && (
           <TakeoffOverlay sessionId={active.id} startedAt={active.startedAt} city={name(getCity(state.plan.stops.at(-1) ?? pass.toId).name)} time={t("timer.duration", { count: ceilMinutes(active.plannedMs) })} />
         )}
@@ -184,6 +197,7 @@ export default function FocusPage() {
         <p className="max-w-md text-xs text-ink-soft">{t("focus.awayNote")}</p>
         </div>
       </section>
+      </>
     );
   }
 
@@ -198,6 +212,7 @@ export default function FocusPage() {
 
   return (
     <section className="mx-auto flex max-w-2xl flex-col gap-6">
+      <h1 className="sr-only">{t("nav.focus")}</h1>
       <Notice />
       <NoteReview />
       {justFinished && !state.pendingArrivals.length && (

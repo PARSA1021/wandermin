@@ -15,9 +15,9 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#f4ecd8",
     launch_handler: { client_mode: "focus-existing" },
     shortcuts: [
-      { name: "Focus", short_name: "Focus", url: "/focus", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
-      { name: "Journal", short_name: "Journal", url: "/journal", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
-      { name: "Map", short_name: "Map", url: "/map", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
+      { name: "Focus", short_name: "Focus", url: "/focus", icons: [{ src: "/icons/icon-192.png?v=2", sizes: "192x192" }] },
+      { name: "Journal", short_name: "Journal", url: "/journal", icons: [{ src: "/icons/icon-192.png?v=2", sizes: "192x192" }] },
+      { name: "Map", short_name: "Map", url: "/map", icons: [{ src: "/icons/icon-192.png?v=2", sizes: "192x192" }] },
     ],
     screenshots: [
       { src: "/screenshots/home.png", sizes: "780x1688", type: "image/png", form_factor: "narrow", label: "Home" },
@@ -26,9 +26,9 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     categories: ["productivity", "education", "travel"],
     icons: [
-      { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
-      { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
-      { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+      { src: "/icons/icon-192.png?v=2", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "/icons/icon-512.png?v=2", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/icons/icon-512.png?v=2", sizes: "512x512", type: "image/png", purpose: "maskable" },
     ],
   };
 }

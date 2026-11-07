@@ -1,6 +1,6 @@
 import { bayer, rng, type PixelCanvas } from "../pixel/canvas";
 import type { PostcardScene } from "../template";
-import { W, H, foliage, reflection, sky, water, birds, people, lamp, rowboat } from "./common";
+import { foliage, reflection, sky, water, birds, people, lamp, rowboat } from "./common";
 
 /** Singapore: Marina Bay Sands and its SkyPark, Gardens by the Bay supertrees, the Merlion fountain. */
 const P = {

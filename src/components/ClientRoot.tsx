@@ -11,7 +11,7 @@ import { AppBadge, UpdateToast } from "./AppSignals";
 export function ClientRoot({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (process.env.NODE_ENV !== "production" || !("serviceWorker" in navigator)) return;
-    navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => { /* app works without it, just not offline */ });
+    navigator.serviceWorker.register(`/sw.js?v=${encodeURIComponent(process.env.NEXT_PUBLIC_BUILD_ID ?? "dev")}`, { scope: "/" }).catch(() => { /* app works without it, just not offline */ });
   }, []);
   return (
     <AppProvider>

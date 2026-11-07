@@ -171,9 +171,9 @@ html[data-motion="reduce"] .wing-light { animation: none; opacity: 1; }
 .is-calm .calm-hint { opacity: .8; transition: opacity 1.8s ease 1.2s; }
 .is-calm .calm-dim { filter: brightness(.84) saturate(.9); transition: filter 2.4s ease; }
 /* night cabin: the lights go down around the window; the clock stays readable in soft light */
-.calm-night { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: #070a14; opacity: 0; transition: opacity .35s ease; }
-.is-calm .calm-night { opacity: .94; transition: opacity 2.4s ease; }
+html[data-calm-fx], html[data-calm-fx] body { transition: background-color .35s ease; } /* only on the flight screen: theme changes stay instant */
+html[data-calm], html[data-calm] body { background-color: #0b0e1a; transition: background-color 2.4s ease; }
+html[data-calm] aside { opacity: 0; pointer-events: none; transition: opacity 1.8s ease; }
 .is-calm { --color-paper-deep: #1f2537; }
-.is-calm > :not(.calm-night):not(.fixed) { position: relative; z-index: 1; }
 .is-calm [role="timer"], .is-calm .calm-hint { color: #e8e1d2; transition: color 2.4s ease; }
 .is-calm .window-view { box-shadow: 0 0 0 6px #1b2133, 0 0 0 7px #2a3146; }

@@ -1,6 +1,6 @@
 import { bayer, rng, type PixelCanvas } from "../pixel/canvas";
 import type { PostcardScene } from "../template";
-import { W, H, birds, cloud, people, ridge, sky, water } from "./common";
+import { W, birds, cloud, people, ridge, sky, water } from "./common";
 
 /** Vancouver: Stanley Park's cedars and seawall, Brockton Point lighthouse, Lions Gate Bridge, the North Shore mountains, a seaplane. */
 const P = {

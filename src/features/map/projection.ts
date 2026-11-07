@@ -14,7 +14,8 @@ export interface Box { x: number; y: number; w: number; h: number }
 export function fitBox(points: [number, number][], pad = 40, minW = 160): Box {
   if (!points.length) return { x: 0, y: 0, w: MAP_W, h: MAP_H };
   const xs = points.map((p) => p[0]), ys = points.map((p) => p[1]);
-  let x0 = Math.min(...xs) - pad, x1 = Math.max(...xs) + pad, y0 = Math.min(...ys) - pad, y1 = Math.max(...ys) + pad;
+  let x0 = Math.min(...xs) - pad, y0 = Math.min(...ys) - pad;
+  const x1 = Math.max(...xs) + pad, y1 = Math.max(...ys) + pad;
   const aspect = MAP_W / MAP_H;
   let w = Math.max(minW, x1 - x0), h = Math.max(minW / aspect, y1 - y0);
   if (w / h > aspect) h = w / aspect; else w = h * aspect;

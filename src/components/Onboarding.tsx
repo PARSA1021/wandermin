@@ -11,6 +11,7 @@ import { ArtImage } from "./ArtImage";
 import { ceilMinutes } from "@/features/focus/timer";
 import { buzz, startSession } from "./session";
 import { cabin } from "./cabin";
+import { Notice } from "./Notice";
 
 /** A best guess at the nearest departure city from the device time zone (the user can change it). */
 export function guessDeparture(timeZone: string): string {
@@ -130,6 +131,8 @@ export function Onboarding() {
       <div key={step} className="page-in flex flex-1 flex-col pt-5">
         {step === 0 && (
           <>
+            {/* saved data that couldn't be read: say so here too, since starting over lands on this screen */}
+            <div className="mb-4 empty:hidden"><Notice /></div>
             <p className="text-xs font-black tracking-[0.25em] text-accent">WANDERMIN</p>
             <h1 className="mt-2 text-3xl font-bold leading-tight short:text-2xl">{t("app.slogan")}</h1>
             <p className="mt-2 text-ink-soft short:mt-1 short:text-sm">{t("welcome.lead")}</p>

@@ -1,6 +1,7 @@
 /* WANDERMIN service worker — offline app shell, cached art/audio, notification clicks.
  * The timer never runs here: progress is always computed from stored timestamps by the page. */
-const VERSION = "wm-v4";
+// one cache per deployed build (the page registers /sw.js?v=<build>), so a new deployment is a new worker
+const VERSION = "wm-" + (new URL(self.location.href).searchParams.get("v") || "v4");
 const SHELL = ["/", "/focus", "/map", "/journal", "/profile", "/manifest.webmanifest",
   "/icons/icon-192.png", "/icons/icon-512.png", "/samples/welcome-tokyo.png", "/audio/chime.m4a", "/audio/chime.mp3"];
 const MEDIA = ["/audio/cabin.m4a", "/audio/cabin.mp3"];
@@ -61,6 +62,8 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   const url = new URL(req.url);
   if (req.method !== "GET" || url.origin !== self.location.origin) return;
+  // the version check must always ask the server
+  if (url.pathname === "/version.json") return;
 
   if (url.pathname.startsWith("/audio/") && req.headers.has("range")) {
     event.respondWith(rangeFromCache(req));

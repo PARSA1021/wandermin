@@ -5,7 +5,7 @@
  */
 import { buildPostcardContent, composePostcard, CARD_W, CARD_H } from "@/features/postcards/template";
 import { getScene } from "@/features/postcards/scenes";
-import { buildBoardingPass, composeBoardingPass, passAccent, PASS_W, PASS_H, type BoardingPassInput } from "@/features/tickets/boarding-pass";
+import { buildBoardingPass, composeBoardingPass, passAccent, PASS_W, PASS_H } from "@/features/tickets/boarding-pass";
 
 import type { ArtJob, ArtResult } from "./jobs";
 export type { ArtJob, ArtResult, PassJob, PostcardJob } from "./jobs";

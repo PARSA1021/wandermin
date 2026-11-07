@@ -1,4 +1,4 @@
-import { bayer, rng, type PixelCanvas } from "../pixel/canvas";
+import { bayer, type PixelCanvas } from "../pixel/canvas";
 import type { PostcardScene } from "../template";
 import { W, H, birds, cloud, foliage, people, sky, townhouses, water, type TownhouseStyle } from "./common";
 

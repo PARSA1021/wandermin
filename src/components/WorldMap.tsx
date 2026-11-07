@@ -171,7 +171,7 @@ export function WorldMap() {
           ))}
 
           {/* the plane */}
-          <g transform={`translate(${projX(model.here.lng)} ${projY(model.here.lat)}) rotate(${model.heading}) scale(${s(1)})`} aria-label={t("map.you")}>
+          <g transform={`translate(${projX(model.here.lng)} ${projY(model.here.lat)}) rotate(${model.heading}) scale(${s(1)})`} role="img" aria-label={t("map.you")}>
             <circle r="7" fill="var(--color-ink)" opacity="0.15" />
             <path d="M6 0 L-2 -1.2 L-4 -5 L-5.5 -5 L-4.2 -1 L-6 -0.8 L-7 -2.5 L-8 -2.5 L-7.2 0 L-8 2.5 L-7 2.5 L-6 0.8 L-4.2 1 L-5.5 5 L-4 5 L-2 1.2 Z" fill="var(--color-ink)" />
           </g>

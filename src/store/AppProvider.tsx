@@ -1,9 +1,11 @@
 "use client";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { computeJourney, type Journey } from "@/features/travel/journey";
-import { initialState, parseState, reduce, type Action, type AppState } from "./state";
+import { initialState, parseState, readState, reduce, type Action, type AppState } from "./state";
 
 const KEY = "wandermin.v1";
+/** Where saved data that could not be read is kept, untouched, so it is never silently lost. */
+export const RECOVERED_KEY = "wandermin.v1.unreadable";
 
 interface Ctx {
   state: AppState;
@@ -15,7 +17,18 @@ interface Ctx {
 const AppContext = createContext<Ctx | null>(null);
 
 function load(): AppState {
-  try { return parseState(window.localStorage.getItem(KEY)); } catch { return initialState(); }
+  try {
+    const raw = window.localStorage.getItem(KEY);
+    const { state, lost } = readState(raw);
+    if (lost && raw) {
+      // keep the original before anything overwrites it, and tell the user once
+      try { window.localStorage.setItem(RECOVERED_KEY, raw); } catch { /* storage full: nothing more we can do */ }
+      return { ...state, notice: { kind: "recovered" } };
+    }
+    return state;
+  } catch {
+    return initialState();
+  }
 }
 function save(s: AppState) {
   try { window.localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* private mode / quota: keep running in memory */ }

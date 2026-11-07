@@ -6,7 +6,7 @@ import { CITIES } from "@/data";
 const leaves = (o: object, p = ""): string[] =>
   Object.entries(o).flatMap(([k, v]) => (typeof v === "string" ? [`${p}${k}`] : leaves(v, `${p}${k}.`)));
 const placeholders = (s: string) => [...s.matchAll(/\{\s*([a-zA-Z]+)/g)].map((m) => m[1]).sort();
-const get = (o: object, key: string) => key.split(".").reduce<any>((n, k) => n?.[k], o) as string;
+const get = (o: object, key: string) => key.split(".").reduce<unknown>((n, k) => (n as Record<string, unknown> | undefined)?.[k], o) as string;
 
 describe("message resources", () => {
   const enKeys = leaves(MESSAGES.en).sort();

@@ -193,7 +193,11 @@
     "importConfirm": "この端末の旅の記録をバックアップの内容に置き換えますか？",
     "importDone": "バックアップを復元しました。",
     "importInvalid": "WANDERMINのバックアップファイルではありません。",
-    "importAction": "復元する"
+    "importAction": "復元する",
+    "unreadableTitle": "読み込めなかった以前の記録があります",
+    "unreadableBody": "元データをファイルに保存しておけば、後で復元を手伝えます。",
+    "unreadableSave": "元データを保存",
+    "unreadableForget": "保管データを削除"
   },
   "common": {
     "confirm": "確認",
@@ -212,9 +216,10 @@
     "installed": "インストール済み。アプリ版を使用中です。",
     "later": "あとで",
     "offline": "オフライン · 記録はこの端末に保存されます",
-    "updateReady": "新しいバージョンの準備ができました。",
-    "reload": "再読み込み",
-    "iosKeep": "Safariではホーム画面に追加すると旅の記録が安全に保たれます。共有 →「ホーム画面に追加」。"
+    "iosKeep": "Safariではホーム画面に追加すると旅の記録が安全に保たれます。共有 →「ホーム画面に追加」。",
+    "updateAvailable": "新しいバージョンがあります",
+    "updateNow": "今すぐ更新",
+    "updated": "最新バージョンに更新しました"
   },
   "companion": {
     "cabin": "機内の音＋ロック画面カード",
@@ -346,5 +351,19 @@
     "nextHint": "おすすめの都市をタップするとすぐ出発。好きな都市は検索で探せます。",
     "doneSr": "完了",
     "seeCards": "受け取ったはがきを見る →"
+  },
+  "notice": {
+    "recovered": "保存データの一部を読み込めませんでした。元のデータは消さずに保管してあります。",
+    "recoveredCta": "元データを確認"
+  },
+  "about": {
+    "title": "アプリ情報",
+    "version": "バージョン",
+    "check": "アップデートを確認",
+    "checking": "確認中…",
+    "latest": "最新バージョンです",
+    "available": "新しいバージョンがあります",
+    "offline": "インターネットに接続すると確認できます",
+    "hint": "更新しても旅の記録と進行中のフライトはそのままです。"
   }
 }

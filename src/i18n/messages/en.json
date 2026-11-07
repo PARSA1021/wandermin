@@ -193,7 +193,11 @@
     "importConfirm": "Replace this device's travel log with the backup?",
     "importDone": "Backup restored.",
     "importInvalid": "That file isn't a WANDERMIN backup.",
-    "importAction": "Restore"
+    "importAction": "Restore",
+    "unreadableTitle": "There's saved data the app couldn't read",
+    "unreadableBody": "Save the original as a file so it can be recovered later.",
+    "unreadableSave": "Save the original",
+    "unreadableForget": "Discard it"
   },
   "common": {
     "confirm": "Confirm",
@@ -212,9 +216,10 @@
     "installed": "Installed. You're using the app version.",
     "later": "Not now",
     "offline": "Offline · your progress is saved on this device",
-    "updateReady": "A new version is ready.",
-    "reload": "Reload",
-    "iosKeep": "In Safari, install to your home screen so your travel log is kept safely: Share → Add to Home Screen."
+    "iosKeep": "In Safari, install to your home screen so your travel log is kept safely: Share → Add to Home Screen.",
+    "updateAvailable": "A new version is out",
+    "updateNow": "Update now",
+    "updated": "Updated to the latest version"
   },
   "companion": {
     "cabin": "Cabin sound + lock-screen card",
@@ -346,5 +351,19 @@
     "nextHint": "Tap a suggested city to fly on, or search for any city.",
     "doneSr": "done",
     "seeCards": "See your postcards →"
+  },
+  "notice": {
+    "recovered": "Part of your saved data couldn't be read. The original was kept aside, untouched.",
+    "recoveredCta": "See the original"
+  },
+  "about": {
+    "title": "About this app",
+    "version": "Version",
+    "check": "Check for updates",
+    "checking": "Checking…",
+    "latest": "You're up to date",
+    "available": "A new version is available",
+    "offline": "Connect to the internet to check",
+    "hint": "Updating keeps your travel record and any flight in progress."
   }
 }

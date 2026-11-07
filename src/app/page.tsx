@@ -73,7 +73,7 @@ export default function HomePage() {
           <div className="flex flex-col gap-4">
           <div>
             <p className="text-sm font-semibold text-ink-soft">{t("home.nextDestination", { city: name(getCity(leg.toId).name) })} · {name(getCountry(getCity(leg.toId).countryCode).name)}</p>
-            <div className="mt-3 h-3 overflow-hidden rounded-full bg-paper-deep" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(liveProgress * 100)}>
+            <div className="mt-3 h-3 overflow-hidden rounded-full bg-paper-deep" role="progressbar" aria-label={t("home.nextDestination", { city: name(getCity(leg.toId).name) })} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(liveProgress * 100)}>
               <div className="h-full rounded-full bg-accent" style={{ width: `${Math.max(2, liveProgress * 100)}%` }} />
             </div>
             <p className="mt-2 text-sm tabular text-ink-soft">

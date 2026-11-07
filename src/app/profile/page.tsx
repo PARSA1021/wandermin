@@ -1,16 +1,17 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { afterLayersClosed } from "@/components/backStack";
 import { getCity } from "@/data";
 import { PRESET_MINUTES } from "@/features/focus/timer";
 import { LOCALE_LABELS, SUPPORTED_LOCALES, type Locale } from "@/i18n";
-import { useApp } from "@/store/AppProvider";
+import { RECOVERED_KEY, useApp } from "@/store/AppProvider";
 import { useI18n } from "@/i18n/react";
 import { InstallCard } from "@/components/InstallCard";
 import { LockScreenOptions } from "@/components/LockScreenOptions";
 import { ConfirmSheet } from "@/components/ConfirmSheet";
 import { HowItWorksSheet } from "@/components/HowItWorks";
+import { AboutApp } from "@/components/AboutApp";
 import { parseBackup, type AppState } from "@/store/state";
 
 function Row({ title, children }: { title: string; children: React.ReactNode }) {
@@ -40,20 +41,30 @@ export default function ProfilePage() {
     if (!parsed) { setImportMsg(t("profile.importInvalid")); return; }
     setImportMsg(null); setPending(parsed);
   };
-  const exportData = () => {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const download = (text: string, name: string) => {
+    const blob = new Blob([text], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `wandermin-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = name;
+    document.body.appendChild(a);
     a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10_000);
   };
+  const today = () => new Date().toISOString().slice(0, 10);
+  const exportData = () => download(JSON.stringify(state, null, 2), `wandermin-backup-${today()}.json`);
+  // saved data the app could not read is kept aside (never silently lost); offer it as a file
+  const [unreadable, setUnreadable] = useState<string | null>(null);
+  useEffect(() => { try { setUnreadable(localStorage.getItem(RECOVERED_KEY)); } catch { /* storage blocked */ } }, []);
+  const saveUnreadable = () => { if (unreadable) download(unreadable, `wandermin-unreadable-${today()}.json`); };
+  const forgetUnreadable = () => { try { localStorage.removeItem(RECOVERED_KEY); } catch { /* ignore */ } setUnreadable(null); };
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6">
       <h1 className="text-2xl font-bold sm:text-3xl">{t("nav.profile")}</h1>
       <section className="rounded-3xl border border-line bg-card px-5">
         <Row title={t("profile.language")}>
-          <select value={s.locale ?? ""} onChange={(e) => dispatch({ type: "settings", patch: { locale: (e.target.value || null) as Locale | null } })}
+          <select aria-label={t("profile.language")} value={s.locale ?? ""} onChange={(e) => dispatch({ type: "settings", patch: { locale: (e.target.value || null) as Locale | null } })}
             className="min-h-11 rounded-xl border border-line bg-paper px-3">
             <option value="">{t("profile.auto")}</option>
             {SUPPORTED_LOCALES.map((l) => <option key={l} value={l}>{LOCALE_LABELS[l]}</option>)}
@@ -72,7 +83,7 @@ export default function ProfilePage() {
             className={`min-h-11 rounded-full px-5 font-semibold ${s.windowView ? "bg-ink text-paper" : "border border-line"}`}>{s.windowView ? t("common.on") : t("common.off")}</button>
         </Row>
         <Row title={t("profile.defaultMinutes")}>
-          <select value={s.defaultMinutes} onChange={(e) => dispatch({ type: "settings", patch: { defaultMinutes: Number(e.target.value) } })}
+          <select aria-label={t("profile.defaultMinutes")} value={s.defaultMinutes} onChange={(e) => dispatch({ type: "settings", patch: { defaultMinutes: Number(e.target.value) } })}
             className="min-h-11 rounded-xl border border-line bg-paper px-3 tabular">
             {PRESET_MINUTES.map((m) => <option key={m} value={m}>{t("timer.duration", { count: m })}</option>)}
           </select>
@@ -97,8 +108,18 @@ export default function ProfilePage() {
       <HowItWorksSheet open={showIntro} onClose={() => setShowIntro(false)} />
       <InstallCard />
       <LockScreenOptions />
-      <section className="rounded-3xl border border-line bg-card p-5">
+      <section id="data" className="scroll-mt-6 rounded-3xl border border-line bg-card p-5">
         <h2 className="text-lg font-bold">{t("profile.data")}</h2>
+        {unreadable && (
+          <div className="mt-3 rounded-2xl border border-accent/40 bg-accent/10 p-4 text-sm" data-unreadable="">
+            <p className="font-semibold">{t("profile.unreadableTitle")}</p>
+            <p className="mt-1 text-ink-soft">{t("profile.unreadableBody")}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button onClick={saveUnreadable} className="tap min-h-11 rounded-xl bg-ink px-4 font-semibold text-paper">{t("profile.unreadableSave")}</button>
+              <button onClick={forgetUnreadable} className="tap min-h-11 rounded-xl px-4 font-semibold text-ink-soft underline underline-offset-4">{t("profile.unreadableForget")}</button>
+            </div>
+          </div>
+        )}
         <p className="mt-1 text-sm text-ink-soft">{t("profile.dataBody")}</p>
         <div className="mt-4 flex flex-col gap-2 sm:flex-row">
           <button onClick={exportData} className="tap min-h-12 rounded-xl bg-ink px-5 font-semibold text-paper">{t("profile.export")}</button>
@@ -108,6 +129,7 @@ export default function ProfilePage() {
         </div>
         {importMsg && <p role="status" className="mt-3 text-sm font-semibold">{importMsg}</p>}
       </section>
+      <AboutApp />
       <ConfirmSheet open={!!pending} title={t("profile.import")} body={t("profile.importConfirm")}
         confirmLabel={t("profile.importAction")} cancelLabel={t("common.cancel")} onCancel={() => setPending(null)}
         onConfirm={() => { if (pending) dispatch({ type: "import", state: pending }); setPending(null); setImportMsg(t("profile.importDone")); }} />
